@@ -8,7 +8,6 @@
 
 #ifndef Window_h
 #define Window_h
-#include "../Updatable.h"
 #include "gfx.h"
 #include <glm/glm.hpp>
 #include <map>
@@ -26,7 +25,7 @@ struct Mouse {
     glm::vec2 pos, delta, delta_last, scroll, scroll_last;
 };
 
-class Window : public Updatable {
+class Window {
 private:
 //    void register_handle(GLFWwindow*);
     void update_buttons(Button*, size_t);
@@ -43,9 +42,8 @@ public:
     Window(const char*);
     Window(const Window&) = delete;
     Window operator=(const Window&) = delete;
-    virtual void init() override;
-    virtual void update(float dt) override;
-    virtual void destroy() override;
+    virtual void update();
+    virtual void destroy();
     
     const char* get_title() const ;
     bool should_close() const;

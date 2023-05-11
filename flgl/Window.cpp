@@ -142,9 +142,7 @@ void Window::update_key_data(){
     update_buttons(keyboard.keys, GLFW_KEY_LAST);
 }
 
-void Window::init() {
-}
-void Window::update(float dt) {
+void Window::update() {
     if (active){
         update_mouse_data();
         update_key_data();
