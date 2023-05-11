@@ -43,6 +43,14 @@ public:
     T& operator[](MAP_ID id){
         return map[id];
     }
+    
+    const typename std::unordered_map<MAP_ID, T>::iterator begin(){
+        return map.begin();
+    }
+    
+    const typename std::unordered_map<MAP_ID, T>::iterator end(){
+        return map.end();
+    }
 };
 
 

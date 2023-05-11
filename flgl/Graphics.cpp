@@ -15,7 +15,10 @@
 
 bool Graphics::isinit = false;
 ID_Map<Shader> Graphics::shaders;
-ID_Map<MeshDetails> Graphics::meshes;
+//ID_Map<MeshDetails> Graphics::meshes;
+std::unordered_set<TEXTURE_SLOT> Graphics::textures;
+std::unordered_set<Window*> Graphics::windows;
+std::unordered_set<uint32_t> Graphics::VAOs;
 
 static void error_callback(int error, const char* description){
     std::cout << "error: " << description << std::endl;
@@ -60,6 +63,18 @@ void Graphics::setDepthTestEnable(bool e){
 
 void Graphics::destroy(){
     isinit = false;
+    for (auto shad : shaders){
+        shad.second.destroy();
+    }
+    for (auto i : VAOs){
+        UnloadMesh(i);
+    }
+    for (auto i : textures){
+        Graphics::UnloadTexture(i);
+    }
+    for (auto w : windows){
+        delete w;
+    }
     glfwTerminate();
 }
 
@@ -70,6 +85,7 @@ bool Graphics::isInit(){
 Window& Graphics::createWindow(const char *title){
     assert(isinit);
     Window* win = new Window(title);
+    windows.insert(win);
     return *win;
 }
 
@@ -121,6 +137,7 @@ TEXTURE_SLOT Graphics::UploadTexture(string name, bool pixelated){
     uint32_t texSlot = slotsInUse++;
     glActiveTexture(GL_TEXTURE0 + texSlot);
     glBindTexture(GL_TEXTURE_2D, textureId);
+    textures.insert(texSlot);
     return texSlot;
 }
 
@@ -157,49 +174,56 @@ MeshDetails Graphics::UploadMesh(const ConstMesh& mesh){
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
     
+    VAOs.emplace(VAO);
     return MeshDetails(VAO, elem.size()&0xFFFFFFFF, mesh.type);
 }
 
 MeshDetails Graphics::UploadMesh(Mesh const& mesh){
-   vector<Vertex> const& verts = mesh.verticies;
-   vector<uint32_t> const& elem = mesh.elements;
-   if (verts.empty() || elem.empty()){
+    vector<Vertex> const& verts = mesh.verticies;
+    vector<uint32_t> const& elem = mesh.elements;
+    if (verts.empty() || elem.empty()){
        throw("empty vectors!");
-   }
-   
-   uint32_t VAO, VBO, EBO;
-   
-   glGenVertexArrays(1, &VAO);
-   glBindVertexArray(VAO);
-   
-   glGenBuffers(1, &VBO);
-   glBindBuffer(GL_ARRAY_BUFFER, VBO);
-   glBufferData(GL_ARRAY_BUFFER, verts.size() * sizeof(Vertex), verts.data(), GL_STATIC_DRAW);
-   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,
+    }
+
+    uint32_t VAO, VBO, EBO;
+
+    glGenVertexArrays(1, &VAO);
+    glBindVertexArray(VAO);
+
+    glGenBuffers(1, &VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, verts.size() * sizeof(Vertex), verts.data(), GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,
                          sizeof(Vertex),
                          (const void*)offsetof(Vertex, pos));
-   glEnableVertexAttribArray(0);
-   glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE,
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE,
                          sizeof(Vertex),
                          (const void*)offsetof(Vertex, UV));
-   glEnableVertexAttribArray(1);
-   
-   glGenBuffers(1, &EBO);
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-   glBufferData(GL_ELEMENT_ARRAY_BUFFER, elem.size() * sizeof(uint32_t), elem.data(), GL_STATIC_DRAW);
-   
-   glBindVertexArray(0);
-   glDeleteBuffers(1, &VBO);
-   glDeleteBuffers(1, &EBO);
-   
-   return MeshDetails(VAO, elem.size()&0xFFFFFFFF, mesh.type);
+    glEnableVertexAttribArray(1);
+
+    glGenBuffers(1, &EBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, elem.size() * sizeof(uint32_t), elem.data(), GL_STATIC_DRAW);
+
+    glBindVertexArray(0);
+    glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);
+
+    VAOs.emplace(VAO);
+    return MeshDetails(VAO, elem.size()&0xFFFFFFFF, mesh.type);
 }
 
 void Graphics::UnloadMesh(MeshDetails& d){
-   glDeleteBuffers(1, &d.vao);
+    glDeleteBuffers(1, &d.vao);
+}
+
+void Graphics::UnloadMesh(uint32_t& vao){
+    glDeleteBuffers(1, &vao);
 }
 
 void Graphics::UnloadTexture(TEXTURE_SLOT slot){
+    textures.erase(slot);
     glDeleteTextures(1, &slot);
 }
 

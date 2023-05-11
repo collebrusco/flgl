@@ -22,11 +22,16 @@ Shader::~Shader(){}
 Shader::Shader(const char* vFileName, const char* fFileName){
     compileAndLink(vFileName, fFileName);
 }
+#include <filesystem>
+static std::string cpath(){
+    auto p = std::filesystem::current_path();
+    return p.string();
+}
 
 const char* Shader::getShaderSource(string shad, string type){
     ifstream fin;
-    string path = "gfx/Shaders/" + shad + ".glsl";
-    cout << "Reading shader at: " << path << endl;
+    string path = "flgl/flgl/Shaders/" + shad + ".glsl";
+    cout << "Reading shader at: " << cpath() + "/" + path << endl;
     fin.open(path);
     if (!fin){
         cout << "error opening " + type + " shader!\n";
