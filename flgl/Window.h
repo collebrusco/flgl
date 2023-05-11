@@ -45,6 +45,8 @@ public:
     virtual void update();
     virtual void destroy();
     
+    bool hasHandle(GLFWwindow*) const;
+    
     const char* get_title() const ;
     bool should_close() const;
 };

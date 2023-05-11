@@ -22,7 +22,6 @@ private:
     static unordered_set<TEXTURE_SLOT> textures;
     static unordered_set<Window*> windows;
     static unordered_set<uint32_t> VAOs;
-//    static //TODO window set, for deallocating, for fucks sake
 public:
     static void init();
     static bool isInit();
@@ -32,6 +31,8 @@ public:
     static void setDepthTestEnable(bool);
     
     static Window& createWindow(const char* title);
+    static Window& getWindow();
+    
     static ID_Map<Shader> shaders;
 //    static ID_Map<MeshDetails> meshes;
     

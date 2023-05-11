@@ -238,3 +238,14 @@ void Graphics::DrawMesh(MeshDetails const& mesh){
     glDrawElements((mesh.drawType == TRIANGLES) ? GL_TRIANGLES : GL_LINES, mesh.numElements, GL_UNSIGNED_INT, nullptr);
     glBindVertexArray(0);
 }
+
+Window &Graphics::getWindow(){
+    auto handle = glfwGetCurrentContext();
+    for (auto w : windows){
+        if (w->hasHandle(handle)){
+            return *w;
+        }
+    }
+    throw ("get window called and window dne or is unregistered");
+}
+

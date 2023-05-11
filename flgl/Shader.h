@@ -27,13 +27,14 @@ private:
     bool compileVertShader(GLuint& vShader, const char* fFileName);
     bool linkPrograms(GLuint& vShader, GLuint& fShader, GLuint& prog);
     const char* getShaderSource(string shad, string type);
+    bool compileAndLink(const char* vFileName, const char* fFileName);
 public:
     Shader();
     ~Shader();
     Shader(const char* vFileName, const char* fFileName);
+    Shader(uint32_t);
     const GLuint& programID() const;
     
-    bool compileAndLink(const char* vFileName, const char* fFileName);
     void bind() const;
     void unBind() const;
     void destroy();
@@ -52,6 +53,7 @@ public:
     void uMat4(const char* varName, const glm::mat4& mat4) const;
     void uMat3(const char* varName, const glm::mat3& mat4) const;
     
+    bool operator==(const Shader&);
 };
 
 #endif /* Shader_h */

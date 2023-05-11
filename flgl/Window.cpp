@@ -160,3 +160,8 @@ void Window::destroy() {
 bool Window::should_close() const {
     return glfwWindowShouldClose(handle);
 }
+
+bool Window::hasHandle(GLFWwindow * h) const {
+    return handle == h;
+}
+

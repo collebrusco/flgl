@@ -17,6 +17,10 @@ static uint32_t numShaders = 0;
 
 Shader::Shader(){}
 
+Shader::Shader(uint32_t p) {
+    programId = p;
+}
+
 Shader::~Shader(){}
 
 Shader::Shader(const char* vFileName, const char* fFileName){
@@ -245,3 +249,10 @@ void Shader::uMat3(const char* varName, const glm::mat3& mat) const{
 const GLuint& Shader::programID() const {
     return programId;
 }
+
+bool Shader::operator==(const Shader & o) {
+    return o.programID() == this->programID();
+}
+
+
+
