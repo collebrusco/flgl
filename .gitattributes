@@ -1,0 +1,2 @@
+# don't count libraries toward language statistics
+lib/* linguist-vendored
