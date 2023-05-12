@@ -30,7 +30,7 @@ public:
     static void setClearColor(float, float, float, float);
     static void setDepthTestEnable(bool);
     
-    static Window& createWindow(const char* title);
+    static Window& createWindow(const char* title, size_t x, size_t y);
     static Window& getWindow();
     
     static ID_Map<Shader> shaders;

@@ -39,7 +39,7 @@ public:
     float aspect;
     Keyboard keyboard;
     Mouse mouse;
-    Window(const char*);
+    Window(const char*, size_t x, size_t y);
     Window(const Window&) = delete;
     Window operator=(const Window&) = delete;
     virtual void update();

@@ -87,11 +87,11 @@ static void scroll_callback(GLFWwindow* handle, double xoffset, double yoffset){
 
 // ================================
 
-Window::Window(const char* t){
+Window::Window(const char* t, size_t x, size_t y){
     title = t;
     active = false;
-    frame.x = 960;
-    frame.y = 720;
+    frame.x = x;
+    frame.y = y;
     aspect = (float)frame.x / (float)frame.y;
     handle = glfwCreateWindow(frame.x, frame.y, title, NULL, NULL);
     if (!handle){ //redundant

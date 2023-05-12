@@ -82,9 +82,9 @@ bool Graphics::isInit(){
     return isinit;
 }
 
-Window& Graphics::createWindow(const char *title){
+Window& Graphics::createWindow(const char *title, size_t x, size_t y){
     assert(isinit);
-    Window* win = new Window(title);
+    Window* win = new Window(title, x, y);
     windows.insert(win);
     return *win;
 }
