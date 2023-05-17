@@ -9,6 +9,7 @@
 #ifndef Graphics_h
 #define Graphics_h
 #include <unordered_set>
+#include <optional>
 #include "Window.h"
 #include "Vertex.h"
 #include "ID_Map.h"
@@ -18,11 +19,8 @@ class Graphics {
 private:
     static bool isinit;
     static bool depth_test;
-//    static TEXTURE_SLOT slotsInUse;
-//    static unordered_set<TEXTURE_SLOT> textures;
     static unordered_set<Window*> windows;
-//    static unordered_set<uint32_t> VAOs;
-//    static unordered_set<uint32_t> shaders;
+    static std::optional<MeshDetails> maybetile;
 public:
     static void init();
     static bool isInit();
@@ -35,22 +33,11 @@ public:
     static Window& getWindow();
     
     static GL_Loader loader;
-
-//    static ID_Map<Shader> shaders;
-//    static ID_Map<MeshDetails> meshes;
     
-//    static Shader UploadShader(std::string vert, std::string frag);
-//    static void UnloadShader(Shader& shad);
+    static MeshDetails const& getTileMesh();
     static void forEachShader(std::function<void(Shader)>);
     
-//    static TEXTURE_SLOT UploadTexture(std::string name, bool pixelated);
-//    static MeshDetails UploadMesh(const ConstMesh& mesh);
-//    static MeshDetails UploadMesh(Mesh const& mesh);
-//
-//    static void UnloadMesh(uint32_t& vao);
-//    static void UnloadMesh(MeshDetails&);
-//    static void UnloadTexture(TEXTURE_SLOT);
-    
+    static void DrawTile();
     static void DrawMesh(MeshDetails& mesh);
     static void DrawMesh(MeshDetails const& mesh);
 };

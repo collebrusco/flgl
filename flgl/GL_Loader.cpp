@@ -141,10 +141,12 @@ MeshDetails GL_Loader::UploadMesh(Mesh const& mesh){
 }
 
 void GL_Loader::UnloadMesh(MeshDetails& d){
+    VAOs.erase(d.vao);
     glDeleteBuffers(1, &d.vao);
 }
 
 void GL_Loader::UnloadMesh(VAO& vao){
+    VAOs.erase(vao);
     glDeleteBuffers(1, &vao);
 }
 
