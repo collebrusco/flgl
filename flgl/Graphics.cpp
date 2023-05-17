@@ -14,11 +14,14 @@
 #include <iostream>
 
 bool Graphics::isinit = false;
-ID_Map<Shader> Graphics::shaders;
+bool Graphics::depth_test = false;
+std::string Graphics::shader_path = "";
+//ID_Map<Shader> Graphics::shaders;
 //ID_Map<MeshDetails> Graphics::meshes;
 std::unordered_set<TEXTURE_SLOT> Graphics::textures;
 std::unordered_set<Window*> Graphics::windows;
 std::unordered_set<uint32_t> Graphics::VAOs;
+std::unordered_set<uint32_t> Graphics::shaders;
 
 static void error_callback(int error, const char* description){
     std::cout << "error: " << description << std::endl;
@@ -41,8 +44,8 @@ void Graphics::init(){
     }
 }
 
-void Graphics::clear(bool depth){
-    if (depth){
+void Graphics::clear(){
+    if (depth_test){
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     } else {
         glClear(GL_COLOR_BUFFER_BIT);
@@ -55,8 +58,10 @@ void Graphics::setClearColor(float r, float g, float b, float a){
 
 void Graphics::setDepthTestEnable(bool e){
     if (e){
+        depth_test = true;
         glEnable(GL_DEPTH_TEST);
     } else {
+        depth_test = false;
         glDisable(GL_DEPTH_TEST);
     }
 }
@@ -64,7 +69,7 @@ void Graphics::setDepthTestEnable(bool e){
 void Graphics::destroy(){
     isinit = false;
     for (auto shad : shaders){
-        shad.second.destroy();
+        Shader(shad).destroy();
     }
     for (auto i : VAOs){
         UnloadMesh(i);
@@ -248,4 +253,22 @@ Window &Graphics::getWindow(){
     }
     throw ("get window called and window dne or is unregistered");
 }
+
+Shader Graphics::UploadShader(std::string vert, std::string frag) {
+    Shader s(vert.c_str(), frag.c_str());
+    shaders.insert(s.programID());
+    return s;
+}
+
+void Graphics::UnloadShader(Shader &shad) {
+    shad.destroy();
+    shaders.erase(shad.programID());
+}
+
+void Graphics::forEachShader(std::function<void(Shader)> visit) {
+    for (auto s : shaders){
+        visit(Shader(s));
+    }
+}
+
 
