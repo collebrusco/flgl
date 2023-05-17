@@ -15,6 +15,8 @@
 static uint32_t numShaders = 0;
 #endif
 
+std::string Shader::user_path;
+
 Shader::Shader(){}
 
 Shader::Shader(uint32_t p) {
@@ -26,20 +28,26 @@ Shader::~Shader(){}
 Shader::Shader(const char* vFileName, const char* fFileName){
     compileAndLink(vFileName, fFileName);
 }
-#include <filesystem>
-static std::string cpath(){
-    auto p = std::filesystem::current_path();
-    return p.string();
-}
+//#include <filesystem>
+//static std::string cpath(){
+//    auto p = std::filesystem::current_path();
+//    return p.string();
+//}
 
 const char* Shader::getShaderSource(string shad, string type){
     ifstream fin;
-    string path = "flgl/flgl/Shaders/" + shad + ".glsl";
-    cout << "Reading shader at: " << cpath() + "/" + path << endl;
+    string path = "flgl/flgl/default_shaders/" + shad + ".glsl";
+//    cout << "Reading shader at: " << cpath() + "/" + path << endl;
+    
     fin.open(path);
     if (!fin){
-        cout << "error opening " + type + " shader!\n";
+        path = user_path + shad + ".glsl";
+        fin.open(path);
+        if (!fin){
+            cout << "can't find " + type + " shader " + shad + "!\n";
+        }
     }
+    
     string contents((std::istreambuf_iterator<char>(fin)), std::istreambuf_iterator<char>());
     fin.close();
     static string src;
@@ -253,6 +261,11 @@ const GLuint& Shader::programID() const {
 bool Shader::operator==(const Shader & o) {
     return o.programID() == this->programID();
 }
+
+void Shader::setUserShaderPath(std::string p) {
+    user_path = p;
+}
+
 
 
 

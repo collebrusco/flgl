@@ -28,12 +28,15 @@ private:
     bool linkPrograms(GLuint& vShader, GLuint& fShader, GLuint& prog);
     const char* getShaderSource(string shad, string type);
     bool compileAndLink(const char* vFileName, const char* fFileName);
+    static std::string user_path;
 public:
     Shader();
     ~Shader();
     Shader(const char* vFileName, const char* fFileName);
     Shader(uint32_t);
     const GLuint& programID() const;
+    
+    static void setUserShaderPath(std::string);
     
     void bind() const;
     void unBind() const;
