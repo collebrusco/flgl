@@ -19,23 +19,21 @@ Create meshes with a vector of verticies and a vector of elements (lines or tria
   A typical render loop first clears the screen, then performs any engine logic necessary. Upload any variables to shaders. Draw with `Graphics::DrawMesh(mesh);`. Finally, call update on your window. When the loop exits, call `Graphics::destroy();` to cleanup. Here is a simple example that renders a simple mesh.
   
 ```c++
-Graphics gl;
-gl.init();
+    Graphics gl;
+    gl.init();
 
-auto window = gl.createWindow("title", w, h);
+    auto& window = gl.createWindow("title", 480, 360);
+    auto shader = gl.loader.UploadShader("test_vert_shader", "test_frag_shader");
+    auto cube = gl.loader.UploadMesh(CubeMesh); // a cube and tile are included, define more
+    auto tex = gl.loader.UploadTexture("terrain", true);
 
-auto shader = gl.loader.UploadShader("vertex_shader_filename", "frag_shader_filename");
-
-auto cube = gl.loader.UploadMesh(CubeMesh); // a cube and tile are included, define more
-
-auto tex = gl.loader.UploadTexture("filename", isPixelated);
-
-gl.setClearColor(0.f, 0.f, 0.f, 0.f);
-while (!window.should_close()){
-  gl.clear();
-  shader.uFloat("varName", value); // upload to shader if needed
-  gl.DrawMesh(cube);
-  window.update();
-}
-gl.destroy();
+    gl.setClearColor(0.f, 0.f, 0.f, 0.f);
+    while (!window.should_close()){
+        gl.clear();
+        shader.bind();
+        shader.uFloat("varName", tex); // upload to shader if needed
+        gl.DrawMesh(cube);
+        window.update();
+    }
+    gl.destroy();
 ```
