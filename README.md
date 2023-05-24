@@ -31,7 +31,7 @@ Create meshes with a vector of verticies and a vector of elements (lines or tria
     while (!window.should_close()){
         gl.clear();
         shader.bind();
-        shader.uFloat("varName", tex); // upload to shader if needed
+        shader.uFloat("varName", value); // upload to shader if needed
         gl.DrawMesh(cube);
         window.update();
     }
