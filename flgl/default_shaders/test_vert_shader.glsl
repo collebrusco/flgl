@@ -9,5 +9,7 @@ out vec3 iPos;
 void main() {
     iUV = aUV;
     iPos = aPos;
-    gl_Position = uModel * vec4(aPos, 1.0f);
+//    gl_Position = uProj * uView * uModel * vec4(aPos, 1.0f);
+//    gl_Position = uModel * vec4(aPos, 1.0f);
+    gl_Position = vec4(aPos, 1.0f);
 }
