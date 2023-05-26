@@ -102,7 +102,7 @@ Window &Graphics::getWindow(){
 
 void Graphics::forEachShader(std::function<void(Shader)> visit) {
     for (auto s : loader.Shaders()){
-        visit(Shader(s));
+        visit(s);
     }
 }
 
