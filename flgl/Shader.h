@@ -18,15 +18,13 @@
 #include <glm/mat4x4.hpp> // glm::mat4
 #include <vector>
 
-using namespace std;
-
 class Shader {
 private:
     GLuint programId;
     bool compileFragShader(GLuint& fShader, const char* vFileName);
     bool compileVertShader(GLuint& vShader, const char* fFileName);
     bool linkPrograms(GLuint& vShader, GLuint& fShader, GLuint& prog);
-    const char* getShaderSource(string shad, string type);
+    const char* getShaderSource(std::string shad, std::string type);
     bool compileAndLink(const char* vFileName, const char* fFileName);
     static std::string user_path;
 public:
@@ -56,7 +54,7 @@ public:
     void uMat4(const char* varName, const glm::mat4& mat4) const;
     void uMat3(const char* varName, const glm::mat3& mat4) const;
     
-    bool operator==(const Shader&);
+    bool operator==(const Shader&) const;
 };
 
 #endif /* Shader_h */

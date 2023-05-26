@@ -19,7 +19,7 @@ class Graphics {
 private:
     static bool isinit;
     static bool depth_test;
-    static unordered_set<Window*> windows;
+    static std::unordered_set<Window*> windows;
     static std::optional<MeshDetails> maybetile;
 public:
     static void init();

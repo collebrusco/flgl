@@ -15,6 +15,8 @@
 static uint32_t numShaders = 0;
 #endif
 
+using namespace std;
+
 std::string Shader::user_path;
 
 Shader::Shader(){}
@@ -258,7 +260,7 @@ const GLuint& Shader::programID() const {
     return programId;
 }
 
-bool Shader::operator==(const Shader & o) {
+bool Shader::operator==(const Shader & o) const {
     return o.programID() == this->programID();
 }
 

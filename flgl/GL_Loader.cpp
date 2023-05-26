@@ -13,13 +13,14 @@
 
 std::unordered_set<TEXTURE_SLOT> GL_Loader::textures;
 std::unordered_set<uint32_t> GL_Loader::VAOs;
-std::unordered_set<uint32_t> GL_Loader::shaders;
+std::unordered_set<Shader> GL_Loader::shaders;
+std::string GL_Loader::asset_path = "assets/";
 
 TEXTURE_SLOT GL_Loader::slotsInUse = 0;
-TEXTURE_SLOT GL_Loader::UploadTexture(string name, bool pixelated){
+TEXTURE_SLOT GL_Loader::UploadTexture(std::string name, bool pixelated){
     int w, h, c;
     uint32_t textureId;
-    string path = "assets/" + name + ".png";
+    std::string path = asset_path + name + ".png";
     //GET PIXELS
     uint8_t* pixels = stbi_load(path.c_str(), &w, &h, &c, 0);
     //PARAMS
@@ -69,8 +70,8 @@ TEXTURE_SLOT GL_Loader::UploadTexture(string name, bool pixelated){
 
 
 MeshDetails GL_Loader::UploadMesh(const ConstMesh& mesh){
-    const vector<Vertex>& verts = mesh.verticies;
-    const vector<uint32_t>& elem = mesh.elements;
+    const std::vector<Vertex>& verts = mesh.verticies;
+    const std::vector<uint32_t>& elem = mesh.elements;
     if (verts.empty() || elem.empty()){
         throw("empty vectors!");
     }
@@ -105,8 +106,8 @@ MeshDetails GL_Loader::UploadMesh(const ConstMesh& mesh){
 }
 
 MeshDetails GL_Loader::UploadMesh(Mesh const& mesh){
-    vector<Vertex> const& verts = mesh.verticies;
-    vector<uint32_t> const& elem = mesh.elements;
+    std::vector<Vertex> const& verts = mesh.verticies;
+    std::vector<uint32_t> const& elem = mesh.elements;
     if (verts.empty() || elem.empty()){
        throw("empty vectors!");
     }
@@ -178,7 +179,17 @@ void GL_Loader::destroy() {
     }
 }
 
-std::unordered_set<SHADER_ID>& GL_Loader::Shaders(){
+std::unordered_set<Shader>& GL_Loader::Shaders(){
     return shaders;
 }
+
+void GL_Loader::setAssetPath(std::string path) { 
+    asset_path = path;
+}
+
+void GL_Loader::setShaderPath(std::string path) { 
+    Shader::setUserShaderPath(path);
+}
+
+
 
