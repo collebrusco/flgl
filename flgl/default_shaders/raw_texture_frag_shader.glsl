@@ -1,4 +1,9 @@
 #version 410 core
+/*
+ This shader is a basic example of applying sprite sheet textures to 2d objects.
+ upload the texture slot, the pix w & h of the sprite, and position of the sprite's bottom left corner in 64-pixel units
+ This is configured for a 1024x1024 sprite sheet with 64 pix position units, this can be changed
+ */
 uniform sampler2D uTexslot;
 uniform ivec2 uSpriteWH;
 uniform vec2 uSpriteSheetCoords;
