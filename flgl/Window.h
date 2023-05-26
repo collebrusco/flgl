@@ -8,7 +8,7 @@
 
 #ifndef Window_h
 #define Window_h
-#include "gfx.h"
+#include "gfx.h" //TODO: get this out of here! The user shouldn't have openGL included, that's the whole point.
 #include <glm/glm.hpp>
 //#include <map>
 
