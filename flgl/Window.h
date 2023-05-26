@@ -13,6 +13,7 @@
 //#include <map>
 
 struct Button {
+    Button();
     bool down, pressed, released, last;
 };
 

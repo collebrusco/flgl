@@ -165,3 +165,6 @@ bool Window::hasHandle(GLFWwindow * h) const {
     return handle == h;
 }
 
+Button::Button(){
+    down = pressed = released = last = 0;
+}
