@@ -48,10 +48,10 @@ static void key_callback(GLFWwindow* handle, int key, int scancode, int action, 
     }
     switch (action){
         case GLFW_PRESS:
-            win.keyboard.keys[key].down = true;
+            win.keyboard[key].down = true;
             break;
         case GLFW_RELEASE:
-            win.keyboard.keys[key].down = false;
+            win.keyboard[key].down = false;
             break;
         default:
             break;
@@ -138,7 +138,7 @@ void Window::update_mouse_data(){
 }
 
 void Window::update_key_data(){
-    update_buttons(keyboard.keys, GLFW_KEY_LAST);
+    update_buttons(keyboard, GLFW_KEY_LAST);
 }
 
 void Window::update() {

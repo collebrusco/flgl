@@ -17,10 +17,6 @@ struct Button {
     bool down, pressed, released, last;
 };
 
-struct Keyboard {
-    Button keys[GLFW_KEY_LAST];
-};
-
 struct Mouse {
     Button buttons[GLFW_MOUSE_BUTTON_LAST];
     glm::vec2 pos, delta, delta_last, scroll, scroll_last;
@@ -38,7 +34,7 @@ private:
 public:
     glm::ivec2 frame;
     float aspect;
-    Keyboard keyboard;
+    Button keyboard[GLFW_KEY_LAST];
     Mouse mouse;
     Window(const char*, size_t x, size_t y);
     Window(const Window&) = delete;
