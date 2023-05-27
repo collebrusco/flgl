@@ -90,15 +90,14 @@ static void scroll_callback(GLFWwindow* handle, double xoffset, double yoffset){
 Window::Window(const char* t, size_t x, size_t y){
     title = t;
     active = false;
-    frame.x = x;
-    frame.y = y;
-    aspect = (float)frame.x / (float)frame.y;
-    handle = glfwCreateWindow(frame.x, frame.y, title, NULL, NULL);
+    handle = glfwCreateWindow((int)x, (int)y, title, NULL, NULL);
     if (!handle){ //redundant
         glfwTerminate();
         std::cout << "Failed to create window! make sure glfw is initialized!" << std::endl;
         assert(false);
     }
+    glfwGetFramebufferSize(handle, &frame.x, &frame.y);
+    aspect = (float)frame.x / (float)frame.y;
     active = true;
 //    register_handle(handle);
     glfwSetWindowUserPointer(handle, reinterpret_cast<void*>(this));
