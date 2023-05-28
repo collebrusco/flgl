@@ -110,7 +110,7 @@ Window::Window(const char* t, size_t x, size_t y){
     glfwSetMouseButtonCallback(handle, mouse_callback);
     
     glfwMakeContextCurrent(handle);
-    glfwSwapInterval(0);
+    glfwSwapInterval(1);
 }
 
 const char* Window::get_title() const {

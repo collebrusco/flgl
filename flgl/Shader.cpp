@@ -204,54 +204,67 @@ void Shader::destroy(){
 }
 
 void Shader::uVec4(const char* varName, const glm::vec4& vec) const{
+    bind();
     GLint loc = glGetUniformLocation(programId, varName);
     glUniform4f(loc, vec.x, vec.y, vec.z, vec.w);
 }
 void Shader::uVec3(const char* varName, const glm::vec3& vec) const{
+    bind();
     GLint loc = glGetUniformLocation(programId, varName);
     glUniform3f(loc, vec.x, vec.y, vec.z);
 }
 void Shader::uVec2(const char* varName, const glm::vec2& vec) const{
+    bind();
     GLint loc = glGetUniformLocation(programId, varName);
     glUniform2f(loc, vec.x, vec.y);
 }
 void Shader::uIVec4(const char* varName, const glm::ivec4& vec) const{
-        GLint loc = glGetUniformLocation(programId, varName);
-        glUniform4i(loc, vec.x, vec.y, vec.z, vec.w);
+    bind();
+    GLint loc = glGetUniformLocation(programId, varName);
+    glUniform4i(loc, vec.x, vec.y, vec.z, vec.w);
 }
 void Shader::uIVec3(const char* varName, const glm::ivec3& vec) const{
+    bind();
     GLint loc = glGetUniformLocation(programId, varName);
     glUniform3i(loc, vec.x, vec.y, vec.z);
 }
 void Shader::uIVec2(const char* varName, const glm::ivec2& vec) const{
+    bind();
     GLint loc = glGetUniformLocation(programId, varName);
     glUniform2i(loc, vec.x, vec.y);
 }
 void Shader::uFloat(const char* varName, const float val) const{
+    bind();
     GLint loc = glGetUniformLocation(programId, varName);
     glUniform1f(loc, val);
 }
 void Shader::uInt(const char* varName, const int val) const{
+    bind();
     GLint loc = glGetUniformLocation(programId, varName);
     glUniform1i(loc, val);
 }
 void Shader::uIntArr(const char* varName, int size, const int* arr) const{
+    bind();
     GLint loc = glGetUniformLocation(programId, varName);
     glUniform1iv(loc, size, arr);
 }
 void Shader::uIntU(const char* varName, uint32_t val) const{
+    bind();
     GLint loc = glGetUniformLocation(programId, varName);
     glUniform1i(loc, val);
 }
 void Shader::uBool(const char* varName, bool val) const{
+    bind();
     GLint loc = glGetUniformLocation(programId, varName);
     glUniform1i(loc, val);
 }
 void Shader::uMat4(const char* varName, const glm::mat4& mat) const{
+    bind();
     GLint loc = glGetUniformLocation(programId, varName);
     glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(mat));
 }
 void Shader::uMat3(const char* varName, const glm::mat3& mat) const{
+    bind();
     GLint loc = glGetUniformLocation(programId, varName);
     glUniformMatrix3fv(loc, 1, GL_FALSE, glm::value_ptr(mat));
 }
