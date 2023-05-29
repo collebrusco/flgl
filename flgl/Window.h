@@ -33,7 +33,7 @@ private:
     bool active;
 public:
     glm::ivec2 frame;
-    float aspect;
+    float aspect;                       // aspect is defined as width over height
     Button keyboard[GLFW_KEY_LAST];
     Mouse mouse;
     Window(const char*, size_t x, size_t y);
