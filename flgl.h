@@ -9,5 +9,7 @@
 #define flgl_h
 
 #include "flgl/Graphics.h"
+#include "flgl/Camera.h"
+#include "flgl/flgl_math.h"
 
 #endif /* flgl_h */
