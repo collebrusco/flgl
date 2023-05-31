@@ -10,7 +10,7 @@ flgl can:
 These are the core opengl features required to render textured 2D & 3D that responds to key and mouse input. 
 
 ### Functional Summary
-  Initialize the graphics with `Graphics::init();` before calling other functions. An instance of Graphics can be created for brevity if prefferred. Create a window with `Graphics::createWindow("title", w, h);`. The keyboard and mouse can be accessed through this window object.  
+  Initialize the graphics with `Graphics::init();` before calling other functions. An instance of Graphics can be created for brevity if preferred, there is no difference. Create a window with `Graphics::createWindow("title", w, h);`. The keyboard and mouse can be accessed through this window object.  
   
   Loading and unloading new shaders, meshes or textures to the GPU is handled by the loader. Upload your shaders with `Graphics::loader.UploadShader("vert_file_name", "frag_file_name");`, and textures with `Graphics::loader.UploadTexture("filename", isPixelated);`.
   
