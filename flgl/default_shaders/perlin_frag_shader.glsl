@@ -3,6 +3,7 @@
  this frag shader provides a perlin noise function, ubiquitous in computer graphics
  this implementation was written by Frank Collebrusco, based on wikipedia's implementation
  the perlin can be scaled, shifted, and animated (gradient vectors rotated by theta)
+ 
  INPUT: this shader relies on having the following uniforms uploaded:
     uTime:      float time since origin, seconds recommended
     uRes:       w/h of screen in pixels

@@ -1,14 +1,12 @@
 //
-//  flgl_math.h
+//  flgl_math.cpp
 //  flgl-tester
 //
 //  Created by Frank Collebrusco on 5/30/23.
 //
 
-#ifndef flgl_math_h
-#define flgl_math_h
+#include "flgl_math.h"
 
-#include <glm/ext/matrix_transform.hpp>
 glm::mat4 genModelMat2d(glm::vec2 pos, float rotation, glm::vec2 scale, glm::vec2 anchor){
     glm::mat4 m(1.0);
     m = glm::translate(m, glm::vec3(pos, 0.0));
@@ -45,5 +43,3 @@ glm::mat4 genModelMat3d(glm::vec3 pos, glm::vec3 rotation, glm::vec3 scale){
     m = glm::scale(m, scale);
     return m;
 }
-
-#endif /* flgl_math_h */
