@@ -18,8 +18,8 @@ void main(){
     ivec2 pixelPos = ivec2(normTexCoords * 1024);
     vec4 pixelColor = texelFetch(uTexslot, pixelPos, 0);
     if (pixelColor.a != 1.0f){
-            discard;
-        }
+        discard;
+    }
     vec4 c = texture(uTexslot, normTexCoords);
     //apply additional shading here...
     outColor = c;
