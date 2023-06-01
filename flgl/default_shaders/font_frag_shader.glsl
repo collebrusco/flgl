@@ -20,41 +20,61 @@
 #define MAX_STRING_LENGTH 32
 
 uniform sampler2D uTexslot;
-uniform ivec2 i_res;
 
 uniform int uChar;
 
-uniform ivec2 uPos;       // in pixels, top left corner
-uniform ivec2 uScale;     // in pixels
 uniform vec3 uColor;      // rgb baby
+uniform ivec2 uScale;
 
 out vec4 outColor;
 in vec2 iUV;
+in vec3 iPos;
+in vec2 i_res;
 
 void main(){
+    outColor = vec4(1.,0.,0.,1.);
     
-    ivec2 i_pos = ivec2(gl_FragCoord.x, i_res.y - gl_FragCoord.y);
-    i_pos -= uPos;
-
     // top left coord of char
     ivec2 iCharPos;
-    iCharPos.x = ((uChar - 0x20) * CHAR_WIDTH) % (CHAR_ROW_SIZE* CHAR_WIDTH);
+    iCharPos.x = ((uChar - 0x20) * CHAR_WIDTH) % (CHAR_ROW_SIZE * CHAR_WIDTH);
     iCharPos.y = ((uChar - 0x20) / CHAR_ROW_SIZE) * CHAR_HEIGHT;
 
-    if (i_pos.x < 0 || i_pos.x > S_CHAR_WIDTH || i_pos.y < 0 || i_pos.y > S_CHAR_HEIGHT) {
-        discard;
-    }
+    vec2 offset = (vec2(iPos.x, iPos.y) * vec2(1.,-1.)) + vec2(0.5);
+    offset *= vec2(7., 9.); // char size
+    iCharPos += ivec2(offset);
 
-    i_pos /= uScale;
-    i_pos += iCharPos;
-
-
-    vec4 pix = texelFetch(uTexslot, i_pos, 0);
+    vec4 pix = texelFetch(uTexslot, iCharPos, 0);
     if (pix.a == 1.f){
         outColor = vec4(uColor, 1.f);
     } else {
         discard;
     }
+    
+    
+}
+    
+//    ivec2 int_pos = ivec2(gl_FragCoord.x, i_res.y - gl_FragCoord.y);
+//    int_pos -= iPos;
+//
+//    // top left coord of char
+//    ivec2 iCharPos;
+//    iCharPos.x = ((uChar - 0x20) * CHAR_WIDTH) % (CHAR_ROW_SIZE* CHAR_WIDTH);
+//    iCharPos.y = ((uChar - 0x20) / CHAR_ROW_SIZE) * CHAR_HEIGHT;
+//
+//    if (int_pos.x < 0 || int_pos.x > S_CHAR_WIDTH || int_pos.y < 0 || int_pos.y > S_CHAR_HEIGHT) {
+//        discard;
+//    }
+//
+//    int_pos /= uScale;
+//    int_pos += iCharPos;
+//
+//
+//    vec4 pix = texelFetch(uTexslot, int_pos, 0);
+//    if (pix.a == 1.f){
+//        outColor = vec4(uColor, 1.f);
+//    } else {
+//        discard;
+//    }
 
 
     
@@ -106,4 +126,4 @@ void main(){
 //    vec4 c = texture(uTexslot, normTexCoords);
 //    //apply additional shading here...
 //    outColor = c;
-}
+
