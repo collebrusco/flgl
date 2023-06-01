@@ -16,5 +16,5 @@ out vec3 iPos;
 void main() {
     iUV = aUV;
     iPos = aPos;
-    gl_Position = vec4(2 * aPos, 1.0f);
+    gl_Position = vec4(2.f * aPos, 1.0f);
 }
