@@ -21,6 +21,15 @@ TEXTURE_SLOT GL_Loader::UploadTexture(std::string name, bool pixelated){
     int w, h, c;
     uint32_t textureId;
     std::string path = asset_path + name + ".png";
+    std::ifstream fin;
+    fin.open(path);
+    if (!fin){
+        path = "flgl/flgl/default_textures/" + name + ".png";
+    }
+    fin.open(path);
+    if (!fin){
+        path = asset_path + name + ".png";
+    }
     //GET PIXELS
     uint8_t* pixels = stbi_load(path.c_str(), &w, &h, &c, 0);
     //PARAMS
