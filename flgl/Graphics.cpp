@@ -13,7 +13,7 @@ bool Graphics::isinit = false;
 bool Graphics::depth_test = false;
 std::unordered_set<Window*> Graphics::windows;
 GL_Loader Graphics::loader;
-std::optional<MeshDetails> Graphics::maybetile;
+FLGL_Presets Graphics::std;
 
 static void error_callback(int error, const char* description){
     std::cout << "error: " << description << std::endl;
@@ -106,16 +106,6 @@ void Graphics::forEachShader(std::function<void(Shader)> visit) {
     }
 }
 
-const MeshDetails &Graphics::getTileMesh() { 
-    if (!maybetile.has_value()){
-        maybetile = loader.UploadMesh(TileMesh);
-    }
-    return maybetile.value();
-}
-
-void Graphics::DrawTile() { 
-    DrawMesh(getTileMesh());
-}
 
 
 

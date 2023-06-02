@@ -14,6 +14,13 @@
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp> // glm::vec3
 
+/*
+ TODO: this currently only allows for one vertex type (3 floats for position, 2 for UV coords).
+ TODO: Add configurability for custom vertex types. This requires configuring gl vertex attribute pointers
+ TODO: Which is probably functionality that will be moved into the mesh objects (for uploading)
+ TODO: Meshdetails can likely stay the same, user just needs to use correct shader for their vertex type
+ */
+
 enum DrawType_t {
     TRIANGLES, LINES
 };
@@ -38,6 +45,7 @@ struct Mesh {
     std::vector<Vertex> verticies;
     std::vector<uint32_t> elements;
     DrawType_t type;
+    Mesh() = default;
     Mesh(DrawType_t t);
 };
 

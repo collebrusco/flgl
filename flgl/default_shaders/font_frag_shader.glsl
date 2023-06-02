@@ -1,6 +1,7 @@
 #version 410 core
 /*
-    
+    Character renderer for included bitmap font
+    This is not really a good implementation
  */
 
 #define IMG_X 128
