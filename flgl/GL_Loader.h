@@ -30,7 +30,7 @@
 #include "Vertex.h"
 
 typedef uint32_t TEXTURE_SLOT;
-typedef uint32_t VAO;
+//typedef uint32_t VAO;
 
 namespace std {
 template <> struct hash<Shader> {
@@ -44,7 +44,7 @@ class GL_Loader {
 private:
     static TEXTURE_SLOT slotsInUse;
     static std::unordered_set<TEXTURE_SLOT> textures;
-    static std::unordered_set<VAO> VAOs;
+    static std::unordered_set<uint32_t> VAOs;
     static std::unordered_set<Shader> shaders;
     static std::string asset_path;
 public:
@@ -59,11 +59,12 @@ public:
     static MeshDetails UploadMesh(const ConstMesh& mesh);
     static MeshDetails UploadMesh(Mesh const& mesh);
 
-    static void UnloadMesh(VAO& vao);
+    static void UnloadMesh(uint32_t vao);
     static void UnloadMesh(MeshDetails&);
     static void UnloadTexture(TEXTURE_SLOT);
     
     static void destroy();
+    
 };
 
 #endif /* GL_Loader_h */

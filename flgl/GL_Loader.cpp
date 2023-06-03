@@ -93,13 +93,9 @@ MeshDetails GL_Loader::UploadMesh(const ConstMesh& mesh){
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, verts.size() * sizeof(Vertex), verts.data(), GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,
-                          sizeof(Vertex),
-                          (const void*)offsetof(Vertex, pos));
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)offsetof(Vertex, pos));
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE,
-                          sizeof(Vertex),
-                          (const void*)offsetof(Vertex, UV));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)offsetof(Vertex, UV));
     glEnableVertexAttribArray(1);
     
     glGenBuffers(1, &EBO);
@@ -155,7 +151,7 @@ void GL_Loader::UnloadMesh(MeshDetails& d){
     glDeleteBuffers(1, &d.vao);
 }
 
-void GL_Loader::UnloadMesh(VAO& vao){
+void GL_Loader::UnloadMesh(uint32_t vao){
     VAOs.erase(vao);
     glDeleteBuffers(1, &vao);
 }
