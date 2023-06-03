@@ -28,6 +28,7 @@ public:
     static void clear();
     static void setClearColor(float, float, float, float);
     static void setDepthTestEnable(bool);
+    static void setWireframe(bool);
     
     static Window& createWindow(const char* title, size_t x, size_t y);
     static Window& getWindow();

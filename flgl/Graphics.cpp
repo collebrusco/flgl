@@ -106,6 +106,11 @@ void Graphics::forEachShader(std::function<void(Shader)> visit) {
     }
 }
 
+void Graphics::setWireframe(bool wf) {
+    glPolygonMode(GL_FRONT_AND_BACK, wf ? GL_LINE : GL_FILL);
+}
+
+
 
 
 
