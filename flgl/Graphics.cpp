@@ -13,7 +13,7 @@ bool Graphics::isinit = false;
 bool Graphics::depth_test = false;
 std::unordered_set<Window*> Graphics::windows;
 GL_Loader Graphics::loader;
-FLGL_Presets Graphics::std;
+flgl_presets Graphics::std;
 
 static void error_callback(int error, const char* description){
     std::cout << "error: " << description << std::endl;
