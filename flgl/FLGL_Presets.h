@@ -18,8 +18,8 @@ private:
     static std::optional<Shader> fontshader;
     static std::optional<TEXTURE_SLOT> fonttex;
     static std::optional<MeshDetails> maybetile;
-    static MeshDetails const& getTileMesh();
 public:
+    static MeshDetails const& getTileMesh();
     static void drawTile();
     
     static void drawChar(char c, glm::ivec2 pos, glm::ivec2 scale);

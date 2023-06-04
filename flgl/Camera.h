@@ -28,6 +28,7 @@
 
 class Camera {
 private:
+    glm::ivec2 prev_frame;
     bool should_update;
 protected:
     glm::vec3 pos, look, up;

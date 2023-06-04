@@ -14,7 +14,7 @@ Camera::Camera(){
 }
 
 void Camera::update(){
-    if (shouldUpdate()){
+    if (shouldUpdate() || prev_frame != Graphics::getWindow().frame){
         this->updateProj();
         this->updateView();
         should_update = false;
