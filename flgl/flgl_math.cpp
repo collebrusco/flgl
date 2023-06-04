@@ -43,3 +43,7 @@ glm::mat4 genModelMat3d(glm::vec3 pos, glm::vec3 rotation, glm::vec3 scale){
     m = glm::scale(m, scale);
     return m;
 }
+
+glm::vec2 angleToVector(float degrees){
+    return glm::vec2(glm::cos(glm::radians(degrees)), glm::sin(glm::radians(degrees)));
+}

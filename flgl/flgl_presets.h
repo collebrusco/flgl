@@ -1,19 +1,19 @@
 //
-//  FLGL_Presets.h
+//  flgl_presets.h
 //  flgl-tester
 //
 //  Created by Frank Collebrusco on 6/2/23.
 //
 //
 
-#ifndef FLGL_Presets_h
-#define FLGL_Presets_h
+#ifndef flgl_presets_h
+#define flgl_presets_h
 
 #include <optional>
 #include "Shader.h"
 #include "GL_Loader.h"
 
-class FLGL_Presets {
+class flgl_presets {
 private:
     static std::optional<Shader> fontshader;
     static std::optional<TEXTURE_SLOT> fonttex;
@@ -26,4 +26,4 @@ public:
     static void drawString(std::string string, glm::ivec2 pos, glm::ivec2 scale);
 };
 
-#endif /* FLGL_Presets_h */
+#endif /* flgl_presets_h */

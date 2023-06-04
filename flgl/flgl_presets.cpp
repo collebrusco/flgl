@@ -1,20 +1,20 @@
 //
-//  FLGL_Presets.cpp
+//  flgl_presets.cpp
 //  flgl-tester
 //
 //  Created by Frank Collebrusco on 6/2/23.
 //
 //
 
-#include "FLGL_Presets.h"
+#include "flgl_presets.h"
 #include "Graphics.h"
 #include "Meshes.h"
-std::optional<MeshDetails> FLGL_Presets::maybetile;
+std::optional<MeshDetails> flgl_presets::maybetile;
 
-std::optional<Shader> FLGL_Presets::fontshader;
-std::optional<TEXTURE_SLOT> FLGL_Presets::fonttex;
+std::optional<Shader> flgl_presets::fontshader;
+std::optional<TEXTURE_SLOT> flgl_presets::fonttex;
 
-void FLGL_Presets::drawChar(char c, glm::ivec2 pos, glm::ivec2 scale) {
+void flgl_presets::drawChar(char c, glm::ivec2 pos, glm::ivec2 scale) {
     if (!fontshader.has_value()){
         fontshader = Graphics::loader.UploadShader("font_vert_shader", "font_frag_shader");
     }
@@ -31,7 +31,7 @@ void FLGL_Presets::drawChar(char c, glm::ivec2 pos, glm::ivec2 scale) {
     drawTile();
 }
 
-void FLGL_Presets::drawString(std::string string, glm::ivec2 pos, glm::ivec2 scale){
+void flgl_presets::drawString(std::string string, glm::ivec2 pos, glm::ivec2 scale){
     constexpr const static glm::ivec2 char_dims = glm::ivec2(7, 9);
     glm::ivec2 cursor = glm::ivec2(0);
     for (auto ch : string){
@@ -45,13 +45,13 @@ void FLGL_Presets::drawString(std::string string, glm::ivec2 pos, glm::ivec2 sca
     }
 }
 
-const MeshDetails& FLGL_Presets::getTileMesh() {
+const MeshDetails& flgl_presets::getTileMesh() {
     if (!maybetile.has_value()){
         maybetile = Graphics::loader.UploadMesh(TileMesh);
     }
     return maybetile.value();
 }
 
-void FLGL_Presets::drawTile() {
+void flgl_presets::drawTile() {
     Graphics::DrawMesh(getTileMesh());
 }

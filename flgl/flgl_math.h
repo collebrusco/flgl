@@ -20,4 +20,7 @@ glm::mat4 genModelMat2d(glm::vec2 pos, float rotation, glm::vec2 scale);
 glm::mat4 genModelMat3d(glm::vec3 pos, glm::vec3 rotation, glm::vec3 scale, glm::vec3 anchor);
 glm::mat4 genModelMat3d(glm::vec3 pos, glm::vec3 rotation, glm::vec3 scale);
 
+// vector help
+glm::vec2 angleToVector(float degrees);
+
 #endif /* flgl_math_h */

@@ -14,7 +14,7 @@
 #include "Vertex.h"
 #include "ID_Map.h"
 #include "GL_Loader.h"
-#include "FLGL_Presets.h"
+#include "flgl_presets.h"
 
 class Graphics {
 private:
@@ -34,7 +34,7 @@ public:
     static Window& getWindow();
     
     static GL_Loader loader;
-    static FLGL_Presets std;
+    static flgl_presets std;
     
     static MeshDetails const& getTileMesh();
     static void forEachShader(std::function<void(Shader)>);
