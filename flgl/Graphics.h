@@ -36,7 +36,6 @@ public:
     static GL_Loader loader;
     static flgl_presets std;
     
-    static MeshDetails const& getTileMesh();
     static void forEachShader(std::function<void(Shader)>);
     
     static void DrawMesh(MeshDetails& mesh);
