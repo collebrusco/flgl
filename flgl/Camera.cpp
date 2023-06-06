@@ -38,22 +38,27 @@ bool Camera::shouldUpdate() const {
 }
 
 glm::vec3 &Camera::getPos() { 
+    setShouldUpdate();
     return pos;
 }
 
 glm::vec3 &Camera::getLook() { 
+    setShouldUpdate();
     return look;
 }
 
 glm::vec3 &Camera::getUp() { 
+    setShouldUpdate();
     return up;
 }
 
 float &Camera::getNear() { 
+    setShouldUpdate();
     return near;
 }
 
 float &Camera::getFar() { 
+    setShouldUpdate();
     return far;
 }
 
@@ -110,6 +115,7 @@ glm::mat4 OrthoCamera::updateProj()  {
 }
 
 void OrthoCamera::setViewWidth(float vw) {
+    setShouldUpdate();
     viewWidth = vw;
 }
 
