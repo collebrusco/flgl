@@ -168,4 +168,4 @@ Button::Button(){
     down = pressed = released = last = 0;
 }
 
-Mouse::Mouse() pos(0.f), delta(0.f), delta_last(0.f), scroll(0.f), scroll_last(0.f) {}
+Mouse::Mouse() : pos(0.f), delta(0.f), delta_last(0.f), scroll(0.f), scroll_last(0.f) {}
