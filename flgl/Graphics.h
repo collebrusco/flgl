@@ -31,6 +31,7 @@ public:
     static void setWireframe(bool);
     
     static Window& createWindow(const char* title, size_t x, size_t y);
+    static Window& initCreateWindow(const char* title, size_t x, size_t y);
     static Window& getWindow();
     
     static GL_Loader loader;

@@ -78,6 +78,11 @@ Window& Graphics::createWindow(const char *title, size_t x, size_t y){
     return *win;
 }
 
+Window& Graphics::initCreateWindow(const char* title, size_t x, size_t y){
+    init();
+    return createWindow(title, x, y);
+}
+
 void Graphics::DrawMesh(MeshDetails& mesh){
     glBindVertexArray(mesh.vao);
     glDrawElements((mesh.drawType == TRIANGLES) ? GL_TRIANGLES : GL_LINES, mesh.numElements, GL_UNSIGNED_INT, nullptr);
