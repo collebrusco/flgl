@@ -167,5 +167,5 @@ bool Window::hasHandle(GLFWwindow * h) const {
 Button::Button(){
     down = pressed = released = last = 0;
 }
-pos, delta, delta_last, scroll, scroll_last;
+
 Mouse::Mouse() pos(0.f), delta(0.f), delta_last(0.f), scroll(0.f), scroll_last(0.f) {}
