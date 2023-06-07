@@ -18,6 +18,7 @@ struct Button {
 };
 
 struct Mouse {
+    Mouse();
     Button buttons[GLFW_MOUSE_BUTTON_LAST];
     glm::vec2 pos, delta, delta_last, scroll, scroll_last;
 };
