@@ -29,7 +29,7 @@ libs:
 	cd lib/glfw && cmake . && make
 
 flgl: $(OBJ)
-	$(CC) -dynamiclib -o $(BIN)/flgl.a $^ $(LFLAGS)
+	$(CC) -dynamiclib -o $(BIN)/libflgl.a $^ $(LFLAGS)
 
 %.o: %.cpp
 	$(CC) -o $@ -c $< $(CFLAGS)
