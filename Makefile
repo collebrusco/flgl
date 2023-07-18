@@ -1,6 +1,7 @@
 UNAME_S = $(shell uname -s)
 
-CC = clang++
+CC = clang
+CPP = clang++
 CFLAGS = -std=c++20 -Wall -Wextra -Wpedantic -Wno-newline-eof
 CFLAGS += -Ilib/glfw/include -Ilib/glad/include -Ilib/glm/ -Ilib/stb
 LFLAGS = lib/glad/src/glad.o lib/glfw/src/libglfw3.a
@@ -29,10 +30,10 @@ libs:
 	cd lib/glfw && cmake . && make
 
 flgl: $(OBJ)
-	$(CC) -dynamiclib -o $(BIN)/libflgl.a $^ $(LFLAGS)
+	$(CPP) -dynamiclib -o $(BIN)/libflgl.a $^ $(LFLAGS)
 
 %.o: %.cpp
-	$(CC) -o $@ -c $< $(CFLAGS)
+	$(CPP) -o $@ -c $< $(CFLAGS)
 
 clean:
 	rm -rf $(BIN) $(OBJ)
