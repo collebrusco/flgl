@@ -20,7 +20,7 @@ BIN = bin
 
 .PHONY: all clean
 
-all: dirs libs flgl
+dylib: dirs libs library
 
 dirs:
 	mkdir -p ./$(BIN)
@@ -29,7 +29,7 @@ libs:
 	cd lib/glad && $(CC) -o src/glad.o -Iinclude -c src/glad.c
 	cd lib/glfw && cmake . && make
 
-flgl: $(OBJ)
+library: $(OBJ)
 	$(CPP) -dynamiclib -o $(BIN)/libflgl.dylib $^ $(LFLAGS)
 
 %.o: %.cpp
