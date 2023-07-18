@@ -36,4 +36,5 @@ flgl: $(OBJ)
 	$(CPP) -o $@ -c $< $(CFLAGS)
 
 clean:
+	rm ./lib/glad/src/glad.o 
 	rm -rf $(BIN) $(OBJ)
