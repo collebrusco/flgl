@@ -4,7 +4,7 @@ CC = clang
 CPP = clang++
 CFLAGS = -std=c++20 -Wall -Wextra -Wpedantic -Wno-newline-eof
 CFLAGS += -Ilib/glfw/include -Ilib/glad/include -Ilib/glm/ -Ilib/stb
-LFLAGS = lib/glad/src/glad.o lib/glfw/src/libglfw3.a -install_name @rpath/bin/libflgl.dylib
+LFLAGS = lib/glad/src/glad.o lib/glfw/src/libglfw3.a -install_name @rpath/libflgl.dylib
 
 ifeq ($(UNAME_S), Linux)
 	LFLAGS += -ldl -lpthread
