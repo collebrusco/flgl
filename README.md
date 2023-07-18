@@ -37,3 +37,33 @@ Create meshes with a vector of verticies and a vector of elements (lines or tria
     }
     gl.destroy();
 ```
+
+### Building
+#### MacOs
+Running '''make dylib''' in the flgl directory will build libflgl.dylib in the flgl/bin/ directory. This is all you need to start programming graphics; it contains glfw, glad, stb & glm. Link this into your project & include flgl.h to use! Here is an example makefile that links a single .cpp file against flgl and builds it, assuming you've submoduled flgl in the (your project)/lib/flgl/ directory.
+
+```make
+CC = clang++
+CFLAGS = -std=c++20 -Wall -Wextra -Wpedantic -Wno-newline-eof -Wno-unused-parameter
+CFLAGS += -Ilib/flgl/inc -Ilib/flgl/lib/glfw/include -Ilib/flgl/lib/glm/
+LDFLAGS = -Llib/flgl/bin/ -lflgl -Wl,-rpath,./lib/flgl/bin
+
+.PHONY: all clean
+
+
+all: libs main.o
+	 clang++ main.o $(LDFLAGS)
+
+libs: 
+	cd lib/flgl && make dylib
+
+main.o: main.cpp
+	clang++ -o main.o -c main.cpp $(CFLAGS)
+
+clean:
+	cd lib/flgl && make clean
+	rm ./a.out
+```
+
+#### Linux
+TBD This will build on linux but I've yet to get on a linux machine & add compatability. Coming soon
