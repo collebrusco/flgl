@@ -1,2 +1,3 @@
 # don't count libraries toward language statistics
-lib/stb/include/* linguist-vendored
+lib/* linguist-vendored
+
