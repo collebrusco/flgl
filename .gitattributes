@@ -1,3 +1,5 @@
 # don't count libraries toward language statistics
-#lib linguist-vendored
-
+lib/glad/src/glad.c linguist-vendored
+lib/glad/include/glad/glad.h linguist-vendored
+lib/glad/include/KHR/khrplatform.h linguist-vendored
+lib/stb/include/stb_image.h linguist-vendored
