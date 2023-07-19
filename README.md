@@ -38,18 +38,22 @@ Create meshes with a vector of verticies and a vector of elements (lines or tria
     gl.destroy();
 ```
 
-### Building
+## Building
 #### MacOs
-Running '''make dylib''' in the flgl directory will build libflgl.dylib in the flgl/bin/ directory. This is all you need to start programming graphics; it contains glfw, glad, stb & glm. Link this into your project & include flgl.h to use! Here is an example makefile that links a single .cpp file against flgl and builds it, assuming you've submoduled flgl in the (your project)/lib/flgl/ directory.
-
+Running ```make dylib``` in the flgl directory will build libflgl.dylib in the flgl/bin/ directory. This is all you need to start programming graphics; it includes linkage to glfw, glad, stb & glm. 
+```bash
+cd ./lib/flgl && make dylib
+clang++ -o main.o -c main.cpp -Ilib/flgl/inc -Ilib/flgl/lib/glfw/include -Ilib/flgl/lib/glm
+clang++ main.o -Llib/flgl/bin -lflgl -Wl,-rpath,./lib/flgl/bin
+```
+Here's an example of a makefile that does this & some more
 ```make
 CC = clang++
 CFLAGS = -std=c++20 -Wall -Wextra -Wpedantic -Wno-newline-eof -Wno-unused-parameter
 CFLAGS += -Ilib/flgl/inc -Ilib/flgl/lib/glfw/include -Ilib/flgl/lib/glm/
 LDFLAGS = -Llib/flgl/bin/ -lflgl -Wl,-rpath,./lib/flgl/bin
 
-.PHONY: all clean
-
+.PHONY: all clean libs
 
 all: libs main.o
 	 clang++ main.o $(LDFLAGS)
@@ -64,6 +68,41 @@ clean:
 	cd lib/flgl && make clean
 	rm ./a.out
 ```
+Alternatively, you can build flgl and its dependencies directly into your project yourself. In fact, this is better if you aren't planning to re-use the flgl .dylib or want to distribute your project, as it won't have to reference the .dylib at runtime. The cost is simply a more complex makefile, like so:
+```make
+UNAME_S = $(shell uname -s)
+
+CC = clang
+CPP = clang++
+CFLAGS = -std=c++20 -Wall -Wextra -Wpedantic -Wno-newline-eof
+CFLAGS += -Ilib/flgl/inc -Ilib/flgl/lib/glfw/include -Ilib/flgl/lib/glad/include -Ilib/flgl/lib/glm/ -Ilib/flgl/lib/stb
+LDFLAGS = lib/flgl/lib/glad/src/glad.o lib/flgl/lib/glfw/src/libglfw3.a
+LDFLAGS += -framework OpenGL -framework IOKit -framework CoreVideo -framework Cocoa
+
+SRC = $(wildcard *.cpp) $(wildcard lib/flgl/src/*.cpp) 
+OBJ = $(SRC:.cpp=.o)
+BIN = bin
+
+.PHONY: all clean
+
+all: dirs libs a.out
+
+dirs:
+	mkdir -p ./$(BIN)
+
+libs:
+	cd lib/flgl/lib/glad && $(CC) -o src/glad.o -Iinclude -c src/glad.c
+	cd lib/flgl/lib/glfw && cmake . && make
+
+a.out: $(OBJ)
+	$(CPP) -o $(BIN)/a.out $^ $(LDFLAGS)
+
+%.o: %.cpp
+	$(CPP) -o $@ -c $< $(CFLAGS)
+
+clean:
+	rm -rf $(BIN) $(OBJ)
+```
 
 #### Linux
-TBD This will build on linux but I've yet to get on a linux machine & add compatability. Coming soon
+TBD This will build on linux but I've yet to get on a linux machine & hash it out. Coming soon
