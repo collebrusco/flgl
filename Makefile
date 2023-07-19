@@ -4,23 +4,23 @@ CC = clang
 CPP = clang++
 CFLAGS = -std=c++20 -Wall -Wextra -Wpedantic -Wno-newline-eof
 CFLAGS += -Ilib/glfw/include -Ilib/glad/include -Ilib/glm/ -Ilib/stb
-LFLAGS = lib/glad/src/glad.o lib/glfw/src/libglfw3.a -install_name @rpath/libflgl.dylib
+LDFLAGS = lib/glad/src/glad.o lib/glfw/src/libglfw3.a -install_name @rpath/libflgl.dylib
 
 ifeq ($(UNAME_S), Linux)
 	LFLAGS += -ldl -lpthread
 endif
 
 ifeq ($(UNAME_S), Darwin)
-	LFLAGS += -framework OpenGL -framework IOKit -framework CoreVideo -framework Cocoa
+	LDFLAGS += -framework OpenGL -framework IOKit -framework CoreVideo -framework Cocoa
 endif
 
 SRC = $(wildcard src/*.cpp)
 OBJ = $(SRC:.cpp=.o)
 BIN = bin
 
-.PHONY: all clean
+.PHONY: clean
 
-dylib: dirs libs library
+dylib: dirs libs _dylib
 
 dirs:
 	mkdir -p ./$(BIN)
@@ -29,8 +29,8 @@ libs:
 	cd lib/glad && $(CC) -o src/glad.o -Iinclude -c src/glad.c
 	cd lib/glfw && cmake . && make
 
-library: $(OBJ)
-	$(CPP) -dynamiclib -o $(BIN)/libflgl.dylib $^ $(LFLAGS)
+_dylib: $(OBJ)
+	$(CPP) -dynamiclib -o $(BIN)/libflgl.dylib $^ $(LDFLAGS)
 
 %.o: %.cpp
 	$(CPP) -o $@ -c $< $(CFLAGS)

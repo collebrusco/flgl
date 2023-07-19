@@ -10,6 +10,5 @@
 
 #include "../src/Graphics.h"
 #include "../src/Camera.h"
-#include "../src/flgl_math.h"
 
 #endif /* flgl_h */

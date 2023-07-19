@@ -5,7 +5,7 @@
 //  Created by Frank Collebrusco on 5/30/23.
 //
 
-#include "flgl_math.h"
+#include "../inc/flgl_math.h"
 
 glm::mat4 genModelMat2d(glm::vec2 pos, float rotation, glm::vec2 scale, glm::vec2 anchor){
     glm::mat4 m(1.0);
