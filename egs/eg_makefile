@@ -1,0 +1,60 @@
+# # EXAMPLE 1 build flgl, glad & glfw into dylib & link
+# UNAME_S = $(shell uname -s)
+
+# CC = clang++
+# CFLAGS = -std=c++20 -Wall -Wextra -Wpedantic -Wno-newline-eof -Wno-unused-parameter
+# CFLAGS += -Ilib/flgl/inc -Ilib/flgl/lib/glfw/include -Ilib/flgl/lib/glm/
+# LDFLAGS = -Llib/flgl/bin/ -lflgl -Wl,-rpath,./lib/flgl/bin
+
+# .PHONY: all clean
+
+
+# all: libs main.o
+# 	 clang++ main.o $(LDFLAGS)
+
+# libs: 
+# 	cd lib/flgl && make dylib
+
+# main.o: main.cpp
+# 	clang++ -o main.o -c main.cpp $(CFLAGS)
+
+# clean:
+# 	cd lib/flgl && make clean
+# 	rm ./a.out
+
+
+# EXAMPLE 2 build flgl, glad & glfw with your project
+UNAME_S = $(shell uname -s)
+
+CC = clang
+CPP = clang++
+CFLAGS = -std=c++20 -Wall -Wextra -Wpedantic -Wno-newline-eof
+CFLAGS += -Ilib/flgl/inc -Ilib/flgl/lib/glfw/include -Ilib/flgl/lib/glad/include -Ilib/flgl/lib/glm/ -Ilib/flgl/lib/stb
+LDFLAGS = lib/flgl/lib/glad/src/glad.o lib/flgl/lib/glfw/src/libglfw3.a
+LDFLAGS += -framework OpenGL -framework IOKit -framework CoreVideo -framework Cocoa
+
+SRC = main.cpp $(wildcard lib/flgl/src/*.cpp) 
+OBJ = $(SRC:.cpp=.o)
+BIN = bin
+
+.PHONY: all clean
+
+all: dirs libs a.out
+
+dirs:
+	mkdir -p ./$(BIN)
+
+libs:
+	cd lib/flgl/lib/glad && $(CC) -o src/glad.o -Iinclude -c src/glad.c
+	cd lib/flgl/lib/glfw && cmake . && make
+
+a.out: $(OBJ)
+	$(CPP) -o $(BIN)/a.out $^ $(LDFLAGS)
+
+%.o: %.cpp
+	$(CPP) -o $@ -c $< $(CFLAGS)
+
+clean:
+	rm -rf $(BIN) $(OBJ) 
+
+
