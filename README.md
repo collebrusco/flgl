@@ -79,7 +79,7 @@ CFLAGS += -Ilib/flgl/inc -Ilib/flgl/lib/glfw/include -Ilib/flgl/lib/glad/include
 LDFLAGS = lib/flgl/lib/glad/src/glad.o lib/flgl/lib/glfw/src/libglfw3.a
 LDFLAGS += -framework OpenGL -framework IOKit -framework CoreVideo -framework Cocoa
 
-SRC = $(wildcard *.cpp) $(wildcard lib/flgl/src/*.cpp) 
+SRC = main.cpp $(wildcard lib/flgl/src/*.cpp) 
 OBJ = $(SRC:.cpp=.o)
 BIN = bin
 
@@ -101,7 +101,7 @@ a.out: $(OBJ)
 	$(CPP) -o $@ -c $< $(CFLAGS)
 
 clean:
-	rm -rf $(BIN) $(OBJ)
+	rm -rf $(BIN) $(OBJ) 
 ```
 
 #### Linux
