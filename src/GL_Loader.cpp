@@ -10,6 +10,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "../lib/stb/include/stb_image.h"
 #include <iostream>
+#include <assert.h>
 
 std::unordered_set<TEXTURE_SLOT> GL_Loader::textures;
 std::unordered_set<uint32_t> GL_Loader::VAOs;
@@ -21,14 +22,16 @@ TEXTURE_SLOT GL_Loader::UploadTexture(std::string name, bool pixelated){
     int w, h, c;
     uint32_t textureId;
     std::string path = asset_path + name + ".png";
-    std::ifstream fin;
-    fin.open(path);
-    if (!fin){
-        path = "flgl/flgl/default_textures/" + name + ".png";
-    }
-    fin.open(path);
-    if (!fin){
-        path = asset_path + name + ".png";
+    { // verify filepath
+        std::ifstream fin;
+        fin.open(path);
+        if (!fin){
+            path = "flgl/flgl/default_textures/" + name + ".png";
+            fin.open(path);
+            std::cout << "file " + path + " not found!\n";
+            assert(fin);
+        }
+        fin.close();
     }
     //GET PIXELS
     uint8_t* pixels = stbi_load(path.c_str(), &w, &h, &c, 0);
