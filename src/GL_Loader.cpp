@@ -155,8 +155,8 @@ void GL_Loader::UnloadMesh(MeshDetails& d){
 }
 
 void GL_Loader::UnloadMesh(uint32_t vao){
+    glDeleteBuffers(1, &VAOs.at(vao));
     VAOs.erase(vao);
-    glDeleteBuffers(1, &vao);
 }
 
 void GL_Loader::UnloadTexture(TEXTURE_SLOT slot){
