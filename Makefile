@@ -36,5 +36,6 @@ _dylib: $(OBJ)
 	$(CPP) -o $@ -c $< $(CFLAGS)
 
 clean:
+	rm ./lib/glfw/CMakeCache.txt
 	rm ./lib/glad/src/glad.o 
 	rm -rf $(BIN) $(OBJ)
