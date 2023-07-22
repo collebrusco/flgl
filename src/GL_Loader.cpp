@@ -155,7 +155,7 @@ void GL_Loader::UnloadMesh(MeshDetails& d){
 }
 
 void GL_Loader::UnloadMesh(uint32_t vao){
-    glDeleteBuffers(1, &VAOs.at(vao));
+    glDeleteBuffers(1, &(*(VAOs.find(vao))));
     VAOs.erase(vao);
 }
 
