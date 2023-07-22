@@ -150,17 +150,14 @@ MeshDetails GL_Loader::UploadMesh(Mesh const& mesh){
 }
 
 void GL_Loader::UnloadMesh(MeshDetails& d){
-    VAOs.erase(d.vao);
     glDeleteBuffers(1, &d.vao);
 }
 
 void GL_Loader::UnloadMesh(uint32_t vao){
     glDeleteBuffers(1, &(*(VAOs.find(vao))));
-    VAOs.erase(vao);
 }
 
 void GL_Loader::UnloadTexture(TEXTURE_SLOT slot){
-    textures.erase(slot);
     glDeleteTextures(1, &slot);
 }
 
@@ -172,19 +169,21 @@ Shader GL_Loader::UploadShader(std::string vert, std::string frag) {
 
 void GL_Loader::UnloadShader(Shader &shad) {
     shad.destroy();
-    shaders.erase(shad.programID());
 }
 
 void GL_Loader::destroy() { 
     for (auto shad : shaders){
         Shader(shad).destroy();
     }
+    shaders.clear();
     for (auto i : VAOs){
         UnloadMesh(i);
     }
+    VAOs.clear();
     for (auto i : textures){
         UnloadTexture(i);
     }
+    textures.clear();
 }
 
 std::unordered_set<Shader>& GL_Loader::Shaders(){
