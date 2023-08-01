@@ -34,6 +34,7 @@ void Graphics::init(){
     #endif
         isinit = true;
     }
+
 }
 
 void Graphics::clear(){
@@ -80,7 +81,20 @@ Window& Graphics::createWindow(const char *title, size_t x, size_t y){
 
 Window& Graphics::initCreateWindow(const char* title, size_t x, size_t y){
     init();
-    return createWindow(title, x, y);
+    auto& win = createWindow(title, x, y);
+    {
+        const char* glversion = (const char*)glGetString(GL_VERSION);
+        if(glversion) 
+            std::cout << "[FLGL]: initialized opengl " << glversion << "\n";
+        else
+            std::cout << "[FLGL]: failed to detect opengl version\n";
+
+        int maj, min, rev;
+        glfwGetVersion(&maj, &min, &rev);
+        std::cout << "[FLGL]: initialized glfw " << maj << "." << min << "." << rev << "\n";
+
+    }
+    return win;
 }
 
 void Graphics::DrawMesh(MeshDetails& mesh){
