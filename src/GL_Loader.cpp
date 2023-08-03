@@ -15,6 +15,7 @@
 std::unordered_set<TEXTURE_SLOT> GL_Loader::textures;
 std::unordered_set<uint32_t> GL_Loader::VAOs;
 std::unordered_set<Shader> GL_Loader::shaders;
+std::unordered_set<TEXTURE_SLOT> GL_Loader::texture_freelist;
 std::string GL_Loader::asset_path = "assets/";
 
 TEXTURE_SLOT GL_Loader::slotsInUse = 0;
@@ -73,12 +74,28 @@ TEXTURE_SLOT GL_Loader::UploadTexture(std::string name, bool pixelated){
                  w, h, 0, format, GL_UNSIGNED_BYTE, pixels);
     
     stbi_image_free(pixels);
-    uint32_t texSlot = slotsInUse++;
+    TEXTURE_SLOT texSlot = LockTextureSlot();
     glActiveTexture(GL_TEXTURE0 + texSlot);
     glBindTexture(GL_TEXTURE_2D, textureId);
     textures.insert(texSlot);
     return texSlot;
 }
+
+
+TEXTURE_SLOT GL_Loader::LockTextureSlot() {
+    if (texture_freelist.size()) { //TODO test
+        auto it = texture_freelist.begin();
+        TEXTURE_SLOT res = *it;
+        texture_freelist.erase(it);
+        return res;
+    }
+    return slotsInUse++;
+}
+
+void GL_Loader::FreeTextureSlot(TEXTURE_SLOT slot) {
+    texture_freelist.insert(slot);
+}
+
 
 
 MeshDetails GL_Loader::UploadMesh(const ConstMesh& mesh){
@@ -152,12 +169,13 @@ MeshDetails GL_Loader::UploadMesh(Mesh const& mesh){
 void GL_Loader::UnloadMesh(MeshDetails& d){
     glDeleteBuffers(1, &d.vao);
 }
-
+// TODO do these need to remove from list???
 void GL_Loader::UnloadMesh(uint32_t vao){
     glDeleteBuffers(1, &(*(VAOs.find(vao))));
 }
 
 void GL_Loader::UnloadTexture(TEXTURE_SLOT slot){
+    FreeTextureSlot(slot);
     glDeleteTextures(1, &slot);
 }
 

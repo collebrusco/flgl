@@ -9,14 +9,6 @@
 #include "Window.h"
 #include <iostream>
 
-// old solution to window handler problem
-//static std::map<GLFWwindow*, Window*> windowMap;
-
-//void Window::register_handle(GLFWwindow* handle){
-//    assert(windowMap.find(handle) == windowMap.end());
-//    windowMap[handle] = this;
-//}
-
 static void size_callback(GLFWwindow *handle, int width, int height){
     glViewport(0, 0, width, height);
     Window& win = *reinterpret_cast<Window*>(glfwGetWindowUserPointer(handle));
@@ -56,10 +48,6 @@ static void key_callback(GLFWwindow* handle, int key, int scancode, int action, 
         default:
             break;
     }
-    // TODO: escape key is baked into window obj as exit key temporarily for convenience. Remove later
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS){
-        glfwSetWindowShouldClose(handle, GLFW_TRUE);
-    }
 }
 
 static void mouse_callback(GLFWwindow *handle, int button, int action, int mods){
@@ -85,7 +73,7 @@ static void scroll_callback(GLFWwindow* handle, double xoffset, double yoffset){
     win.mouse.scroll.y = yoffset;
 }
 
-// ================================
+// ================ Window ================
 
 Window::Window(const char* t, size_t x, size_t y){
     title = t;
@@ -99,7 +87,6 @@ Window::Window(const char* t, size_t x, size_t y){
     glfwGetFramebufferSize(handle, &frame.x, &frame.y);
     aspect = (float)frame.x / (float)frame.y;
     active = true;
-//    register_handle(handle);
     glfwSetWindowUserPointer(handle, reinterpret_cast<void*>(this));
     
     glfwSetFramebufferSizeCallback(handle, size_callback);
@@ -154,6 +141,10 @@ void Window::destroy() {
         glfwDestroyWindow(handle);
         active = false;
     }
+}
+
+void Window::close() {
+    glfwSetWindowShouldClose(handle, true);
 }
 
 bool Window::should_close() const {

@@ -15,6 +15,7 @@
 #include "ID_Map.h"
 #include "GL_Loader.h"
 #include "flgl_presets.h"
+#include "Framebuffer.h"
 
 class Graphics {
 private:

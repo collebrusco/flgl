@@ -44,6 +44,7 @@ class GL_Loader {
 private:
     static TEXTURE_SLOT slotsInUse;
     static std::unordered_set<TEXTURE_SLOT> textures;
+    static std::unordered_set<TEXTURE_SLOT> texture_freelist;
     static std::unordered_set<uint32_t> VAOs;
     static std::unordered_set<Shader> shaders;
     static std::string asset_path;
@@ -55,6 +56,8 @@ public:
     static void UnloadShader(Shader& shad);
     static std::unordered_set<Shader>& Shaders();
     
+    static TEXTURE_SLOT LockTextureSlot();
+    static void FreeTextureSlot(TEXTURE_SLOT slot);
     static TEXTURE_SLOT UploadTexture(std::string name, bool pixelated);
     static MeshDetails UploadMesh(const ConstMesh& mesh);
     static MeshDetails UploadMesh(Mesh const& mesh);
