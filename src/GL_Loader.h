@@ -16,7 +16,7 @@
 //          use Shaders(); to iterate through all shaders, useful when data needs to be uploaded to all of them
 //
 //  3.  Upload/Unload Textures
-//          Uploading returns a TEXTURE_SLOT, which can be uploaded to shaders to select and use the texture
+//          Uploading returns a texture_slot_t, which can be uploaded to shaders to select and use the texture
 //
 //  4. Upload/Unload Meshes
 //          Upload Meshes, which are arrays of verticies and elements. See Vertex.h for details on Mesh objects
@@ -25,12 +25,14 @@
 #ifndef GL_Loader_h
 #define GL_Loader_h
 #include <unordered_set>
+#include <unordered_map>
 #include <string>
 #include "Shader.h"
 #include "Vertex.h"
 
-typedef uint32_t TEXTURE_SLOT;
-//typedef uint32_t VAO;
+typedef uint32_t texture_slot_t;
+typedef uint32_t texture_id_t;
+typedef uint32_t vao_id_t;
 
 namespace std {
 template <> struct hash<Shader> {
@@ -42,10 +44,10 @@ template <> struct hash<Shader> {
 
 class GL_Loader {
 private:
-    static TEXTURE_SLOT slotsInUse;
-    static std::unordered_set<TEXTURE_SLOT> textures;
-    static std::unordered_set<TEXTURE_SLOT> texture_freelist;
-    static std::unordered_set<uint32_t> VAOs;
+    static texture_slot_t slotsInUse;
+    static std::unordered_map<texture_slot_t, texture_id_t> textures;
+    static std::unordered_set<texture_slot_t> texture_slot_freelist;
+    static std::unordered_set<vao_id_t> VAOs;
     static std::unordered_set<Shader> shaders;
     static std::string asset_path;
 public:
@@ -56,15 +58,15 @@ public:
     static void UnloadShader(Shader& shad);
     static std::unordered_set<Shader>& Shaders();
     
-    static TEXTURE_SLOT LockTextureSlot();
-    static void FreeTextureSlot(TEXTURE_SLOT slot);
-    static TEXTURE_SLOT UploadTexture(std::string name, bool pixelated);
+    static texture_slot_t LockTextureSlot();
+    static void FreeTextureSlot(texture_slot_t slot);
+    static texture_slot_t UploadTexture(std::string name, bool pixelated);
     static MeshDetails UploadMesh(const ConstMesh& mesh);
     static MeshDetails UploadMesh(Mesh const& mesh);
 
-    static void UnloadMesh(uint32_t vao);
+    static void UnloadMesh(vao_id_t vao);
     static void UnloadMesh(MeshDetails&);
-    static void UnloadTexture(TEXTURE_SLOT);
+    static void UnloadTexture(texture_slot_t);
     
     static void destroy();
     

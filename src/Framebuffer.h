@@ -8,7 +8,7 @@
 
 class Framebuffer {
 	uint32_t framebuffer;
-	TEXTURE_SLOT _slot;
+	texture_slot_t _slot;
 	uint32_t _w;
 	uint32_t _h;
 public:

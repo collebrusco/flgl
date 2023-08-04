@@ -12,16 +12,35 @@
 #include <iostream>
 #include <assert.h>
 
-std::unordered_set<TEXTURE_SLOT> GL_Loader::textures;
-std::unordered_set<uint32_t> GL_Loader::VAOs;
+/*
+ TODO: jesus. ok all of these internal representations 
+ of gl objects that are used for garb collecting
+ will not have items removed on individual unload_x calls. 
+
+ They only really work when used by destroy() 
+ which runs through each list calling unload,
+ then clears the lists. In this case, unload_x calls 
+ cannot remove the item from the list of i'll get a
+ concurrent access segfault. 
+
+ So for now, dont call individual unload_x methods or destroy() will segfault.
+ TERRIBLE! Fixme!
+ fix:
+ private calls to unload that do not edit list
+ public calls to unload that do edit list 
+
+*/
+
+std::unordered_map<texture_slot_t, texture_id_t> GL_Loader::textures;
+std::unordered_set<vao_id_t> GL_Loader::VAOs;
 std::unordered_set<Shader> GL_Loader::shaders;
-std::unordered_set<TEXTURE_SLOT> GL_Loader::texture_freelist;
+std::unordered_set<texture_slot_t> GL_Loader::texture_slot_freelist;
 std::string GL_Loader::asset_path = "assets/";
 
-TEXTURE_SLOT GL_Loader::slotsInUse = 0;
-TEXTURE_SLOT GL_Loader::UploadTexture(std::string name, bool pixelated){
+texture_slot_t GL_Loader::slotsInUse = 0;
+texture_slot_t GL_Loader::UploadTexture(std::string name, bool pixelated){
     int w, h, c;
-    uint32_t textureId;
+    texture_id_t textureId;
     std::string path = asset_path + name + ".png";
     { // verify filepath
         std::ifstream fin;
@@ -74,29 +93,26 @@ TEXTURE_SLOT GL_Loader::UploadTexture(std::string name, bool pixelated){
                  w, h, 0, format, GL_UNSIGNED_BYTE, pixels);
     
     stbi_image_free(pixels);
-    TEXTURE_SLOT texSlot = LockTextureSlot();
+    texture_slot_t texSlot = LockTextureSlot();
     glActiveTexture(GL_TEXTURE0 + texSlot);
     glBindTexture(GL_TEXTURE_2D, textureId);
-    textures.insert(texSlot);
+    textures[texSlot] = textureId;
     return texSlot;
 }
 
-
-TEXTURE_SLOT GL_Loader::LockTextureSlot() {
-    if (texture_freelist.size()) { //TODO test
-        auto it = texture_freelist.begin();
-        TEXTURE_SLOT res = *it;
-        texture_freelist.erase(it);
+texture_slot_t GL_Loader::LockTextureSlot() {
+    if (texture_slot_freelist.size()) { //TODO test
+        auto it = texture_slot_freelist.begin();
+        texture_slot_t res = *it;
+        texture_slot_freelist.erase(it);
         return res;
     }
     return slotsInUse++;
 }
 
-void GL_Loader::FreeTextureSlot(TEXTURE_SLOT slot) {
-    texture_freelist.insert(slot);
+void GL_Loader::FreeTextureSlot(texture_slot_t slot) {
+    texture_slot_freelist.insert(slot);
 }
-
-
 
 MeshDetails GL_Loader::UploadMesh(const ConstMesh& mesh){
     const std::vector<Vertex>& verts = mesh.verticies;
@@ -170,13 +186,13 @@ void GL_Loader::UnloadMesh(MeshDetails& d){
     glDeleteBuffers(1, &d.vao);
 }
 // TODO do these need to remove from list???
-void GL_Loader::UnloadMesh(uint32_t vao){
+void GL_Loader::UnloadMesh(vao_id_t vao){
     glDeleteBuffers(1, &(*(VAOs.find(vao))));
 }
-
-void GL_Loader::UnloadTexture(TEXTURE_SLOT slot){
+#include <iostream>
+void GL_Loader::UnloadTexture(texture_slot_t slot){
     FreeTextureSlot(slot);
-    glDeleteTextures(1, &slot);
+    glDeleteTextures(1, &(textures.at(slot)));
 }
 
 Shader GL_Loader::UploadShader(std::string vert, std::string frag) {
@@ -199,7 +215,7 @@ void GL_Loader::destroy() {
     }
     VAOs.clear();
     for (auto i : textures){
-        UnloadTexture(i);
+        UnloadTexture(i.first);
     }
     textures.clear();
 }

@@ -16,7 +16,7 @@
 class flgl_presets {
 private:
     static std::optional<Shader> fontshader;
-    static std::optional<TEXTURE_SLOT> fonttex;
+    static std::optional<texture_slot_t> fonttex;
     static std::optional<MeshDetails> maybetile;
 public:
     static MeshDetails const& getTileMesh();

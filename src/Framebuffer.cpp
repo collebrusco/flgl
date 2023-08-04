@@ -21,7 +21,7 @@ bool Framebuffer::create(uint32_t w, uint32_t h, bool pixelate) {
 				 GL_RGB,
 				 nullptr);
 	_slot = GL_Loader::LockTextureSlot();
-	glActiveTexture() 
+	glActiveTexture(GL_TEXTURE0 + _slot);
 	return this->active();
 }
 
@@ -51,7 +51,7 @@ bool Framebuffer::active() const {
 }
 
 void Framebuffer::destroy() {
-	GL_Loader::FreeTextureSlot(_slot); slot = 0xFFFFFFFF;
-	glDeleteTextures(1, &texture);
+	
+	GL_Loader::FreeTextureSlot(_slot); _slot = 0xFFFFFFFF;
 	glDeleteFramebuffers(1, &framebuffer);
 }
