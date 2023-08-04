@@ -32,7 +32,6 @@
 
 typedef uint32_t texture_slot_t;
 typedef uint32_t texture_id_t;
-typedef uint32_t vao_id_t;
 
 namespace std {
 template <> struct hash<Shader> {
@@ -50,12 +49,14 @@ private:
     static std::unordered_set<vao_id_t> VAOs;
     static std::unordered_set<Shader> shaders;
     static std::string asset_path;
+
+    static void inner_loopsafe_UnloadMesh(vao_id_t vao);
+    static void inner_loopsafe_UnloadTexture(texture_slot_t);
 public:
     static void setAssetPath(std::string path);
     static void setShaderPath(std::string path);
     
     static Shader UploadShader(std::string vert, std::string frag);
-    static void UnloadShader(Shader& shad);
     static std::unordered_set<Shader>& Shaders();
     
     static texture_slot_t LockTextureSlot();
@@ -64,6 +65,7 @@ public:
     static MeshDetails UploadMesh(const ConstMesh& mesh);
     static MeshDetails UploadMesh(Mesh const& mesh);
 
+    static void UnloadShader(Shader& shad);
     static void UnloadMesh(vao_id_t vao);
     static void UnloadMesh(MeshDetails&);
     static void UnloadTexture(texture_slot_t);

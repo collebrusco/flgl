@@ -21,6 +21,8 @@
  TODO: Meshdetails can likely stay the same, user just needs to use correct shader for their vertex type
  */
 
+typedef uint32_t vao_id_t;
+
 enum DrawType_t {
     TRIANGLES, LINES
 };
@@ -51,9 +53,9 @@ struct Mesh {
 
 struct MeshDetails {
     MeshDetails();
-    MeshDetails(uint32_t v, uint32_t e);
-    MeshDetails(uint32_t v, uint32_t e, DrawType_t dt);
-    uint32_t vao;
+    MeshDetails(vao_id_t v, uint32_t e);
+    MeshDetails(vao_id_t v, uint32_t e, DrawType_t dt);
+    vao_id_t vao;
     uint32_t numElements;
     DrawType_t drawType;
 };

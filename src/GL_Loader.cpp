@@ -183,16 +183,19 @@ MeshDetails GL_Loader::UploadMesh(Mesh const& mesh){
 }
 
 void GL_Loader::UnloadMesh(MeshDetails& d){
-    glDeleteBuffers(1, &d.vao);
+    UnloadMesh(d.vao);
 }
-// TODO do these need to remove from list???
+
 void GL_Loader::UnloadMesh(vao_id_t vao){
-    glDeleteBuffers(1, &(*(VAOs.find(vao))));
+    auto it = VAOs.find(vao);
+    glDeleteBuffers(1, &(*(it)));
+    VAOs.erase(it);
 }
-#include <iostream>
+
 void GL_Loader::UnloadTexture(texture_slot_t slot){
     FreeTextureSlot(slot);
     glDeleteTextures(1, &(textures.at(slot)));
+    textures.erase(slot);
 }
 
 Shader GL_Loader::UploadShader(std::string vert, std::string frag) {
@@ -203,6 +206,7 @@ Shader GL_Loader::UploadShader(std::string vert, std::string frag) {
 
 void GL_Loader::UnloadShader(Shader &shad) {
     shad.destroy();
+    shaders.erase(shad);
 }
 
 void GL_Loader::destroy() { 
@@ -211,11 +215,11 @@ void GL_Loader::destroy() {
     }
     shaders.clear();
     for (auto i : VAOs){
-        UnloadMesh(i);
+        inner_loopsafe_UnloadMesh(i);
     }
     VAOs.clear();
     for (auto i : textures){
-        UnloadTexture(i.first);
+        inner_loopsafe_UnloadTexture(i.first);
     }
     textures.clear();
 }
@@ -232,5 +236,12 @@ void GL_Loader::setShaderPath(std::string path) {
     Shader::setUserShaderPath(path);
 }
 
+void GL_Loader::inner_loopsafe_UnloadTexture(texture_slot_t slot){
+    FreeTextureSlot(slot);
+    glDeleteTextures(1, &(textures.at(slot)));
+}
 
+void GL_Loader::inner_loopsafe_UnloadMesh(vao_id_t vao){
+    glDeleteBuffers(1, &(*(VAOs.find(vao))));
+}
 
