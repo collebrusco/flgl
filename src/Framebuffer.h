@@ -9,8 +9,11 @@
 class Framebuffer {
 	uint32_t framebuffer;
 	texture_slot_t _slot;
+	texture_id_t tid;
+	uint32_t depthbuffer_id;
 	uint32_t _w;
 	uint32_t _h;
+	GLenum drawbuff;
 public:
 	Framebuffer();
 
