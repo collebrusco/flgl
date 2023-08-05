@@ -38,7 +38,7 @@ Shader::Shader(const char* vFileName, const char* fFileName){
 
 const char* Shader::getShaderSource(string shad, string type){
     ifstream fin;
-    string path = "flgl/flgl/default_shaders/" + shad + ".glsl";
+    string path = "lib/flgl/default_shaders/" + shad + ".glsl";
 //    cout << "Reading shader at: " << cpath() + "/" + path << endl;
     
     fin.open(path);
