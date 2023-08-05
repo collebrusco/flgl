@@ -36,6 +36,11 @@ std::unordered_set<vao_id_t> GL_Loader::VAOs;
 std::unordered_set<Shader> GL_Loader::shaders;
 std::unordered_set<texture_slot_t> GL_Loader::texture_slot_freelist;
 std::string GL_Loader::asset_path = "assets/";
+std::string GL_Loader::flgl_path = "lib/flgl/";
+
+static void GL_Loader::setFLGLPath(std::string path) {
+    flgl_path = path;
+}
 
 texture_slot_t GL_Loader::slotsInUse = 0;
 texture_slot_t GL_Loader::UploadTexture(std::string name, bool pixelated){
@@ -46,7 +51,7 @@ texture_slot_t GL_Loader::UploadTexture(std::string name, bool pixelated){
         std::ifstream fin;
         fin.open(path);
         if (!fin){
-            path = "flgl/flgl/default_textures/" + name + ".png";
+            path = flgl_path + "src/default_textures/" + name + ".png";
             fin.open(path);
             std::cout << "file " + path + " not found!\n";
             assert(fin);

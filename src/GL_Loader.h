@@ -49,12 +49,14 @@ private:
     static std::unordered_set<vao_id_t> VAOs;
     static std::unordered_set<Shader> shaders;
     static std::string asset_path;
+    static std::string flgl_path;
 
     static void inner_loopsafe_UnloadMesh(vao_id_t vao);
     static void inner_loopsafe_UnloadTexture(texture_slot_t);
 public:
     static void setAssetPath(std::string path);
     static void setShaderPath(std::string path);
+    static void setFLGLPath(std::string path);
     
     static Shader UploadShader(std::string vert, std::string frag);
     static std::unordered_set<Shader>& Shaders();
