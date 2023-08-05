@@ -12,7 +12,7 @@
 std::optional<MeshDetails> flgl_presets::maybetile;
 
 std::optional<Shader> flgl_presets::fontshader;
-std::optional<TEXTURE_SLOT> flgl_presets::fonttex;
+std::optional<texture_slot_t> flgl_presets::fonttex;
 
 void flgl_presets::drawChar(char c, glm::ivec2 pos, glm::ivec2 scale) {
     if (!fontshader.has_value()){
