@@ -12,25 +12,6 @@
 #include <iostream>
 #include <assert.h>
 
-/*
- TODO: jesus. ok all of these internal representations 
- of gl objects that are used for garb collecting
- will not have items removed on individual unload_x calls. 
-
- They only really work when used by destroy() 
- which runs through each list calling unload,
- then clears the lists. In this case, unload_x calls 
- cannot remove the item from the list of i'll get a
- concurrent access segfault. 
-
- So for now, dont call individual unload_x methods or destroy() will segfault.
- TERRIBLE! Fixme!
- fix:
- private calls to unload that do not edit list
- public calls to unload that do edit list 
-
-*/
-
 std::unordered_map<texture_slot_t, texture_id_t> GL_Loader::textures;
 std::unordered_set<vao_id_t> GL_Loader::VAOs;
 std::unordered_set<Shader> GL_Loader::shaders;
