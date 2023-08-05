@@ -53,7 +53,7 @@ texture_slot_t GL_Loader::UploadTexture(std::string name, bool pixelated){
         if (!fin){
             path = flgl_path + "src/default_textures/" + name + ".png";
             fin.open(path);
-            std::cout << "file " + path + " not found!\n";
+            if (!fin) std::cout << "file " + path + " not found!\n";
             assert(fin);
         }
         fin.close();
