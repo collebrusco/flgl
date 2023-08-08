@@ -93,6 +93,7 @@ texture_slot_t GL_Loader::LockTextureSlot() {
         texture_slot_freelist.erase(it);
         return res;
     }
+    std::cout << slotsInUse << "\n";
     return slotsInUse++;
 }
 

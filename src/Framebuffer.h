@@ -2,12 +2,12 @@
 #include "GL_Loader.h"
 
 // This is not really a framebuffer object as it's more or less hardcoded
-// to be a texutre frame buffer object
-// the plan would be to eventually abstract all opengl objects
+// to be a texutre frame buffer object with a depth buffer
+// the plan would be to eventually abstract all those individual opengl objects
 // so the loader can still free them all but they can all be used nicely
 
 class Framebuffer {
-	uint32_t framebuffer;
+	GLuint framebuffer;
 	texture_slot_t _slot;
 	texture_id_t tid;
 	uint32_t depthbuffer_id;
@@ -20,6 +20,7 @@ public:
 	void bind() const;
 	void unbind() const;
 	uint32_t slot() const;
+	uint32_t id() const;
 	uint32_t w() const;
 	uint32_t h() const;
 
