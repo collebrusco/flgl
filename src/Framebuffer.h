@@ -24,6 +24,8 @@ public:
 	uint32_t w() const;
 	uint32_t h() const;
 
+	void clear(bool depth = true);
+
 	bool create(uint32_t w, uint32_t h, bool pixelate = false);
 	bool active() const;
 	void destroy();

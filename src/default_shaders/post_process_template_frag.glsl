@@ -11,7 +11,10 @@ in vec3 iPos;
 in vec2 iUV;
 
 void main(){
-    vec2 sample_coord = iUV;
+    // vec2 sample_coord = floor(iUV * 256.) / 256. + sin(dot(iUV, iPos.xy));
+    // vec2 sample_coord = iUV * sin(dot(iPos.xy, vec2(11.12131321, -4.9992131)));
+    vec2 sample_coord = floor(iUV * 256.) / 256.;
+    // vec2 sample_coord = iUV;
     vec3 c = texture(uTexslot, sample_coord).xyz;
     // apply additional shading... 
     outColor = c;//vec4(c, 1);

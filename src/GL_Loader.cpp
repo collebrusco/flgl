@@ -22,7 +22,15 @@ std::string GL_Loader::flgl_path = "lib/flgl/";
 void GL_Loader::setFLGLPath(std::string path) {
     flgl_path = path;
 }
-
+#include <iostream> 
+static void er(std::string n = "") {
+    static uint32_t ct = 0;
+    ++ct;
+    GLenum err = glGetError();
+    while (err != GL_NO_ERROR) {
+        std::cout << err << " " + n + " " << ct << "\n"; err = glGetError();
+    }
+}
 texture_slot_t GL_Loader::slotsInUse = 0;
 texture_slot_t GL_Loader::UploadTexture(std::string name, bool pixelated){
     int w, h, c;
@@ -42,6 +50,7 @@ texture_slot_t GL_Loader::UploadTexture(std::string name, bool pixelated){
     //GET PIXELS
     uint8_t* pixels = stbi_load(path.c_str(), &w, &h, &c, 0);
     //PARAMS
+    er("pre");
     glGenTextures(1, &textureId);
     glBindTexture(GL_TEXTURE_2D, textureId);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -80,19 +89,21 @@ texture_slot_t GL_Loader::UploadTexture(std::string name, bool pixelated){
     
     stbi_image_free(pixels);
     texture_slot_t texSlot = LockTextureSlot();
+    std::cout << "binding " + name + " to " << texSlot << "\n";
     glActiveTexture(GL_TEXTURE0 + texSlot);
     glBindTexture(GL_TEXTURE_2D, textureId);
     textures[texSlot] = textureId;
+    er("end");
     return texSlot;
 }
 
 texture_slot_t GL_Loader::LockTextureSlot() {
-    if (texture_slot_freelist.size()) { //TODO test
-        auto it = texture_slot_freelist.begin();
-        texture_slot_t res = *it;
-        texture_slot_freelist.erase(it);
-        return res;
-    }
+    // if (texture_slot_freelist.size()) { //TODO test
+    //     auto it = texture_slot_freelist.begin();
+    //     texture_slot_t res = *it;
+    //     texture_slot_freelist.erase(it);
+    //     return res;
+    // }
     std::cout << slotsInUse << "\n";
     return slotsInUse++;
 }
