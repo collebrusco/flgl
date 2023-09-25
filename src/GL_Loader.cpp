@@ -89,7 +89,7 @@ texture_slot_t GL_Loader::UploadTexture(std::string name, bool pixelated){
     
     stbi_image_free(pixels);
     texture_slot_t texSlot = LockTextureSlot();
-    std::cout << "binding " + name + " to " << texSlot << " with id " << textureId << "\n";
+    // std::cout << "binding " + name + " to " << texSlot << " with id " << textureId << "\n";
     glActiveTexture(GL_TEXTURE0 + texSlot);
     glBindTexture(GL_TEXTURE_2D, textureId);
     textures[texSlot] = textureId;
@@ -104,7 +104,7 @@ texture_slot_t GL_Loader::LockTextureSlot() {
     //     texture_slot_freelist.erase(it);
     //     return res;
     // }
-    std::cout << "locking slot " << slotsInUse << "\n";
+    // std::cout << "locking slot " << slotsInUse << "\n";
     return slotsInUse++;
 }
 

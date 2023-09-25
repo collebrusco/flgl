@@ -30,13 +30,12 @@ bool Framebuffer::create(uint32_t w, uint32_t h, bool pixelate) {
 				 GL_RGB,
 				 GL_UNSIGNED_BYTE,
 				 nullptr);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	_slot = (uint32_t)GL_Loader::LockTextureSlot();
-	std::cout << "fb: slot is " << _slot << "\n";
 	glActiveTexture(GL_TEXTURE0 + _slot);
-	// glBindTexture(GL_TEXTURE_2D, tid);
-	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, tid, 0);
+	glBindTexture(GL_TEXTURE_2D, tid);
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tid, 0);
 	// generate depth buffer
 	glGenRenderbuffers(1, &depthbuffer_id);
 	glBindRenderbuffer(GL_RENDERBUFFER, depthbuffer_id);
@@ -48,8 +47,8 @@ bool Framebuffer::create(uint32_t w, uint32_t h, bool pixelate) {
 	// TODO: this should update a static array because I think this is global state
 	// and having this call for each FBO I think makes only 1 work at a time :/ FIXME
 
-	drawbuff = GL_COLOR_ATTACHMENT0 + _slot;
-	glDrawBuffers(1, &drawbuff);
+	// drawbuff = GL_COLOR_ATTACHMENT0;// + _slot;
+	// glDrawBuffers(1, &drawbuff);
 	// if (this->active()) std::cout << "created frame buffer, active, errors if any: \\/\n"; er();
 	return this->active();
 }
@@ -63,7 +62,11 @@ uint32_t Framebuffer::slot() const {
 	return _slot;
 }
 
-uint32_t Framebuffer::id() const {
+uint32_t Framebuffer::texid() const {
+	return tid;
+}
+
+uint32_t Framebuffer::fbid() const {
 	return framebuffer;
 }
 

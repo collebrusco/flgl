@@ -20,7 +20,8 @@ public:
 	void bind() const;
 	void unbind() const;
 	uint32_t slot() const;
-	uint32_t id() const;
+	uint32_t fbid() const;
+	uint32_t texid() const;
 	uint32_t w() const;
 	uint32_t h() const;
 

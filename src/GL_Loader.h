@@ -44,7 +44,6 @@ template <> struct hash<Shader> {
 class GL_Loader {
 private:
     static texture_slot_t slotsInUse;
-    static std::unordered_map<texture_slot_t, texture_id_t> textures;
     static std::unordered_set<texture_slot_t> texture_slot_freelist;
     static std::unordered_set<vao_id_t> VAOs;
     static std::unordered_set<Shader> shaders;
@@ -54,6 +53,7 @@ private:
     static void inner_loopsafe_UnloadMesh(vao_id_t vao);
     static void inner_loopsafe_UnloadTexture(texture_slot_t);
 public:
+    static std::unordered_map<texture_slot_t, texture_id_t> textures;
     static void setAssetPath(std::string path);
     static void setShaderPath(std::string path);
     static void setFLGLPath(std::string path);
