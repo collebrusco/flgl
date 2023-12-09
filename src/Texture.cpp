@@ -52,6 +52,17 @@ void Texture::paramI(GLenum pname, GLint param) {
 	glTexParameteri(target, pname, param);
 }
 
+void Texture::texImage2D(GLenum target,
+					 	GLint level,
+					 	GLint internalformat,
+					 	GLsizei width,
+					 	GLsizei height,
+					 	GLenum format,
+					 	GLenum type,
+					 	const void * data) {
+	bind();
+	glTexImage2D(target, level, internalFormat, width, height, 0, format, type, data);
+}
 
 void Texture::destroy() {
 	glDeleteTextures(1, &handle);

@@ -24,6 +24,15 @@ public:
 	void paramF(GLenum pname, GLfloat param);
 	void paramI(GLenum pname, GLint param);
 
+	void texImage2D(GLenum target,
+			 	GLint level,
+			 	GLint internalformat,
+			 	GLsizei width,
+			 	GLsizei height,
+			 	GLenum format,
+			 	GLenum type,
+			 	const void * data);
+
 	void destroy();
 };
 
