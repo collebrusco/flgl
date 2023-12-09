@@ -22,20 +22,20 @@ void Texture::create() {
 	glGenTextures(1, &handle);
 }
 
-uint32_t Texture::id() {
+uint32_t Texture::id() const {
 	return handle;
 }
 
-void Texture::bind() {
+void Texture::bind() const {
 	glBindTexture(target, handle);
 }
 
-void Texture::bind_to_unit(texture_unit_t unit) {
+void Texture::bind_to_unit(texture_unit_t unit) const {
 	active_unit(unit);
 	bind();
 }
 
-void Texture::unbind() {
+void Texture::unbind() const {
 	glBindTexture(target, 0);
 }
 
