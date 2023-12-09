@@ -1,113 +1,113 @@
-#include "Framebuffer.h"
-#include "Texture.h"
+// #include "Framebuffer.h"
+// #include "Texture.h"
 
 
-Framebuffer::Framebuffer() {
-	framebuffer = 0xFFFFFFFF;
-	_slot = 0xFFFFFFFF;
-}
-#include <iostream> 
-static void er(std::string n = "") {
-	static uint32_t ct = 0;
-	++ct;
-	GLenum err = glGetError();
-	while (err != GL_NO_ERROR) {
-		std::cout << err << " " + n + " " << ct << "\n"; err = glGetError();
-	}
-}
+// Framebuffer::Framebuffer() {
+// 	framebuffer = 0xFFFFFFFF;
+// 	_slot = 0xFFFFFFFF;
+// }
+// #include <iostream> 
+// static void er(std::string n = "") {
+// 	static uint32_t ct = 0;
+// 	++ct;
+// 	GLenum err = glGetError();
+// 	while (err != GL_NO_ERROR) {
+// 		std::cout << err << " " + n + " " << ct << "\n"; err = glGetError();
+// 	}
+// }
 
-bool Framebuffer::create(uint32_t w, uint32_t h, bool pixelate) {
-	_w = w; _h = h;
-	// generate framebuffer
-	framebuffer = 0;
-	glGenFramebuffers(1, &framebuffer);
-	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-	// generate texture
-	// tid = 0;
-	// glGenTextures(1, &tid);
-	// glBindTexture(GL_TEXTURE_2D, tid);
-	// glTexImage2D(GL_TEXTURE_2D, 0,
-	// 			 GL_RGB, w, h, 0,
-	// 			 GL_RGB,
-	// 			 GL_UNSIGNED_BYTE,
-	// 			 nullptr);
-	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	// _slot = (uint32_t)GL_Loader::LockTextureSlot();
-	// glActiveTexture(GL_TEXTURE0 + _slot);
-	// glBindTexture(GL_TEXTURE_2D, tid);
+// bool Framebuffer::create(uint32_t w, uint32_t h, bool pixelate) {
+// 	_w = w; _h = h;
+// 	// generate framebuffer
+// 	framebuffer = 0;
+// 	glGenFramebuffers(1, &framebuffer);
+// 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+// 	// generate texture
+// 	// tid = 0;
+// 	// glGenTextures(1, &tid);
+// 	// glBindTexture(GL_TEXTURE_2D, tid);
+// 	// glTexImage2D(GL_TEXTURE_2D, 0,
+// 	// 			 GL_RGB, w, h, 0,
+// 	// 			 GL_RGB,
+// 	// 			 GL_UNSIGNED_BYTE,
+// 	// 			 nullptr);
+// 	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+// 	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+// 	// _slot = (uint32_t)GL_Loader::LockTextureSlot();
+// 	// glActiveTexture(GL_TEXTURE0 + _slot);
+// 	// glBindTexture(GL_TEXTURE_2D, tid);
 
-	Texture tex(GL_TEXTURE_2D);
-	tex.create();
-	tex.bind();
-	tex.alloc(GL_TEXTURE_2D, 0, GL_RGB, w, h, GL_RGB, GL_UNSIGNED_BYTE);
-	tex.paramI(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	tex.paramI(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	_slot = (uint32_t)GL_Loader::LockTextureSlot();
-	tex.bind_to_unit(_slot);
-	tid = tex.id();
+// 	Texture tex(GL_TEXTURE_2D);
+// 	tex.create();
+// 	tex.bind();
+// 	tex.alloc(GL_TEXTURE_2D, 0, GL_RGB, w, h, GL_RGB, GL_UNSIGNED_BYTE);
+// 	tex.paramI(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+// 	tex.paramI(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+// 	_slot = (uint32_t)GL_Loader::LockTextureSlot();
+// 	tex.bind_to_unit(_slot);
+// 	tid = tex.id();
 	
-	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tid, 0);
-	// generate depth buffer
-	glGenRenderbuffers(1, &depthbuffer_id);
-	glBindRenderbuffer(GL_RENDERBUFFER, depthbuffer_id);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, _w, _h);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthbuffer_id);
+// 	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tid, 0);
+// 	// generate depth buffer
+// 	glGenRenderbuffers(1, &depthbuffer_id);
+// 	glBindRenderbuffer(GL_RENDERBUFFER, depthbuffer_id);
+// 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, _w, _h);
+// 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthbuffer_id);
 
 
-	// set draw buff array 
-	// TODO: this should update a static array because I think this is global state
-	// and having this call for each FBO I think makes only 1 work at a time :/ FIXME
+// 	// set draw buff array 
+// 	// TODO: this should update a static array because I think this is global state
+// 	// and having this call for each FBO I think makes only 1 work at a time :/ FIXME
 
-	// drawbuff = GL_COLOR_ATTACHMENT0;// + _slot;
-	// glDrawBuffers(1, &drawbuff);
-	// if (this->active()) std::cout << "created frame buffer, active, errors if any: \\/\n"; er();
-	return this->active();
-}
+// 	// drawbuff = GL_COLOR_ATTACHMENT0;// + _slot;
+// 	// glDrawBuffers(1, &drawbuff);
+// 	// if (this->active()) std::cout << "created frame buffer, active, errors if any: \\/\n"; er();
+// 	return this->active();
+// }
 
-void Framebuffer::clear(bool depth) {
-	this->bind();
-	glClear(depth ? GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT : GL_COLOR_BUFFER_BIT);
-}
+// void Framebuffer::clear(bool depth) {
+// 	this->bind();
+// 	glClear(depth ? GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT : GL_COLOR_BUFFER_BIT);
+// }
 
-uint32_t Framebuffer::slot() const {
-	return _slot;
-}
+// uint32_t Framebuffer::slot() const {
+// 	return _slot;
+// }
 
-uint32_t Framebuffer::texid() const {
-	return tid;
-}
+// uint32_t Framebuffer::texid() const {
+// 	return tid;
+// }
 
-uint32_t Framebuffer::fbid() const {
-	return framebuffer;
-}
+// uint32_t Framebuffer::fbid() const {
+// 	return framebuffer;
+// }
 
-uint32_t Framebuffer::w() const {
-	return _w;
-}
+// uint32_t Framebuffer::w() const {
+// 	return _w;
+// }
 
-uint32_t Framebuffer::h() const {
-	return _h;
-}
+// uint32_t Framebuffer::h() const {
+// 	return _h;
+// }
 
-void Framebuffer::bind() const {
-	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-}
+// void Framebuffer::bind() const {
+// 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+// }
 
-void Framebuffer::unbind() const {
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-}
+// void Framebuffer::unbind() const {
+// 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+// }
 
-bool Framebuffer::active() const {
-	if (_slot == 0xFFFFFFFF || framebuffer == 0xFFFFFFFF) return false;
-	this->bind();
-	return glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE;
-}
+// bool Framebuffer::active() const {
+// 	if (_slot == 0xFFFFFFFF || framebuffer == 0xFFFFFFFF) return false;
+// 	this->bind();
+// 	return glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE;
+// }
 
-void Framebuffer::destroy() {
+// void Framebuffer::destroy() {
 	
-	GL_Loader::FreeTextureSlot(_slot); _slot = 0xFFFFFFFF;
-	glDeleteTextures(1, &tid);
-	glDeleteRenderbuffers(1, &depthbuffer_id);
-	glDeleteFramebuffers(1, &framebuffer);
-}
+// 	GL_Loader::FreeTextureSlot(_slot); _slot = 0xFFFFFFFF;
+// 	glDeleteTextures(1, &tid);
+// 	glDeleteRenderbuffers(1, &depthbuffer_id);
+// 	glDeleteFramebuffers(1, &framebuffer);
+// }

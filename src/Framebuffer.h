@@ -1,3 +1,6 @@
+#ifndef FRAMEBUFFER_H
+#define FRAMEBUFFER_H
+
 #include "gfx.h"
 #include "GL_Loader.h"
 
@@ -8,8 +11,8 @@
 
 class Framebuffer {
 	GLuint framebuffer;
-	texture_slot_t _slot;
-	texture_id_t tid;
+	// texture_slot_t _slot;
+	// texture_id_t tid;
 	uint32_t depthbuffer_id;
 	uint32_t _w;
 	uint32_t _h;
@@ -32,3 +35,4 @@ public:
 	void destroy();
 };
 
+#endif 

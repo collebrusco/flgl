@@ -29,6 +29,9 @@
 #include <string>
 #include "Shader.h"
 #include "Vertex.h"
+#include "Texture.h"
+#include "Framebuffer.h"
+#include "Renderbuffer.h"
 
 typedef uint32_t texture_slot_t;
 typedef uint32_t texture_id_t;
@@ -57,6 +60,8 @@ public:
     static void setAssetPath(std::string path);
     static void setShaderPath(std::string path);
     static void setFLGLPath(std::string path);
+    static std::string getAssetPath();
+    static std::string getFLGLPath();
     
     static Shader UploadShader(std::string vert, std::string frag);
     static std::unordered_set<Shader>& Shaders();

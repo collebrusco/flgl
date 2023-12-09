@@ -20,9 +20,6 @@ std::unordered_set<texture_slot_t> GL_Loader::texture_slot_freelist;
 std::string GL_Loader::asset_path = "assets/";
 std::string GL_Loader::flgl_path = "lib/flgl/";
 
-void GL_Loader::setFLGLPath(std::string path) {
-    flgl_path = path;
-}
 #include <iostream> 
 static void er(std::string n = "") {
     static uint32_t ct = 0;
@@ -241,6 +238,18 @@ void GL_Loader::setAssetPath(std::string path) {
 
 void GL_Loader::setShaderPath(std::string path) { 
     Shader::setUserShaderPath(path);
+}
+
+void GL_Loader::setFLGLPath(std::string path) {
+    flgl_path = path;
+}
+
+std::string GL_Loader::getAssetPath() { 
+    return asset_path;
+}
+
+std::string GL_Loader::getFLGLPath() {
+    return flgl_path;
 }
 
 void GL_Loader::inner_loopsafe_UnloadTexture(texture_slot_t slot){

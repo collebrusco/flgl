@@ -10,17 +10,24 @@ class Texture {
 protected:
 	uint32_t handle;
 	GLenum target;
+	uint32_t _w, _h;
 public:
-
-	static void active_unit(texture_unit_t unit);
+	// presets
+	Texture(std::string file, bool pix=false); //gen from file
+	void pixelate(bool pix=true);
+	void wrap(GLenum wrap);
 
 	Texture(GLenum target=GL_TEXTURE_2D);
 	void create();
 
 	uint32_t id() const;
 	void bind() const;
+	static void active_unit(texture_unit_t unit);
 	void bind_to_unit(texture_unit_t unit) const;
 	void unbind() const;
+
+	uint32_t w() const;
+	uint32_t h() const;
 
 	void paramF(GLenum target, GLenum pname, GLfloat param);
 	void paramI(GLenum target, GLenum pname, GLint param);
