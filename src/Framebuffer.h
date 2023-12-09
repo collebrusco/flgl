@@ -3,6 +3,8 @@
 
 #include "gfx.h"
 #include "GL_Loader.h"
+#include "Texture.h"
+#include "Renderbuffer.h"
 
 // This is not really a framebuffer object as it's more or less hardcoded
 // to be a texutre frame buffer object with a depth buffer
@@ -11,27 +13,23 @@
 
 class Framebuffer {
 	GLuint framebuffer;
-	// texture_slot_t _slot;
-	// texture_id_t tid;
-	uint32_t depthbuffer_id;
-	uint32_t _w;
-	uint32_t _h;
 	GLenum drawbuff;
 public:
 	Framebuffer();
+	void create();
+
+	uint32_t id() const;
 
 	void bind() const;
 	void unbind() const;
-	uint32_t slot() const;
-	uint32_t fbid() const;
-	uint32_t texid() const;
-	uint32_t w() const;
-	uint32_t h() const;
+	static void bind_default();
 
-	void clear(bool depth = true);
+	void clear(GLbitfield mask);
 
-	bool create(uint32_t w, uint32_t h, bool pixelate = false);
-	bool active() const;
+	void attach_texture(Texture tex, GLenum attachment);
+	void attach_renderbuffer(Renderbuffer rbo, GLenum attachment);
+
+	bool complete() const;
 	void destroy();
 };
 
