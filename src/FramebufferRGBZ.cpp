@@ -1,4 +1,5 @@
 #include "FramebufferRGBZ.h"
+#include "Graphics.h"
 
 void FramebufferRGBZ::create(uint32_t w, uint32_t h) {
 	_w = w; _h = h;
@@ -46,7 +47,7 @@ void FramebufferRGBZ::resize(uint32_t w, uint32_t h) {
 
 void FramebufferRGBZ::bind_for_render() {
 	framebuffer.bind();
-	glViewport(0,0,_w, _h);
+	Graphics::viewport(_w, _h);
 }
 
 void FramebufferRGBZ::clear() {

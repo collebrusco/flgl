@@ -19,16 +19,18 @@
 class Graphics {
 private:
     static bool isinit;
-    static bool depth_test;
     static std::unordered_set<Window*> windows;
+    static GLbitfield clearer;
 public:
     static void init();
     static bool isInit();
     static void destroy();
     static void clear();
+    static void clear(GLbitfield mask);
     static void setClearColor(float, float, float, float);
     static void setDepthTestEnable(bool);
     static void setWireframe(bool);
+    static void viewport(GLsizei width, GLsizei height, GLint x=0, GLint y=0);
     
     static Window& createWindow(const char* title, size_t x, size_t y);
     static Window& initCreateWindow(const char* title, size_t x, size_t y);

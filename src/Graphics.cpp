@@ -10,10 +10,10 @@
 //include "Meshes.h"
 
 bool Graphics::isinit = false;
-bool Graphics::depth_test = false;
 std::unordered_set<Window*> Graphics::windows;
 GL_Loader Graphics::loader;
 flgl_presets Graphics::std;
+GLbitfield Graphics::clearer = 0;
 
 static void error_callback(int error, const char* description){
     (void)error;
@@ -33,17 +33,18 @@ void Graphics::init(){
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     #endif
+        clearer = GL_COLOR_BUFFER_BIT;
         isinit = true;
     }
 
 }
 
 void Graphics::clear(){
-    if (depth_test){
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    } else {
-        glClear(GL_COLOR_BUFFER_BIT);
-    }
+    glClear(clearer);
+}
+
+void Graphics::clear(GLbitfield mask){
+    glClear(mask);
 }
 
 void Graphics::setClearColor(float r, float g, float b, float a){
@@ -52,12 +53,16 @@ void Graphics::setClearColor(float r, float g, float b, float a){
 
 void Graphics::setDepthTestEnable(bool e){
     if (e){
-        depth_test = true;
+        clearer |= GL_DEPTH_BUFFER_BIT;
         glEnable(GL_DEPTH_TEST);
     } else {
-        depth_test = false;
+        clearer &= (~GL_DEPTH_BUFFER_BIT);
         glDisable(GL_DEPTH_TEST);
     }
+}
+
+void Graphics::viewport(GLsizei width, GLsizei height, GLint x, GLint y) {
+    glViewport(x,y,width,height);
 }
 
 void Graphics::destroy(){
