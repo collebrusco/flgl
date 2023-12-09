@@ -10,7 +10,7 @@
 #define flgl_presets_h
 
 #include <optional>
-#include "Shader.h"
+#include "gl_objects/Shader.h"
 #include "GL_Loader.h"
 
 class flgl_presets {

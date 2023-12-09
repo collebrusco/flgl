@@ -1,7 +1,7 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include "gfx.h"
+#include "../gfx.h"
 #include <string>
 
 typedef uint32_t texture_unit_t;
@@ -41,6 +41,10 @@ public:
 		 	GLsizei height,
 		 	GLenum format,
 		 	GLenum type,
+		 	const void * data=nullptr);
+
+	void alloc_rgb(GLsizei width,
+		 	GLsizei height,
 		 	const void * data=nullptr);
 
 	void destroy();

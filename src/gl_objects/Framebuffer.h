@@ -1,8 +1,7 @@
 #ifndef FRAMEBUFFER_H
 #define FRAMEBUFFER_H
 
-#include "gfx.h"
-#include "GL_Loader.h"
+#include "../gfx.h"
 #include "Texture.h"
 #include "Renderbuffer.h"
 

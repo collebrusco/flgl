@@ -9,7 +9,7 @@
 #define Meshes_h
 
 #include <vector>
-#include "../src/Vertex.h"
+#include "../src/gl_objects/Vertex.h"
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 

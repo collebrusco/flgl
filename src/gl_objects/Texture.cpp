@@ -1,5 +1,5 @@
 #include "Texture.h"
-#include "GL_Loader.h"
+#include "../GL_Loader.h"
 // #define STB_IMAGE_IMPLEMENTATION
 #include "../lib/stb/include/stb_image.h"
     // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -142,6 +142,10 @@ void Texture::alloc(GLenum target,
 	_w = width; _h = height;
 	bind();
 	glTexImage2D(target, level, internalFormat, width, height, 0, format, type, data);
+}
+
+void Texture::alloc_rgb(GLsizei width, GLsizei height, const void * data) {
+    this->alloc(GL_TEXTURE_2D, 0, GL_RGB, width, height, GL_RGB, GL_UNSIGNED_BYTE);
 }
 
 void Texture::destroy() {

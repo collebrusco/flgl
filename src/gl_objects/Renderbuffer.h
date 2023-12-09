@@ -1,7 +1,7 @@
 #ifndef RENDERBUFFER_H
 #define RENDERBUFFER_H
 
-#include "gfx.h"
+#include "../gfx.h"
 
 class Renderbuffer {
 private:

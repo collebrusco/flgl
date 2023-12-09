@@ -7,7 +7,6 @@
 //
 
 #include "GL_Loader.h"
-#include "Texture.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "../lib/stb/include/stb_image.h"
 #include <iostream>

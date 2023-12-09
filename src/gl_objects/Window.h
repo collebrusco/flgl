@@ -8,7 +8,7 @@
 
 #ifndef Window_h
 #define Window_h
-#include "gfx.h" 
+#include "../gfx.h" 
 #include <glm/glm.hpp>
 
 struct Button {
@@ -38,8 +38,8 @@ public:
     Window(const char*, size_t x, size_t y);
     Window(const Window&) = delete;
     Window operator=(const Window&) = delete;
-    virtual void update();
-    virtual void destroy();
+    void update();
+    void destroy();
     
     bool hasHandle(GLFWwindow*) const;
     

@@ -10,11 +10,11 @@
 #define Graphics_h
 #include <unordered_set>
 #include <optional>
-#include "Window.h"
-#include "Vertex.h"
+#include "gl_objects/Window.h"
+#include "gl_objects/Vertex.h"
+#include "gl_objects/Framebuffer.h"
 #include "GL_Loader.h"
 #include "flgl_presets.h"
-#include "Framebuffer.h"
 
 class Graphics {
 private:
