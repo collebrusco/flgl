@@ -22,6 +22,10 @@ void Texture::create() {
 	glGenTextures(1, &handle);
 }
 
+uint32_t Texture::id() {
+	return handle;
+}
+
 void Texture::bind() {
 	glBindTexture(target, handle);
 }
@@ -52,14 +56,14 @@ void Texture::paramI(GLenum pname, GLint param) {
 	glTexParameteri(target, pname, param);
 }
 
-void Texture::texImage2D(GLenum target,
+void Texture::alloc(GLenum target,
 					 	GLint level,
-					 	GLint internalformat,
+					 	GLint internalFormat,
 					 	GLsizei width,
 					 	GLsizei height,
 					 	GLenum format,
 					 	GLenum type,
-					 	const void * data) {
+		 				const void * data) {
 	bind();
 	glTexImage2D(target, level, internalFormat, width, height, 0, format, type, data);
 }

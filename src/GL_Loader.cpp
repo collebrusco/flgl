@@ -7,6 +7,7 @@
 //
 
 #include "GL_Loader.h"
+#include "Texture.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "../lib/stb/include/stb_image.h"
 #include <iostream>
@@ -51,12 +52,19 @@ texture_slot_t GL_Loader::UploadTexture(std::string name, bool pixelated){
     uint8_t* pixels = stbi_load(path.c_str(), &w, &h, &c, 0);
     //PARAMS
     er("pre");
-    glGenTextures(1, &textureId);
-    glBindTexture(GL_TEXTURE_2D, textureId);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, pixelated ? GL_NEAREST : GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, pixelated ? GL_NEAREST : GL_LINEAR);
+    // glGenTextures(1, &textureId);
+    // glBindTexture(GL_TEXTURE_2D, textureId);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, pixelated ? GL_NEAREST : GL_LINEAR);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, pixelated ? GL_NEAREST : GL_LINEAR);
+    Texture tex(GL_TEXTURE_2D);
+    tex.create();
+    tex.bind();
+    tex.paramI(GL_TEXTURE_WRAP_S, GL_REPEAT);
+    tex.paramI(GL_TEXTURE_WRAP_T, GL_REPEAT);
+    tex.paramI(GL_TEXTURE_MIN_FILTER, pixelated ? GL_NEAREST : GL_LINEAR);
+    tex.paramI(GL_TEXTURE_MAG_FILTER, pixelated ? GL_NEAREST : GL_LINEAR);
     //UPLOAD
     uint32_t mipLevel = 0;
     uint32_t internalFormat;
@@ -84,15 +92,16 @@ texture_slot_t GL_Loader::UploadTexture(std::string name, bool pixelated){
             break;
     }
     
-    glTexImage2D(GL_TEXTURE_2D, mipLevel, internalFormat,
-                 w, h, 0, format, GL_UNSIGNED_BYTE, pixels);
+    tex.alloc(GL_TEXTURE_2D, mipLevel, internalFormat,
+                 w, h, format, GL_UNSIGNED_BYTE, pixels);
     
     stbi_image_free(pixels);
     texture_slot_t texSlot = LockTextureSlot();
     // std::cout << "binding " + name + " to " << texSlot << " with id " << textureId << "\n";
-    glActiveTexture(GL_TEXTURE0 + texSlot);
-    glBindTexture(GL_TEXTURE_2D, textureId);
-    textures[texSlot] = textureId;
+    // glActiveTexture(GL_TEXTURE0 + texSlot);
+    // glBindTexture(GL_TEXTURE_2D, textureId);
+    tex.bind_to_unit(texSlot);
+    textures[texSlot] = tex.id();
     er("end");
     return texSlot;
 }

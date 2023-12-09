@@ -1,4 +1,5 @@
 #include "Framebuffer.h"
+#include "Texture.h"
 
 
 Framebuffer::Framebuffer() {
@@ -22,19 +23,30 @@ bool Framebuffer::create(uint32_t w, uint32_t h, bool pixelate) {
 	glGenFramebuffers(1, &framebuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 	// generate texture
-	tid = 0;
-	glGenTextures(1, &tid);
-	glBindTexture(GL_TEXTURE_2D, tid);
-	glTexImage2D(GL_TEXTURE_2D, 0,
-				 GL_RGB, w, h, 0,
-				 GL_RGB,
-				 GL_UNSIGNED_BYTE,
-				 nullptr);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// tid = 0;
+	// glGenTextures(1, &tid);
+	// glBindTexture(GL_TEXTURE_2D, tid);
+	// glTexImage2D(GL_TEXTURE_2D, 0,
+	// 			 GL_RGB, w, h, 0,
+	// 			 GL_RGB,
+	// 			 GL_UNSIGNED_BYTE,
+	// 			 nullptr);
+	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// _slot = (uint32_t)GL_Loader::LockTextureSlot();
+	// glActiveTexture(GL_TEXTURE0 + _slot);
+	// glBindTexture(GL_TEXTURE_2D, tid);
+
+	Texture tex(GL_TEXTURE_2D);
+	tex.create();
+	tex.bind();
+	tex.alloc(GL_TEXTURE_2D, 0, GL_RGB, w, h, GL_RGB, GL_UNSIGNED_BYTE);
+	tex.paramI(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	tex.paramI(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	_slot = (uint32_t)GL_Loader::LockTextureSlot();
-	glActiveTexture(GL_TEXTURE0 + _slot);
-	glBindTexture(GL_TEXTURE_2D, tid);
+	tex.bind_to_unit(_slot);
+	tid = tex.id();
+	
 	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tid, 0);
 	// generate depth buffer
 	glGenRenderbuffers(1, &depthbuffer_id);
