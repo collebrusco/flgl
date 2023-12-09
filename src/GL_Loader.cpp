@@ -31,7 +31,6 @@ static void er(std::string n = "") {
 texture_slot_t GL_Loader::slotsInUse = 0;
 texture_slot_t GL_Loader::UploadTexture(std::string name, bool pixelated){
     int w, h, c;
-    texture_id_t textureId;
     std::string path = asset_path + name + ".png";
     { // verify filepath
         std::ifstream fin;

@@ -77,7 +77,7 @@ bool Shader::compileVertShader(GLuint& vShader, const char* vFileName){
         std::vector<GLchar> errorLog(maxLength);
         glGetShaderInfoLog(vShader, maxLength, &maxLength, &errorLog[0]);
         cout << "Error: \n";
-        for (int i = 0; i < errorLog.size(); i++){
+        for (size_t i = 0; i < errorLog.size(); i++){
             cout << errorLog[i];
         }
         cout << "\n";
@@ -112,7 +112,7 @@ bool Shader::compileFragShader(GLuint& fShader, const char* fFileName){
         std::vector<GLchar> errorLog(maxLength);
         glGetShaderInfoLog(fShader, maxLength, &maxLength, &errorLog[0]);
         cout << "Error: \n";
-        for (int i = 0; i < errorLog.size(); i++){
+        for (size_t i = 0; i < errorLog.size(); i++){
             cout << errorLog[i];
         }
         cout << "\n";

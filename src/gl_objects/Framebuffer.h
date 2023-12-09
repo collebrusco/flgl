@@ -12,7 +12,6 @@
 
 class Framebuffer {
 	GLuint framebuffer;
-	GLenum drawbuff;
 public:
 	Framebuffer();
 	void create();

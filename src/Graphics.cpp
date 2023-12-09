@@ -16,6 +16,7 @@ GL_Loader Graphics::loader;
 flgl_presets Graphics::std;
 
 static void error_callback(int error, const char* description){
+    (void)error;
     std::cout << "error: " << description << std::endl;
 }
 

@@ -34,6 +34,7 @@ static void cursor_callback(GLFWwindow *handle, double xp, double yp){
 }
 
 static void key_callback(GLFWwindow* handle, int key, int scancode, int action, int mods){
+    (void)scancode; (void)mods;
     Window& win = *reinterpret_cast<Window*>(glfwGetWindowUserPointer(handle));
     if (key < 0) {
         return;
@@ -51,6 +52,7 @@ static void key_callback(GLFWwindow* handle, int key, int scancode, int action, 
 }
 
 static void mouse_callback(GLFWwindow *handle, int button, int action, int mods){
+    (void)mods;
     Window& win = *reinterpret_cast<Window*>(glfwGetWindowUserPointer(handle));
     if (button < 0){
         return;
@@ -105,7 +107,7 @@ const char* Window::get_title() const {
 }
 
 void Window::update_buttons(Button * b, size_t n){
-    for (int i = 0; i < n; i++){
+    for (size_t i = 0; i < n; i++){
         b[i].pressed = b[i].down && !b[i].last;
         b[i].released = b[i].last && !b[i].down;
         b[i].last = b[i].down;

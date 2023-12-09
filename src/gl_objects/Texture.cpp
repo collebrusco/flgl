@@ -145,7 +145,7 @@ void Texture::alloc(GLenum target,
 }
 
 void Texture::alloc_rgb(GLsizei width, GLsizei height, const void * data) {
-    this->alloc(GL_TEXTURE_2D, 0, GL_RGB, width, height, GL_RGB, GL_UNSIGNED_BYTE);
+    this->alloc(GL_TEXTURE_2D, 0, GL_RGB, width, height, GL_RGB, GL_UNSIGNED_BYTE, data);
 }
 
 void Texture::destroy() {
