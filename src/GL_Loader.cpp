@@ -235,7 +235,7 @@ void GL_Loader::setAssetPath(std::string path) {
 }
 
 void GL_Loader::setShaderPath(std::string path) { 
-    Shader::setUserShaderPath(path);
+    // Shader::setUserShaderPath(path);
 }
 
 void GL_Loader::setFLGLPath(std::string path) {

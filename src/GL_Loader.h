@@ -27,12 +27,12 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <string>
-#include "gl_objects/Shader.h"
-#include "gl_objects/Vertex.h"
-#include "gl_objects/Texture.h"
-#include "gl_objects/Framebuffer.h"
-#include "gl_objects/Renderbuffer.h"
-#include "FramebufferRGBZ.h"
+#include "gl_objs/Shader.h"
+#include "gl_objs/Vertex.h"
+#include "gl_objs/Texture.h"
+#include "gl_objs/Framebuffer.h"
+#include "gl_objs/Renderbuffer.h"
+#include "gl_objs/FramebufferRGBZ.h"
 
 typedef uint32_t texture_slot_t;
 typedef uint32_t texture_id_t;

@@ -10,7 +10,6 @@
 //include "Meshes.h"
 
 bool Graphics::isinit = false;
-std::unordered_set<Window*> Graphics::windows;
 GL_Loader Graphics::loader;
 flgl_presets Graphics::std;
 GLbitfield Graphics::clearer = 0;
@@ -68,9 +67,6 @@ void Graphics::viewport(GLsizei width, GLsizei height, GLint x, GLint y) {
 void Graphics::destroy(){
     isinit = false;
     loader.destroy();
-    for (auto w : windows){
-        delete w;
-    }
     glfwTerminate();
 }
 
@@ -78,30 +74,30 @@ bool Graphics::isInit(){
     return isinit;
 }
 
-Window& Graphics::createWindow(const char *title, size_t x, size_t y){
-    assert(isinit);
-    Window* win = new Window(title, x, y);
-    windows.insert(win);
-    return *win;
-}
+// Window& Graphics::createWindow(const char *title, size_t x, size_t y){
+//     assert(isinit);
+//     Window* win = new Window(title, x, y);
+//     windows.insert(win);
+//     return *win;
+// }
 
-Window& Graphics::initCreateWindow(const char* title, size_t x, size_t y){
-    init();
-    auto& win = createWindow(title, x, y);
-    {
-        const char* glversion = (const char*)glGetString(GL_VERSION);
-        if(glversion) 
-            std::cout << "[FLGL]: initialized opengl " << glversion << "\n";
-        else
-            std::cout << "[FLGL]: failed to detect opengl version\n";
+// Window& Graphics::initCreateWindow(const char* title, size_t x, size_t y){
+//     init();
+//     auto& win = createWindow(title, x, y);
+//     {
+//         const char* glversion = (const char*)glGetString(GL_VERSION);
+//         if(glversion) 
+//             std::cout << "[FLGL]: initialized opengl " << glversion << "\n";
+//         else
+//             std::cout << "[FLGL]: failed to detect opengl version\n";
 
-        int maj, min, rev;
-        glfwGetVersion(&maj, &min, &rev);
-        std::cout << "[FLGL]: initialized glfw " << maj << "." << min << "." << rev << "\n";
+//         int maj, min, rev;
+//         glfwGetVersion(&maj, &min, &rev);
+//         std::cout << "[FLGL]: initialized glfw " << maj << "." << min << "." << rev << "\n";
 
-    }
-    return win;
-}
+//     }
+//     return win;
+// }
 
 void Graphics::DrawMesh(MeshDetails& mesh){
     glBindVertexArray(mesh.vao);
@@ -116,13 +112,13 @@ void Graphics::DrawMesh(MeshDetails const& mesh){
 }
 
 Window &Graphics::getWindow(){
-    auto handle = glfwGetCurrentContext();
-    for (auto w : windows){
-        if (w->hasHandle(handle)){
-            return *w;
-        }
-    }
-    throw ("get window called and window dne or is unregistered");
+    // auto handle = glfwGetCurrentContext();
+    // for (auto w : windows){
+    //     if (w->hasHandle(handle)){
+    //         return *w;
+    //     }
+    // }
+    throw ("fix this function or remove it");
 }
 
 void Graphics::forEachShader(std::function<void(Shader)> visit) {

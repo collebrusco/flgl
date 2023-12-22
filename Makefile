@@ -14,7 +14,7 @@ ifeq ($(UNAME_S), Darwin)
 	LDFLAGS += -framework OpenGL -framework IOKit -framework CoreVideo -framework Cocoa
 endif
 
-SRC = $(wildcard src/*.cpp)
+SRC = $(wildcard src/*.cpp) $(wildcard src/**/*.cpp)
 OBJ = $(SRC:.cpp=.o)
 BIN = bin
 

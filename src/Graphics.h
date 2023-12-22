@@ -10,16 +10,15 @@
 #define Graphics_h
 #include <unordered_set>
 #include <optional>
-#include "gl_objects/Window.h"
-#include "gl_objects/Vertex.h"
-#include "gl_objects/Framebuffer.h"
+#include "Window.h"
 #include "GL_Loader.h"
-#include "flgl_presets.h"
+#include "gl_objs/Vertex.h"
+#include "gl_objs/Framebuffer.h"
+#include "tools/flgl_presets.h"
 
 class Graphics {
 private:
     static bool isinit;
-    static std::unordered_set<Window*> windows;
     static GLbitfield clearer;
 public:
     static void init();
@@ -32,8 +31,8 @@ public:
     static void setWireframe(bool);
     static void viewport(GLsizei width, GLsizei height, GLint x=0, GLint y=0);
     
-    static Window& createWindow(const char* title, size_t x, size_t y);
-    static Window& initCreateWindow(const char* title, size_t x, size_t y);
+    // static Window& createWindow(const char* title, size_t x, size_t y);
+    // static Window& initCreateWindow(const char* title, size_t x, size_t y);
     static Window& getWindow();
     
     static GL_Loader loader;

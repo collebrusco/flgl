@@ -1,14 +1,6 @@
-//
-//  flgl.h
-//  graphics-library-interface
-//
-//  Created by Frank Collebrusco on 5/10/23.
-//
+#ifndef USER_FLGL_H
+#define USER_FLGL_H
 
-#ifndef flgl_h
-#define flgl_h
+#include "../src/flgl.h"
 
-#include "../src/Graphics.h"
-#include "../src/Camera.h"
-
-#endif /* flgl_h */
+#endif
