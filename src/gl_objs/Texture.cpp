@@ -2,6 +2,9 @@
 #include "../flgl.h"
 // #define STB_IMAGE_IMPLEMENTATION
 #include "../lib/stb/include/stb_image.h"
+#include <fstream>
+#include "../util/log.h"
+LOG_MODULE(Texture)
 
 void Texture::active_unit(texture_unit_t unit) {
 	glActiveTexture(GL_TEXTURE0+unit);
@@ -32,7 +35,7 @@ Texture::Texture(std::string file, bool pix) : Texture(GL_TEXTURE_2D) {
         if (!fin){
             path = flgl::config.flgl_path() + "res/default_textures/" + file + ".png";
             fin.open(path);
-            if (!fin) std::cout << "file " + path + " not found!\n";
+            if (!fin) LOG_ERR("file %s not found!", path.c_str());
             assert(fin);
         }
         fin.close();

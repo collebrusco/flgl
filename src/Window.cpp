@@ -105,7 +105,6 @@ void Window::create(const char* t, size_t x, size_t y){
         if(glversion) 
             LOG_INF("initialized opengl %s", glversion);
         else
-            std::cout << "[FLGL]: failed to detect opengl version\n";
             LOG_WRN("failed to detect opengl version");
 
         int maj, min, rev;

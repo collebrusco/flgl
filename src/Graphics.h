@@ -7,6 +7,10 @@
 #include "gl_objs/Framebuffer.h"
 #include "tools/flgl_presets.h"
 
+/*
+  Container for context-wide gl calls or simple combinations
+*/
+
 class Graphics {
 private:
     static bool isinit;

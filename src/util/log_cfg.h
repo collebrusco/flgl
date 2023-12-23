@@ -12,8 +12,10 @@
 // file settings
 
 // use file
-#define _LOG_USE_FILE 1
+#define _LOG_USE_FILE 0
 
-// file name
-#define _LOG_FILE "log.log"
-
+#if _LOG_USE_FILE == 1
+	#include "../flgl.h"
+	// file name
+	#define _LOG_FILE (flgl::config.flgl_path() + "logs/log.txt").c_str()
+#endif

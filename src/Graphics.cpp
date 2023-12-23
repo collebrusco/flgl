@@ -63,7 +63,6 @@ void Graphics::polygon_mode(GLenum mode, GLenum face) {
 
 void Graphics::destroy(){
     isinit = false;
-    loader.destroy();
     glfwTerminate();
 }
 
