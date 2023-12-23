@@ -201,7 +201,7 @@ void GL_Loader::UnloadTexture(texture_slot_t slot){
 }
 
 Shader GL_Loader::UploadShader(std::string vert, std::string frag) {
-    Shader s(vert.c_str(), frag.c_str());
+    Shader s; s.create(vert.c_str(), frag.c_str());
     shaders.insert(s.programID());
     return s;
 }

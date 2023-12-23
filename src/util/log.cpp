@@ -13,14 +13,6 @@ void flgl_logger::down() {
 	fclose(_log_get_file());
 }
 
-flgl_logger::flgl_logger() {
-	up();
-}
-
-flgl_logger::~flgl_logger() {
-	down();
-}
-
 FILE* flgl_logger::_log_get_file() {
 	static FILE* p = fopen(_LOG_FILE, "w");
 	return p;
@@ -29,3 +21,15 @@ FILE* flgl_logger::_log_get_file() {
 static flgl_logger _flgl_logger;
 
 #endif // log use file
+
+flgl_logger::flgl_logger(const char* n) : modname(n){
+#if _LOG_USE_FILE == 1
+	up();
+#endif
+}
+
+flgl_logger::~flgl_logger() {
+#if _LOG_USE_FILE == 1
+	down();
+#endif
+}

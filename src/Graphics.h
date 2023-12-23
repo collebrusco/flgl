@@ -5,7 +5,10 @@
 #include "Window.h"
 #include "gl_objs/Vertex.h"
 #include "gl_objs/Framebuffer.h"
-#include "tools/flgl_presets.h"
+#include "gl_objs/Shader.h"
+#include "gl_objs/Texture.h"
+#include "gl_objs/Renderbuffer.h"
+#include "gl_objs/FramebufferRGBZ.h"
 
 /*
   Container for context-wide gl calls or simple combinations

@@ -16,13 +16,14 @@ private:
     bool compileFragShader(GLuint& fShader, const char* vFileName);
     bool compileVertShader(GLuint& vShader, const char* fFileName);
     bool linkPrograms(GLuint& vShader, GLuint& fShader, GLuint& prog);
+    bool check_status(const char* name, GLuint shader);
     const char* getShaderSource(std::string shad, std::string type);
     bool compileAndLink(const char* vFileName, const char* fFileName);
 public:
     Shader();
     ~Shader();
-    Shader(const char* vFileName, const char* fFileName);
     Shader(uint32_t);
+    void create(const char* vFileName, const char* fFileName);
     const GLuint& programID() const;
     
     void bind() const;

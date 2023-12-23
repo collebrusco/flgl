@@ -8,9 +8,12 @@
 
 #define GLFW_INCLUDE_GLCOREARB
 #define GL_SILENCE_DEPRECATION
+#include <sstream>
 #include "Shader.h"
 #include <glm/gtc/type_ptr.hpp>
 #include "../flgl.h"
+#include "../util/log.h"
+LOG_MODULE(Shader);
 
 #ifdef DEBUG
 static uint32_t numShaders = 0;
@@ -26,31 +29,31 @@ Shader::Shader(uint32_t p) {
 
 Shader::~Shader(){}
 
-Shader::Shader(const char* vFileName, const char* fFileName){
+void Shader::create(const char* vFileName, const char* fFileName){
     compileAndLink(vFileName, fFileName);
 }
-// #include <filesystem>
-// static std::string cpath(){
-//    auto p = std::filesystem::current_path();
-//    return p.string();
-// }
+#include <filesystem>
+static std::string cpath(std::string p){
+   return std::filesystem::current_path().string() + "/" + p;
+}
 
 const char* Shader::getShaderSource(string shad, string type){
     ifstream fin;
     string path = flgl::config.flgl_path() + "res/default_shaders/" + shad + ".glsl";
-   // cout << "Reading shader at: " << cpath() + "/" + path << endl;
-    
+    LOG_DBG("looking for shader %s at %s", shad.c_str(), path.c_str());
     fin.open(path);
     if (!fin){
         path = flgl::config.shader_path() + shad + ".glsl";
-           // cout << "Reading shader at: " << cpath() + "/" + path << endl;
-
+        LOG_DBG("not found, now looking for %s at %s", shad.c_str(), path.c_str());
         fin.open(path);
         if (!fin){
-            cout << "can't find " + type + " shader " + shad + "!\n";
+            LOG_ERR("cant find %s shader %s at %s!", type.c_str(), shad.c_str(), cpath(path).c_str());
+            return 0;
         }
     }
     
+    LOG_INF("found shader %s at %s", shad.c_str(), cpath(path).c_str());
+
     string contents((std::istreambuf_iterator<char>(fin)), std::istreambuf_iterator<char>());
     fin.close();
     static string src;
@@ -58,82 +61,55 @@ const char* Shader::getShaderSource(string shad, string type){
     return src.c_str();
 }
 
-bool Shader::compileVertShader(GLuint& vShader, const char* vFileName){
-    const char* vSource = getShaderSource(vFileName, "vert");
-    vShader = glCreateShader(GL_VERTEX_SHADER);
-    #ifdef DEBUG
-    numShaders++;
-    #endif
-    glShaderSource(vShader, 1, &vSource, NULL);
-    glCompileShader(vShader);
+bool Shader::check_status(const char* name, GLuint shader) {
     GLint status;
-    glGetShaderiv(vShader, GL_COMPILE_STATUS, &status);
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
     if (status == GL_TRUE){
-        cout << vFileName << " shader compiled sucessfully!" << endl;
+        LOG_INF("shader %s compiled sucessfully", name);
     } else {
-        cout << vFileName << " shader compilation failed!" << endl;
+        LOG_ERR("shader %s compilation failed!", name);
         GLint maxLength = 0;
-        glGetShaderiv(vShader, GL_INFO_LOG_LENGTH, &maxLength);
+        glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &maxLength);
 
         std::vector<GLchar> errorLog(maxLength);
-        glGetShaderInfoLog(vShader, maxLength, &maxLength, &errorLog[0]);
-        cout << "Error: \n";
+        glGetShaderInfoLog(shader, maxLength, &maxLength, &errorLog[0]);
+        std::ostringstream strm;
+        strm << "OpenGL Compiler output: \n";
         for (size_t i = 0; i < errorLog.size(); i++){
-            cout << errorLog[i];
+            strm << errorLog[i];
         }
-        cout << "\n";
+        LOG_ERR("%s", strm.str().c_str());
         // Exit with failure.
-        #ifdef DEBUG
-        numShaders--;
-        #endif
-        glDeleteShader(vShader); // Don't leak the shader.
+        glDeleteShader(shader); // Don't leak the shader.
         return false;
     }
     return true;
+}
+
+bool Shader::compileVertShader(GLuint& vShader, const char* vFileName){
+    const char* vSource = getShaderSource(vFileName, "vert");
+    vShader = glCreateShader(GL_VERTEX_SHADER);
+
+    glShaderSource(vShader, 1, &vSource, NULL);
+    glCompileShader(vShader);
+    return check_status(vFileName, vShader);
 }
 
 bool Shader::compileFragShader(GLuint& fShader, const char* fFileName){
     const char* fSource = getShaderSource(fFileName, "frag");
 
     fShader = glCreateShader(GL_FRAGMENT_SHADER);
-    #ifdef DEBUG
-    numShaders++;
-    #endif
     glShaderSource(fShader, 1, &fSource, NULL);
     glCompileShader(fShader);
     GLint status;
     glGetShaderiv(fShader, GL_COMPILE_STATUS, &status);
-    if (status == GL_TRUE){
-        cout << fFileName << " shader compiled sucessfully!" << endl;
-    } else {
-        cout << fFileName << " shader compilation failed!" << endl;
-        GLint maxLength = 0;
-        glGetShaderiv(fShader, GL_INFO_LOG_LENGTH, &maxLength);
-
-        std::vector<GLchar> errorLog(maxLength);
-        glGetShaderInfoLog(fShader, maxLength, &maxLength, &errorLog[0]);
-        cout << "Error: \n";
-        for (size_t i = 0; i < errorLog.size(); i++){
-            cout << errorLog[i];
-        }
-        cout << "\n";
-        // Exit with failure.
-        glDeleteShader(fShader); // Don't leak the shader.
-        #ifdef DEBUG
-        numShaders--;
-        #endif
-        return false;
-    }
-    return true;
+    return check_status(fFileName, fShader);
 }
 
 bool Shader::linkPrograms(GLuint& vShader, GLuint& fShader, GLuint& prog){
     bool flag = true;
     //create program object
     prog = glCreateProgram();
-    #ifdef DEBUG
-    numShaders++;
-    #endif
     //attach vert & frags
     glAttachShader(prog, vShader);
     glAttachShader(prog, fShader);
@@ -148,29 +124,26 @@ bool Shader::linkPrograms(GLuint& vShader, GLuint& fShader, GLuint& prog){
         glGetProgramiv(prog, GL_INFO_LOG_LENGTH, &maxLength);
         vector<GLchar> infoLog(maxLength);
         glGetProgramInfoLog(prog, maxLength, &maxLength, &infoLog[0]);
+        std::ostringstream strm;
         for (int i = 0; i < maxLength; i++){
-            cout << infoLog[i];
+            strm << infoLog[i];
         }
-        cout << endl;
+        LOG_ERR("Shader link failed!");
+        LOG_ERR("OpenGL error output:\n%s", strm.str().c_str());
         //destroy individual shader objs
         glDetachShader(prog, vShader);
         glDetachShader(prog, fShader);
         glDeleteShader(vShader);
         glDeleteShader(fShader);
         glDeleteProgram(prog);
-        #ifdef DEBUG
-        numShaders-=3;
-        #endif
     } else {
-        cout << "Shader link successful!\n";
+        LOG_INF("shader link successful!");
         //destroy individual shader objs
         glDetachShader(prog, vShader);
         glDetachShader(prog, fShader);
         glDeleteShader(vShader);
         glDeleteShader(fShader);
-        #ifdef DEBUG
-        numShaders-=2;
-        #endif
+
     }
     return flag;
 }
@@ -198,9 +171,6 @@ void Shader::unBind() const {
 
 // if this is called after program has already been destroyed, is there a problem?
 void Shader::destroy(){
-    #ifdef DEBUG
-    cout << "shader deleted, " << --numShaders << " remain..\n";
-    #endif
     glDeleteProgram(programId);
 }
 
