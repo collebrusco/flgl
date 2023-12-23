@@ -19,3 +19,7 @@ Window flgl::window = Window();
 flgl::Input flgl::input = flgl::Input();
 flgl::Config flgl::config = Config();
 
+void flgl::destroy() {
+	
+}
+

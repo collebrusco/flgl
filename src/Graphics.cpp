@@ -1,29 +1,22 @@
-//
-//  Graphics.cpp
-//  graphics-library-interface
-//
-//  Created by Frank Collebrusco on 3/17/23.
-//
-//
 #define GL_SILENCE_DEPRECATION
 #include "Graphics.h"
-//include "Meshes.h"
+#include "util/log.h"
+LOG_MODULE(GFX);
 
 bool Graphics::isinit = false;
-GL_Loader Graphics::loader;
-flgl_presets Graphics::std;
-GLbitfield Graphics::clearer = 0;
+GLbitfield Graphics::clearer = GL_COLOR_BUFFER_BIT;
+
 
 static void error_callback(int error, const char* description){
     (void)error;
-    std::cout << "error: " << description << std::endl;
+    LOG_ERR(description);
 }
 
 void Graphics::init(){
     if (!isinit){
         glfwSetErrorCallback(error_callback);
         if (!glfwInit()){
-            std::cout << "Failed to initialize GLFW! :(\n";
+            LOG_ERR("failed to initialize GLFW!");
             throw ("failed GLFW init");
         }
     #ifdef __APPLE__
@@ -46,22 +39,26 @@ void Graphics::clear(GLbitfield mask){
     glClear(mask);
 }
 
-void Graphics::setClearColor(float r, float g, float b, float a){
+void Graphics::set_clear_color(float r, float g, float b, float a){
     glClearColor(r, g, b, a);
 }
 
-void Graphics::setDepthTestEnable(bool e){
-    if (e){
+void Graphics::enable_depth_test(bool en){
+    if (en){
         clearer |= GL_DEPTH_BUFFER_BIT;
         glEnable(GL_DEPTH_TEST);
-    } else {
-        clearer &= (~GL_DEPTH_BUFFER_BIT);
-        glDisable(GL_DEPTH_TEST);
-    }
+        return;
+    } 
+    clearer &= (~GL_DEPTH_BUFFER_BIT);
+    glDisable(GL_DEPTH_TEST);
 }
 
 void Graphics::viewport(GLsizei width, GLsizei height, GLint x, GLint y) {
     glViewport(x,y,width,height);
+}
+
+void Graphics::polygon_mode(GLenum mode, GLenum face) {
+    glPolygonMode(face, mode);
 }
 
 void Graphics::destroy(){
@@ -70,34 +67,9 @@ void Graphics::destroy(){
     glfwTerminate();
 }
 
-bool Graphics::isInit(){
+bool Graphics::is_init(){
     return isinit;
 }
-
-// Window& Graphics::createWindow(const char *title, size_t x, size_t y){
-//     assert(isinit);
-//     Window* win = new Window(title, x, y);
-//     windows.insert(win);
-//     return *win;
-// }
-
-// Window& Graphics::initCreateWindow(const char* title, size_t x, size_t y){
-//     init();
-//     auto& win = createWindow(title, x, y);
-//     {
-//         const char* glversion = (const char*)glGetString(GL_VERSION);
-//         if(glversion) 
-//             std::cout << "[FLGL]: initialized opengl " << glversion << "\n";
-//         else
-//             std::cout << "[FLGL]: failed to detect opengl version\n";
-
-//         int maj, min, rev;
-//         glfwGetVersion(&maj, &min, &rev);
-//         std::cout << "[FLGL]: initialized glfw " << maj << "." << min << "." << rev << "\n";
-
-//     }
-//     return win;
-// }
 
 void Graphics::DrawMesh(MeshDetails& mesh){
     glBindVertexArray(mesh.vao);
@@ -111,24 +83,14 @@ void Graphics::DrawMesh(MeshDetails const& mesh){
     glBindVertexArray(0);
 }
 
-Window &Graphics::getWindow(){
-    // auto handle = glfwGetCurrentContext();
-    // for (auto w : windows){
-    //     if (w->hasHandle(handle)){
-    //         return *w;
-    //     }
-    // }
-    throw ("fix this function or remove it");
-}
+// void Graphics::forEachShader(std::function<void(Shader)> visit) {
+//     for (auto s : loader.Shaders()){
+//         visit(s);
+//     }
+// }
 
-void Graphics::forEachShader(std::function<void(Shader)> visit) {
-    for (auto s : loader.Shaders()){
-        visit(s);
-    }
-}
-
-void Graphics::setWireframe(bool wf) {
-    glPolygonMode(GL_FRONT_AND_BACK, wf ? GL_LINE : GL_FILL);
+void Graphics::wireframe(bool en) {
+    glPolygonMode(GL_FRONT_AND_BACK, en ? GL_LINE : GL_FILL);
 }
 
 

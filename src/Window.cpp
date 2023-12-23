@@ -1,6 +1,7 @@
 #define GL_SILENCE_DEPRECATION
 #include "Window.h"
-#include <iostream>
+#include "util/log.h"
+LOG_MODULE(Window);
 
 void WindowingCallbacks::size_callback(GLFWwindow *handle, int width, int height){
     glViewport(0, 0, width, height);
@@ -12,8 +13,7 @@ void WindowingCallbacks::size_callback(GLFWwindow *handle, int width, int height
 void WindowingCallbacks::window_close_callback(GLFWwindow *handle){
     Window& win = *reinterpret_cast<Window*>(glfwGetWindowUserPointer(handle));
     win.destroy();
-    std::cout << "window " << win.get_title() << " closed" << std::endl;
-    
+    LOG_INF("Window %s closed.", win.get_title());
 }
 
 void WindowingCallbacks::cursor_callback(GLFWwindow *handle, double xp, double yp){
@@ -34,7 +34,6 @@ void WindowingCallbacks::key_callback(GLFWwindow* handle, int key, int scancode,
     }
     switch (action){
         case GLFW_PRESS:
-            // std::cout << "press kb " << &(win->_keyboard) << "\n";
             win->_keyboard[key].down = true;
             break;
         case GLFW_RELEASE:
@@ -43,7 +42,6 @@ void WindowingCallbacks::key_callback(GLFWwindow* handle, int key, int scancode,
         default:
             break;
     }
-    // if (key == GLFW_KEY_ENTER) {std::cout << "BOO " << win << "!\n";}
 }
 
 void WindowingCallbacks::mouse_callback(GLFWwindow *handle, int button, int action, int mods){
@@ -91,7 +89,7 @@ void Window::create(const char* t, size_t x, size_t y){
     handle = glfwCreateWindow((int)x, (int)y, title, NULL, NULL);
     if (!handle){ //redundant
         glfwTerminate();
-        std::cout << "Failed to create window! make sure glfw is initialized!" << std::endl;
+        LOG_ERR("Failed to create window! Initialize glfw");
         assert(false);
     }
     glfwGetFramebufferSize(handle, &_frame.x, &_frame.y);
@@ -102,6 +100,19 @@ void Window::create(const char* t, size_t x, size_t y){
     WindowingCallbacks::attach(handle);
     
     this->context_current();
+    { // logging version
+        const char* glversion = (const char*)glGetString(GL_VERSION);
+        if(glversion) 
+            LOG_INF("initialized opengl %s", glversion);
+        else
+            std::cout << "[FLGL]: failed to detect opengl version\n";
+            LOG_WRN("failed to detect opengl version");
+
+        int maj, min, rev;
+        glfwGetVersion(&maj, &min, &rev);
+        LOG_INF("initialized glfw %d.%d.%d", maj, min, rev);
+
+    }
     glfwSwapInterval(1);
 }
 

@@ -7,6 +7,8 @@
 
 struct flgl {
 
+	static void destroy();
+
 	class Input {
 		friend struct flgl;
 		Input();
