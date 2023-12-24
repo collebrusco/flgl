@@ -1,7 +1,6 @@
 #include "Texture.h"
 #include "../flgl.h"
-// #define STB_IMAGE_IMPLEMENTATION
-#include "../lib/stb/include/stb_image.h"
+#include "../../lib/stb/include/stb_image.h"
 #include <fstream>
 #include "../util/log.h"
 LOG_MODULE(Texture)

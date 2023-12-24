@@ -9,6 +9,8 @@
 #include "gl_objs/Texture.h"
 #include "gl_objs/Renderbuffer.h"
 #include "gl_objs/FramebufferRGBZ.h"
+#include "gl_objs/VertexBuffer.h"
+#include "gl_objs/VertexArray.h"
 
 /*
   Container for context-wide gl calls or simple combinations

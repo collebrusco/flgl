@@ -1,4 +1,6 @@
 #include "flgl.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include "../lib/stb/include/stb_image.h"
 using namespace std;
 
 flgl::Config::Config() : _flgl_path("lib/flgl/"),

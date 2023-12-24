@@ -1,13 +1,4 @@
-//
-//  GL_Loader.cpp
-//  flgl-tester
-//
-//  Created by Frank Collebrusco on 5/16/23.
-//
-//
-
 #include "GL_Loader.h"
-#define STB_IMAGE_IMPLEMENTATION
 #include "../lib/stb/include/stb_image.h"
 #include <iostream>
 #include <assert.h>
@@ -47,12 +38,6 @@ texture_slot_t GL_Loader::UploadTexture(std::string name, bool pixelated){
     uint8_t* pixels = stbi_load(path.c_str(), &w, &h, &c, 0);
     //PARAMS
     er("pre");
-    // glGenTextures(1, &textureId);
-    // glBindTexture(GL_TEXTURE_2D, textureId);
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, pixelated ? GL_NEAREST : GL_LINEAR);
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, pixelated ? GL_NEAREST : GL_LINEAR);
     Texture tex(GL_TEXTURE_2D);
     tex.create();
     tex.bind();
