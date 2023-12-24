@@ -1,12 +1,11 @@
 #include "Buffer.h"
 
-Buffer::Buffer() {
+Buffer::Buffer(GLenum t) {
+	type = t;
 	handle = 0xFFFFFFFF;
-	vert_size = 0;
 }
 
-void Buffer::create(GLenum t) {
-	type = t;
+void Buffer::create() {
 	glGenBuffers(1, &handle);
 }
 
@@ -18,16 +17,15 @@ void Buffer::unbind_array() {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void Buffer::active() const {
+bool Buffer::active() const {
 	return handle == 0xFFFFFFFF;
 }
 
-void Buffer::buffer(size_t size, void* data, GLenum usage) {
+void Buffer::buffer_data(size_t size, void* data, GLenum usage) {
 	glBufferData(type, size, data, usage);
 }
 
 void Buffer::destroy() {
 	glDeleteBuffers(1, &handle);
 	handle = 0xFFFFFFFF;
-	vert_size = 0;
 }

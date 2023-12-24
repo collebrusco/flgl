@@ -3,6 +3,9 @@
 
 #include "../gfx.h"
 
+template<typename T>
+class VertexBuffer;
+
 class VertexArray {
 	uint32_t handle;
 	uint32_t attrib_counter;
@@ -20,6 +23,11 @@ public:
 			 		   GLenum type,
 			 		   GLsizei stride,
 			 		   size_t offset);
+
+	template<typename Vert>
+	void attach(VertexBuffer<Vert> const& vb) {
+		vb.attach_to_vao(*this);
+	}
 
 };
 
