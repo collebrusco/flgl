@@ -23,8 +23,10 @@ public:
 	void resize(uint32_t w, uint32_t h);
 
 	void bind_for_render();
+	void bind_for_sample();
+	void bind_for_sample(uint32_t unit);
 	void clear();
-	void unbind();
+	static void unbind();
 
 	uint32_t w();
 	uint32_t h();

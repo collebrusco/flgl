@@ -50,6 +50,16 @@ void FramebufferRGBZ::bind_for_render() {
 	Graphics::viewport(_w, _h);
 }
 
+
+void FramebufferRGBZ::bind_for_sample() {
+	tex.bind();
+}
+
+void FramebufferRGBZ::bind_for_sample(uint32_t unit) {
+	tex.bind_to_unit(unit);
+}
+
+
 void FramebufferRGBZ::clear() {
 	framebuffer.bind();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

@@ -8,7 +8,6 @@ class VertexBuffer;
 
 class VertexArray {
 	uint32_t handle;
-	uint32_t attrib_counter;
 public:
 	VertexArray();
 	void create();
@@ -28,7 +27,6 @@ public:
 	void attach(VertexBuffer<Vert> const& vb) {
 		vb.attach_to_vao(*this);
 	}
-
 };
 
 #endif

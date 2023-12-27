@@ -70,23 +70,13 @@ bool Graphics::is_init(){
     return isinit;
 }
 
-void Graphics::DrawMesh(MeshDetails& mesh){
-    glBindVertexArray(mesh.vao);
-    glDrawElements((mesh.drawType == TRIANGLES) ? GL_TRIANGLES : GL_LINES, mesh.numElements, GL_UNSIGNED_INT, nullptr);
-    glBindVertexArray(0);
+void Graphics::draw_elements(GLenum mode, GLsizei count, GLenum type) {
+    glDrawElements(mode, count, type, nullptr);
 }
 
-void Graphics::DrawMesh(MeshDetails const& mesh){
-    glBindVertexArray(mesh.vao);
-    glDrawElements((mesh.drawType == TRIANGLES) ? GL_TRIANGLES : GL_LINES, mesh.numElements, GL_UNSIGNED_INT, nullptr);
-    glBindVertexArray(0);
+void Graphics::draw_arrays(GLenum mode, GLint first, GLsizei count) {
+    glDrawArrays(mode, first, count);
 }
-
-// void Graphics::forEachShader(std::function<void(Shader)> visit) {
-//     for (auto s : loader.Shaders()){
-//         visit(s);
-//     }
-// }
 
 void Graphics::wireframe(bool en) {
     glPolygonMode(GL_FRONT_AND_BACK, en ? GL_LINE : GL_FILL);

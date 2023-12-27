@@ -13,6 +13,10 @@ void Buffer::bind() const {
 	glBindBuffer(type, handle);
 }
 
+void Buffer::unbind() const {
+	glBindBuffer(type, 0);
+}
+
 void Buffer::unbind_array() {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
@@ -29,3 +33,5 @@ void Buffer::destroy() {
 	glDeleteBuffers(1, &handle);
 	handle = 0xFFFFFFFF;
 }
+
+ElementBuffer::ElementBuffer() : Buffer(GL_ELEMENT_ARRAY_BUFFER) {}

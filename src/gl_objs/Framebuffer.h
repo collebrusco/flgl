@@ -5,11 +5,6 @@
 #include "Texture.h"
 #include "Renderbuffer.h"
 
-// This is not really a framebuffer object as it's more or less hardcoded
-// to be a texutre frame buffer object with a depth buffer
-// the plan would be to eventually abstract all those individual opengl objects
-// so the loader can still free them all but they can all be used nicely
-
 class Framebuffer {
 	GLuint framebuffer;
 public:
@@ -24,8 +19,12 @@ public:
 
 	void clear(GLbitfield mask);
 
-	void attach_texture(Texture tex, GLenum attachment);
+	void attach_texture(Texture tex, GLenum attachment=GL_COLOR_ATTACHMENT0);
 	void attach_renderbuffer(Renderbuffer rbo, GLenum attachment);
+	void attach_depth_buffer(Renderbuffer rbo);
+
+	void set_draw_buffers(GLsizei n, GLenum* buffers);
+	void draw_buffer_color(uint32_t n);
 
 	bool complete() const;
 	void destroy();

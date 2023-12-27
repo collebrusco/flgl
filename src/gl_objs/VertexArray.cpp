@@ -5,7 +5,6 @@ VertexArray::VertexArray() {
 }
 
 void VertexArray::create() {
-	attrib_counter = 0;
 	glGenVertexArrays(1, &handle);
 }
 

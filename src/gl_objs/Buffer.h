@@ -12,6 +12,7 @@ public:
 	Buffer(GLenum);
 	void create();
 	void bind() const;
+	void unbind() const;
 	static void unbind_array();
 	bool active() const;
 	void destroy();
@@ -24,6 +25,9 @@ public:
 	void buffer_data(size_t size, void* data, GLenum usage=GL_STATIC_DRAW);
 };
 
-
+class ElementBuffer : public Buffer {
+public:
+	ElementBuffer();
+};
 
 #endif

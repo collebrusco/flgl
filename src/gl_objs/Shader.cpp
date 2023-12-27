@@ -32,6 +32,11 @@ Shader::~Shader(){}
 void Shader::create(const char* vFileName, const char* fFileName){
     compileAndLink(vFileName, fFileName);
 }
+
+Shader Shader::from_source(const char* vFileName, const char* fFileName) {
+    Shader s; s.create(vFileName, fFileName); return s;
+}
+
 #include <filesystem>
 static std::string cpath(std::string p){
    return std::filesystem::current_path().string() + "/" + p;

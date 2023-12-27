@@ -24,6 +24,7 @@ public:
     ~Shader();
     Shader(uint32_t);
     void create(const char* vFileName, const char* fFileName);
+    static Shader from_source(const char* vFileName, const char* fFileName);
     const GLuint& programID() const;
     
     void bind() const;

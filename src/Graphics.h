@@ -34,11 +34,8 @@ public:
     static void wireframe(bool en=true);
     static void viewport(GLsizei width, GLsizei height, GLint x=0, GLint y=0);
     
-    // static void forEachShader(std::function<void(Shader)>);
-    
-    // TODO: handle this after vao...
-    static void DrawMesh(MeshDetails& mesh);
-    static void DrawMesh(MeshDetails const& mesh);
+    static void draw_arrays(GLenum mode, GLint first, GLsizei count); 
+    static void draw_elements(GLenum mode, GLsizei count, GLenum type);
 };
 
 #endif /* Graphics_h */
