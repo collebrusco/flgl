@@ -17,6 +17,10 @@ void Buffer::unbind() const {
 	glBindBuffer(type, 0);
 }
 
+uint32_t Buffer::num_elements() const {
+	return num_elem;
+}
+
 void Buffer::unbind_array() {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
@@ -25,7 +29,8 @@ bool Buffer::active() const {
 	return handle == 0xFFFFFFFF;
 }
 
-void Buffer::buffer_data(size_t size, void* data, GLenum usage) {
+void Buffer::buffer_data(size_t size, void* data, GLenum usage, size_t size_each) {
+	num_elem = size/size_each;
 	glBufferData(type, size, data, usage);
 }
 
