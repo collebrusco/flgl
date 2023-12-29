@@ -3,7 +3,6 @@
 #include <unordered_set>
 #include <optional>
 #include "Window.h"
-#include "gl_objs/Vertex.h"
 #include "gl_objs/Framebuffer.h"
 #include "gl_objs/Shader.h"
 #include "gl_objs/Texture.h"
