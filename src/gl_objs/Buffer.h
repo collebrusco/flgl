@@ -15,7 +15,8 @@ public:
 	void bind() const;
 	void unbind() const;
 	uint32_t num_elements() const;
-	static void unbind_array();
+	static void unbind_vbo();
+	static void unbind_ibo();
 	bool active() const;
 	void destroy();
 

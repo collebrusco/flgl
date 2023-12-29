@@ -21,8 +21,12 @@ uint32_t Buffer::num_elements() const {
 	return num_elem;
 }
 
-void Buffer::unbind_array() {
+void Buffer::unbind_vbo() {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void Buffer::unbind_ibo() {
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
 bool Buffer::active() const {

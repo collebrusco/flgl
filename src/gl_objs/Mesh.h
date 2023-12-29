@@ -52,6 +52,14 @@ struct Mesh {
 
 	void bind() const {
 		vao.bind();
+		vbo.bind();
+		ibo.bind();
+	}
+
+	static void unbind() {
+		VertexArray::unbind();
+		Buffer::unbind_vbo();
+		Buffer::unbind_ibo();
 	}
 
 	void destroy() {
