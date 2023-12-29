@@ -29,11 +29,6 @@ bool Buffer::active() const {
 	return handle == 0xFFFFFFFF;
 }
 
-void Buffer::buffer_data(size_t size, void* data, GLenum usage, size_t size_each) {
-	num_elem = size/size_each;
-	glBufferData(type, size, data, usage);
-}
-
 void Buffer::destroy() {
 	glDeleteBuffers(1, &handle);
 	handle = 0xFFFFFFFF;

@@ -44,10 +44,6 @@ public:
 		return sizeof(Vert);
 	}
 
-	void buffer(std::vector<Vert> const& dat, GLenum usage=GL_STATIC_DRAW) {
-		this->buffer_data(dat, usage);
-	}
-
 	void attach_to_vao(VertexArray const&) const;
 };
 

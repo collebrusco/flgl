@@ -20,12 +20,16 @@ public:
 	void destroy();
 
 	template<typename Dat>
-	void buffer_data(std::vector<Dat> const& dat, GLenum usage=GL_STATIC_DRAW) {
+	void buffer(std::vector<Dat> const& dat, GLenum usage=GL_STATIC_DRAW) {
 		num_elem = dat.size();
 		glBufferData(type, dat.size() * sizeof(Dat), dat.data(), usage);
 	}
 
-	void buffer_data(size_t size, void* data, GLenum usage=GL_STATIC_DRAW, size_t size_each=1);
+	template<typename T>
+	void buffer_data(size_t num, T* data, GLenum usage=GL_STATIC_DRAW) {
+		num_elem = num/sizeof(T);
+		glBufferData(type, num*sizeof(T), data, usage);
+	}
 };
 
 class ElementBuffer : public Buffer {
