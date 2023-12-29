@@ -5,25 +5,18 @@
 #include "Graphics.h"
 #include "Window.h"
 
-struct flgl {
+// namespace flgl {
 
-	static void destroy();
-
-	class Input {
-		friend struct flgl;
-		Input();
-	public:
-		Keyboard const& keyboard;
-		Mouse const& mouse;
-	};
+	void init_create_window(const char* title, int w, int h);
+	void destroy();
 
 	class Config {
 		std::string _flgl_path;
 		std::string _asset_path;
 		std::string _shader_path;
-		friend struct flgl;
-		Config();
+		// friend struct flgl;
 	public:
+		Config();
 		void set_flgl_path(std::string);
 		void set_asset_path(std::string);
 		void set_shader_path(std::string);
@@ -32,16 +25,10 @@ struct flgl {
 		std::string const& shader_path() const;
 	};
 
-	static Graphics gl;
-	static Window window;
-	static Input input;
-	static Config config;
+	extern Graphics gl;
+	extern Window window;
+	extern Config glconfig;
 
-};
-
-#define USING_FLGL \
-static Graphics& gl = flgl::gl;	\
-static Window& window = flgl::window;	
-// static flgl::Input const& input = flgl::input;	
+// };
 
 #endif /* FLGL_CORE_H */

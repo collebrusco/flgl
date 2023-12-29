@@ -27,12 +27,12 @@ void Texture::wrap(GLenum wrap) {
 
 Texture::Texture(std::string file, bool pix) : Texture(GL_TEXTURE_2D) {
 	int w, h, c;
-    std::string path = flgl::config.asset_path() + file + ".png";
+    std::string path = glconfig.asset_path() + file + ".png";
     { // verify filepath
         std::ifstream fin;
         fin.open(path);
         if (!fin){
-            path = flgl::config.flgl_path() + "res/default_textures/" + file + ".png";
+            path = glconfig.flgl_path() + "res/default_textures/" + file + ".png";
             fin.open(path);
             if (!fin) LOG_ERR("file %s not found!", path.c_str());
             assert(fin);
