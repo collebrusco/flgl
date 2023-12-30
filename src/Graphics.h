@@ -36,6 +36,12 @@ public:
     
     static void draw_arrays(GLenum mode, GLint first, GLsizei count); 
     static void draw_elements(GLenum mode, GLsizei count, GLenum type);
+    template<typename Vt>
+    static void draw_mesh(Mesh<Vt> mesh, GLenum mode=GL_TRIANGLES) {
+        mesh.vao.bind();
+        draw_elements(mode, mesh.ibo.num_elements(), GL_UNSIGNED_INT);
+        mesh.vao.unbind();
+    }
 };
 
 #endif /* Graphics_h */
