@@ -7,6 +7,8 @@
 #include "Buffer.h"
 #include "VertexArray.h"
 
+#define _PACKED_ __attribute__((packed))
+
 /*
 	Here there are a few pre-config'd vertex options to choose from
 */
@@ -14,20 +16,20 @@
 typedef glm::vec3 Vertex_3f;
 typedef glm::vec2 Vertex_2f;
 
-struct __attribute__((packed)) Vertex_3fpos_2fuv {
+struct _PACKED_ Vertex_3fpos_2fuv {
 	glm::vec3 pos;
 	glm::vec2 uv;
 }; 
 typedef Vertex_3fpos_2fuv Vt_classic;
 
-struct __attribute__((packed)) Vertex_3fpos_2fuv_3fnorm {
+struct _PACKED_ Vertex_3fpos_2fuv_3fnorm {
 	glm::vec3 pos;
 	glm::vec2 uv;
 	glm::vec3 norm;
 }; 
 typedef Vertex_3fpos_2fuv_3fnorm Vt_pun;
 
-struct __attribute__((packed)) Vertex_3fpos_3fnorm {
+struct _PACKED_ Vertex_3fpos_3fnorm {
 	glm::vec3 pos;
 	glm::vec3 norm;
 }; 

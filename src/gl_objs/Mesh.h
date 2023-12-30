@@ -5,12 +5,26 @@
 #include "VertexArray.h"
 #include "VertexBuffer.h"
 
+/*
+	A Mesh here wraps a vertex & index buffer pair 
+	along with the vertex array that holds their state.
+	So a vao and its associated vbo and ibo
+*/
+
 template <typename Vt>
 struct Mesh {
 	VertexArray vao;
 	VertexBuffer<Vt> vbo;
 	ElementBuffer ibo;
 	Mesh() = default;
+
+	// ================ member function summary ================
+	// static Mesh<Vt> from_vectors(std::vector<Vt> const& verts, std::vector<uint32_t> const& elems);
+	// static Mesh<Vt> from_arrays(size_t numV, Vt* verts, size_t numE, uint32_t* elems);
+	// void create();
+	// void bind() const;
+	// static void unbind();
+	// void destroy();
 
 	static Mesh<Vt> from_vectors(std::vector<Vt> const& verts, std::vector<uint32_t> const& elems) {
 		Mesh<Vt> mesh; 
