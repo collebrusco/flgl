@@ -1,42 +1,117 @@
 # franks low-fat graphics library (flgl)
-flgl is a graphics library meant to provide simple and easy access to basic opengl and windowing (glfw). 
+flgl is a graphics library meant to provide simple and consice access to opengl and windowing (glfw)  
 
-flgl can:
-* Create windows
-* Read mouse and key input
-* Shaders: read from file, compile, link, bind, and upload to
-* Upload and use textures
+flgl includes:
+* Windowing: windows, mouse and key input, callbacks
+* Low level abstractions for buffers, vertex arrays, textures, shaders, framebuffers, renderbuffers, etc.
+* Higher level abstractions for various vertex types, post processing buffers, reading textures from files, etc.
+* Math: includes glm and tools for orthographic and perspective cameras, model matricies & other odds & ends
 
-These are the core opengl features required to render textured 2D & 3D that responds to key and mouse input. 
-
-### Functional Summary
-  Initialize the graphics with `Graphics::init();` before calling other functions. An instance of Graphics can be created for brevity if preferred, there is no difference. Create a window with `Graphics::createWindow("title", w, h);`. The keyboard and mouse can be accessed through this window object.  
-  
-  Loading and unloading new shaders, meshes or textures to the GPU is handled by the loader. Upload your shaders with `Graphics::loader.UploadShader("vert_file_name", "frag_file_name");`, and textures with `Graphics::loader.UploadTexture("filename", isPixelated);`.
-  
-Create meshes with a vector of verticies and a vector of elements (lines or triangles). These can be hardcoded in a `ConstMesh` or created dynamically with a `Mesh`. Upload it with `Graphics::UploadMesh(mesh);`. Flgl includes hardcoded tile and cube meshes by default.  
-  
-  A typical render loop first clears the screen, then performs any engine logic necessary. Upload any variables to shaders. Draw with `Graphics::DrawMesh(mesh);`. Finally, call update on your window. When the loop exits, call `Graphics::destroy();` to cleanup. Here is a simple example that renders a simple mesh.
-  
+submodule add flgl and opening a window is this easy:  
 ```c++
-    Graphics gl;
-    gl.init();
+#include <flgl.h> // includes gl and window
+int main() {
+	gl.init();
+	window.create("title", 480, 360);
+	while (!window.should_close()) {
+		window.update();
+	}
+	gl.destroy();
+	return 0;
+}
 
-    auto& window = gl.createWindow("title", 480, 360);
-    auto shader = gl.loader.UploadShader("test_vert_shader", "test_frag_shader");
-    auto cube = gl.loader.UploadMesh(CubeMesh); // a cube and tile are included, define more
-    auto tex = gl.loader.UploadTexture("terrain", true);
-
-    gl.setClearColor(0.f, 0.f, 0.f, 0.f);
-    while (!window.should_close()){
-        gl.clear();
-        shader.bind();
-        shader.uFloat("varName", value); // upload to shader if needed
-        gl.DrawMesh(cube);
-        window.update();
-    }
-    gl.destroy();
 ```
+### Windows  
+There is a default single window available through the flgl.h header, but nothing is stopping you from creating more.
+```c++
+Window window2;
+window2.create("2nd window", 480, 480);
+```
+Windows also contain their input
+```c++
+if (window.keyboard[GLFW_KEY_SPACE].pressed) {...}
+if (window.mouse.left.down) {...}
+zoom += window.mouse.scroll;
+```
+
+### Shaders
+Tell flgl the path to your shader folder and write them there. Compile and use them with the provided object.
+```c++
+Shader sh = Shader::from_source("vert_name", "frag_name");
+sh.bind();
+sh.uMat4("uModel", modelMatrix);
+sh.uFloat("uTime", time);
+```
+   
+### Meshes
+flgl has abstractions for each individual gl object (vbo, vao, ibo) as well as higher level abstractions so that there is convenience for common usecases and flexibility for advanced ones.      
+Template ```VertexBuffer``` and ```Mesh``` objects with one of a number of vertex options. Defining your own only requires defining a template specialization that configures the vertex attribute pointers for your vertex as in opengl.    
+Here, Vt_classic is a vertex with 3 floats for position and 2 for UV.
+```c++
+VertexArray vao;
+VertexBuffer<Vt_classic> vbo;
+ElementBuffer ibo;
+vao.create();
+vbo.create();
+ibo.create();
+vao.bind();
+vbo.bind();
+vao.attach(vbo);
+vbo.buffer({{{-1.,-1., 0.}, {0.,0.}},
+	    {{-1., 1., 0.}, {0.,1.}},
+	    {{ 1., 1., 0.}, {1.,1.}},
+	    {{ 1.,-1., 0.}, {1.,0.}}});
+ibo.bind();
+ibo.buffer({0, 2, 1,	0, 2, 3});
+vao.unbind(); vbo.unbind(); ibo.unbind();
+
+vao.bind();
+// render...
+
+// or, more simply, 
+mesh = Mesh<Vt_classic>::from_vectors({{{-1.,-1., 0.}, {0.,0.}},
+				       {{-1., 1., 0.}, {0.,1.}},
+				       {{ 1., 1., 0.}, {1.,1.}},
+				       {{ 1.,-1., 0.}, {1.,0.}}}
+				       ,
+				       {0, 2, 1,	0, 2, 3});
+mesh.bind();
+// render...
+```
+This pattern persists throughout the library; in many other cases flgl starts with granular opengl abstractions and builds on them into preconfigured packages of functionality.
+### One more example: post processing
+```c++
+PostProcessBuffer postbuff; // contains Framebuffer, Texture (RGB), Renderbuffer (depth)
+postbuff.create(w, h);
+// in render loop ...
+postbuff.bind_for_render();
+postbuff.clear();
+// draw
+Framebuffer::bind_default();
+gl.clear();
+postbuff.bind_for_sample();
+// draw
+```
+### Finally
+This will render a screen size quad
+```c++
+int main() {
+	gl.init();
+	window.create("title", 480, 360);
+	Shader s = Shader::from_source("passthrough_vert", "color");
+	Mesh<Vt_classic> m = DefaultMeshes::tile<Vt_classic>();
+	while (!window.should_close()) {
+		gl.clear();
+		s.bind();
+		m.bind();
+		gl.draw_mesh(m);
+		window.update();
+	}
+	gl.destroy();
+	return 0;
+}
+```
+
 
 ## Building
 #### MacOs

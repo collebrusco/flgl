@@ -4,6 +4,8 @@
 
 #include "Graphics.h"
 #include "Window.h"
+#include "tools/DefaultMeshes.h"
+#include "tools/Camera.h"
 
 // namespace flgl {
 
