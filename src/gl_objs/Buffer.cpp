@@ -1,4 +1,6 @@
 #include "Buffer.h"
+#include "../util/log.h"
+LOG_MODULE(Buffer);
 
 Buffer::Buffer(GLenum t) {
 	type = t;
@@ -6,7 +8,9 @@ Buffer::Buffer(GLenum t) {
 }
 
 void Buffer::create() {
+	this->enlist();
 	glGenBuffers(1, &handle);
+	LOG_DBG("created %d", handle);
 }
 
 void Buffer::bind() const {
@@ -34,6 +38,8 @@ bool Buffer::active() const {
 }
 
 void Buffer::destroy() {
+	this->delist();
+	LOG_DBG("destroyed %d", handle);
 	glDeleteBuffers(1, &handle);
 	handle = 0xFFFFFFFF;
 }

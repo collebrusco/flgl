@@ -30,7 +30,9 @@ Shader::Shader(uint32_t p) {
 Shader::~Shader(){}
 
 void Shader::create(const char* vFileName, const char* fFileName){
+    this->enlist();
     compileAndLink(vFileName, fFileName);
+    LOG_DBG("created %d", programId);
 }
 
 Shader Shader::from_source(const char* vFileName, const char* fFileName) {
@@ -170,12 +172,14 @@ void Shader::bind() const {
     glUseProgram(programId);
 }
 
-void Shader::unBind() const {
+void Shader::unbind() const {
     glUseProgram(0);
 }
 
 // if this is called after program has already been destroyed, is there a problem?
 void Shader::destroy(){
+    this->delist();
+    LOG_DBG("destroyed %d", programId);
     glDeleteProgram(programId);
 }
 

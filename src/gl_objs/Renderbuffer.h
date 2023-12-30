@@ -2,8 +2,9 @@
 #define RENDERBUFFER_H
 
 #include "../gfx.h"
+#include "GL_Object.h"
 
-class Renderbuffer {
+class Renderbuffer : public GL_Object {
 private:
 	uint32_t handle;
 	uint32_t _w, _h;
@@ -20,7 +21,7 @@ public:
 
 	void alloc(GLenum target, GLsizei width, GLsizei height);
 
-	void destroy();
+	void destroy() override;
 };
 
 #endif

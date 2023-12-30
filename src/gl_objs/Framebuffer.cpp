@@ -1,4 +1,6 @@
 #include "Framebuffer.h"
+#include "../util/log.h"
+LOG_MODULE(Framebuffer);
 
 
 Framebuffer::Framebuffer() {
@@ -15,10 +17,12 @@ Framebuffer::Framebuffer() {
 // }
 
 void Framebuffer::create() {
+	this->enlist();
 	framebuffer = 0;
 	glGenFramebuffers(1, &framebuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	LOG_DBG("created %d", framebuffer);
 }
 
 void Framebuffer::clear(GLbitfield mask) {
@@ -49,6 +53,8 @@ bool Framebuffer::complete() const {
 }
 
 void Framebuffer::destroy() {
+	this->delist();
+	LOG_DBG("destroyed %d", framebuffer);
 	glDeleteFramebuffers(1, &framebuffer);
 	framebuffer = 0xFFFFFFFF;
 }
