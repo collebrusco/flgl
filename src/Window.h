@@ -35,6 +35,7 @@ public:
     static void key_callback(GLFWwindow* handle, int key, int scancode, int action, int mods);
     static void mouse_callback(GLFWwindow *handle, int button, int action, int mods);    
     static void scroll_callback(GLFWwindow* handle, double xoffset, double yoffset);
+    static void window_content_scale_callback(GLFWwindow* window, float xscale, float yscale);
 
     static void attach(GLFWwindow* handle);
 };
@@ -49,6 +50,7 @@ private:
     float _aspect;   // aspect := w / h
     Keyboard _keyboard;
     Mouse _mouse;
+    glm::vec2 cscale;
 public:
     glm::ivec2 const& frame;
     int const& width;
@@ -56,8 +58,10 @@ public:
     float const& aspect;
     Keyboard const& keyboard;
     Mouse const& mouse;
+    glm::vec2 const& content_scale;
 
     Window();
+    GLFWwindow* id() const;
     void create(const char*, size_t x, size_t y);
 
     Window(const Window&) = delete; 

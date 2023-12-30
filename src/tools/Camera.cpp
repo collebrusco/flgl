@@ -22,7 +22,7 @@ void Camera::update(){
         should_update = false;
     }
 }
-glm::mat4 Camera::updateView(){
+glm::mat4 const& Camera::updateView(){
     setShouldUpdate();
     glm::vec3 target = pos + look;
     _view = lookAt(pos, target, up);
@@ -104,7 +104,7 @@ float& OrthoCamera::getViewWidth(){
     setShouldUpdate();
     return viewWidth;
 }
-glm::mat4 OrthoCamera::updateProj()  {
+glm::mat4 const& OrthoCamera::updateProj()  {
     setShouldUpdate();
     glm::vec2 orthoDims = glm::vec2(viewWidth, viewWidth / IN_FLGL_ window.aspect);
 
@@ -151,7 +151,7 @@ float PerspectiveCamera::readFOV() const {
     return fov;
 }
 
-glm::mat4 PerspectiveCamera::updateProj(){
+glm::mat4 const& PerspectiveCamera::updateProj(){
     setShouldUpdate();
     _proj = glm::perspective(fov, IN_FLGL_ window.aspect, near, far);
     return _proj;
