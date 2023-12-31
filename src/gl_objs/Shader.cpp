@@ -47,11 +47,11 @@ static std::string cpath(std::string p){
 
 const char* Shader::getShaderSource(string shad, string type){
     ifstream fin;
-    string path = glconfig.flgl_path() + "res/default_shaders/" + shad + ".glsl";
+    string path = glconfig.shader_path() + shad + ".glsl";
     LOG_DBG("looking for shader %s at %s", shad.c_str(), path.c_str());
     fin.open(path);
     if (!fin){
-        path = glconfig.shader_path() + shad + ".glsl";
+        path = glconfig.flgl_path() + "res/default_shaders/" + shad + ".glsl";
         LOG_DBG("not found, now looking for %s at %s", shad.c_str(), path.c_str());
         fin.open(path);
         if (!fin){
