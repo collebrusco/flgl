@@ -33,13 +33,14 @@ CFLAGS += -Ilib/flgl/inc -Ilib/flgl/lib/glfw/include -Ilib/flgl/lib/glad/include
 LDFLAGS = lib/flgl/lib/glad/src/glad.o lib/flgl/lib/glfw/src/libglfw3.a
 LDFLAGS += -framework OpenGL -framework IOKit -framework CoreVideo -framework Cocoa
 
-SRC = main.cpp $(wildcard lib/flgl/src/*.cpp) $(wildcard lib/flgl/src/**/*.cpp) 
+SRC = $(wildcard src/*.cpp) $(wildcard src/**/*.cpp) $(wildcard lib/flgl/src/*.cpp) $(wildcard lib/flgl/src/**/*.cpp) 
 OBJ = $(SRC:.cpp=.o)
 BIN = bin
+TARGET = main.out
 
 .PHONY: all clean
 
-all: dirs libs a.out
+all: dirs libs 
 
 dirs:
 	mkdir -p ./$(BIN)
@@ -48,8 +49,21 @@ libs:
 	cd lib/flgl/lib/glad && $(CC) -o src/glad.o -Iinclude -c src/glad.c
 	cd lib/flgl/lib/glfw && cmake . && make
 
-a.out: $(OBJ)
-	$(CPP) -o $(BIN)/a.out $^ $(LDFLAGS)
+b: $(BIN)/$(TARGET)
+
+c:
+	clear
+	clean
+
+cb: c b
+
+r: $(BIN)/$(TARGET)
+	./$(BIN)/$(TARGET)
+
+cbr: c b r
+
+$(BIN)/$(TARGET): $(OBJ)
+	$(CPP) -o $(BIN)/$(TARGET) $^ $(LDFLAGS)
 
 %.o: %.cpp
 	$(CPP) -o $@ -c $< $(CFLAGS)
