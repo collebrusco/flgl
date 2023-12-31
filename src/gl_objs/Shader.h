@@ -5,12 +5,13 @@
 #include <fstream>
 #include <string>
 #include "../gfx.h"
+#include "GL_Object.h"
 #include <glm/vec3.hpp> // glm::vec3
 #include <glm/vec4.hpp> // glm::vec4
 #include <glm/mat4x4.hpp> // glm::mat4
 #include <vector>
 
-class Shader {
+class Shader : public GL_Object {
 private:
     GLuint programId;
     bool compileFragShader(GLuint& fShader, const char* vFileName);
@@ -28,8 +29,9 @@ public:
     const GLuint& programID() const;
     
     void bind() const;
-    void unBind() const;
-    void destroy();
+    void unbind() const;
+    void destroy() override;
+
     void uVec4(const char* varName, const glm::vec4& vec) const;
     void uVec3(const char* varName, const glm::vec3& vec) const;
     void uVec2(const char* varName, const glm::vec2& vec) const;

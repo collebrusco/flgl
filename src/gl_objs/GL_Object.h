@@ -1,14 +1,17 @@
 #ifndef GL_OBJECT_H
 #define GL_OBJECT_H
-#include <vector>
-using std::vector;
+#include <unordered_set>
 
 class GL_Object {
-
-	static vector<GL_Object*> objects;
-
-	GL_Object();
+private:
+	static std::unordered_set<GL_Object*> objects;
+protected:
+	GL_Object() = default;
+	void enlist();
+	void delist();
+public:
 	virtual void destroy() = 0;
+	static void destroy_all();
 };
 
 #endif

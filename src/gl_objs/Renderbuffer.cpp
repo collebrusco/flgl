@@ -1,4 +1,6 @@
 #include "Renderbuffer.h"
+#include "../util/log.h"
+LOG_MODULE(Renderbuffer);
 
 
 Renderbuffer::Renderbuffer() {
@@ -6,7 +8,9 @@ Renderbuffer::Renderbuffer() {
 }
 
 void Renderbuffer::create() {
+	this->enlist();
 	glGenRenderbuffers(1, &handle);
+	LOG_DBG("created %d", handle);
 }
 
 
@@ -39,6 +43,8 @@ void Renderbuffer::alloc(GLenum target, GLsizei width, GLsizei height) {
 
 
 void Renderbuffer::destroy() {
+	this->delist();
+	LOG_DBG("destroyed %d", handle);
 	glDeleteRenderbuffers(1, &handle);
 }
 

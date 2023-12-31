@@ -2,9 +2,10 @@
 #define FLGL_BUFFER_H
 
 #include "../gfx.h"
+#include "GL_Object.h"
 #include <vector>
 
-class Buffer {
+class Buffer : public GL_Object {
 protected:
 	uint32_t handle;
 	uint32_t num_elem;
@@ -18,7 +19,7 @@ public:
 	static void unbind_vbo();
 	static void unbind_ibo();
 	bool active() const;
-	void destroy();
+	void destroy() override;
 
 	template<typename Dat>
 	void buffer(std::vector<Dat> const& dat, GLenum usage=GL_STATIC_DRAW) {

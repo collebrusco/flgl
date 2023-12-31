@@ -2,11 +2,12 @@
 #define VERTEX_ARRAY_H
 
 #include "../gfx.h"
+#include "GL_Object.h"
 
 template<typename T>
 class VertexBuffer;
 
-class VertexArray {
+class VertexArray : public GL_Object {
 	uint32_t handle;
 public:
 	VertexArray();
@@ -15,7 +16,7 @@ public:
 	static void unbind();
 	uint32_t id() const;
 	bool active() const;
-	void destroy();
+	void destroy() override;
 
 	static void attrib(GLuint index,
 			 		   GLint dimension,

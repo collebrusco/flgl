@@ -86,7 +86,9 @@ Texture Texture::from_file(std::string file, bool pix) {
 }
 
 void Texture::create() {
+    this->enlist();
 	glGenTextures(1, &handle);
+    LOG_DBG("created %d", handle);
 }
 
 uint32_t Texture::id() const {
@@ -149,6 +151,8 @@ void Texture::alloc_rgb(GLsizei width, GLsizei height, const void * data) {
 }
 
 void Texture::destroy() {
+    this->delist();
+    LOG_DBG("destroyed %d", handle);
 	glDeleteTextures(1, &handle);
 }
 

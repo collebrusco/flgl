@@ -1,11 +1,15 @@
 #include "VertexArray.h"
+#include "../util/log.h"
+LOG_MODULE(VertexArray);
 
 VertexArray::VertexArray() {
 	handle = 0xFFFFFFFF;
 }
 
 void VertexArray::create() {
+	this->enlist();
 	glGenVertexArrays(1, &handle);
+	LOG_DBG("created %d", handle);
 }
 
 void VertexArray::bind() const {
@@ -25,6 +29,8 @@ bool VertexArray::active() const {
 }
 
 void VertexArray::destroy() {
+	this->delist();
+	LOG_DBG("destroyed %d", handle);
 	glDeleteBuffers(1, &handle);
 	handle = 0xFFFFFFFF;
 }

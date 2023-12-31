@@ -18,7 +18,7 @@ void WindowingCallbacks::window_close_callback(GLFWwindow *handle){
 
 void WindowingCallbacks::cursor_callback(GLFWwindow *handle, double xp, double yp){
     Window& win = *reinterpret_cast<Window*>(glfwGetWindowUserPointer(handle));
-    glm::vec2 p = glm::vec2(xp,yp);
+    glm::vec2 p = glm::vec2(xp,yp) * win.content_scale;
     win._mouse.delta = p - win.mouse.pos;
     win._mouse.delta.x = glm::clamp(win._mouse.delta.x, -100.0f, 100.0f);
     win._mouse.delta.y = glm::clamp(win._mouse.delta.y, -100.0f, 100.0f);
@@ -68,6 +68,11 @@ void WindowingCallbacks::scroll_callback(GLFWwindow* handle, double xoffset, dou
     win._mouse.scroll.y = yoffset;
 }
 
+void WindowingCallbacks::window_content_scale_callback(GLFWwindow* handle, float xscale, float yscale) {
+    Window& win = *reinterpret_cast<Window*>(glfwGetWindowUserPointer(handle));
+    win.cscale.x = xscale; win.cscale.y = yscale;
+}
+
 void WindowingCallbacks::attach(GLFWwindow* handle) {
     glfwSetFramebufferSizeCallback(handle, &WindowingCallbacks::size_callback);
     glfwSetWindowCloseCallback(handle, &WindowingCallbacks::window_close_callback);
@@ -75,13 +80,18 @@ void WindowingCallbacks::attach(GLFWwindow* handle) {
     glfwSetScrollCallback(handle, &WindowingCallbacks::scroll_callback);
     glfwSetCursorPosCallback(handle, &WindowingCallbacks::cursor_callback);
     glfwSetMouseButtonCallback(handle, &WindowingCallbacks::mouse_callback);
+    glfwSetWindowContentScaleCallback(handle, &WindowingCallbacks::window_content_scale_callback);
 }
 
 // ================ Window ================
 
 Window::Window() : frame(_frame), width(_frame.x), height(_frame.y), aspect(_aspect), 
-                keyboard(_keyboard), mouse(_mouse)
+                keyboard(_keyboard), mouse(_mouse), content_scale(cscale)
 {}
+
+GLFWwindow* Window::id() const {
+    return handle;
+}
 
 void Window::create(const char* t, size_t x, size_t y){
     title = t;
@@ -112,6 +122,9 @@ void Window::create(const char* t, size_t x, size_t y){
         LOG_INF("initialized glfw %d.%d.%d", maj, min, rev);
 
     }
+
+    glfwGetWindowContentScale(handle, &cscale.x, &cscale.y);
+
     glfwSwapInterval(1);
 }
 

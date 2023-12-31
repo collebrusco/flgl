@@ -53,8 +53,8 @@ public:
     float readFar() const;
     
     virtual void update(); // if you override this, call this->Camera::update() from it
-    glm::mat4 updateView();
-    virtual glm::mat4 updateProj() = 0;
+    glm::mat4 const& updateView();
+    virtual glm::mat4 const& updateProj() = 0;
     glm::mat4 const& view() const;
     glm::mat4 const& proj() const;
 };
@@ -70,7 +70,7 @@ public:
     void setViewWidth(float vw);
     float& getViewWidth();
     float readViewWidth() const;
-    glm::mat4 updateProj() override ;
+    glm::mat4 const& updateProj() override ;
 };
 
 class PerspectiveCamera : public Camera {
@@ -84,7 +84,7 @@ public:
     void setFOV(float fv);
     float& getFOV();
     float readFOV() const;
-    glm::mat4 updateProj() override;
+    glm::mat4 const& updateProj() override;
     void setMouseControl(bool);
     void update() override;
 };

@@ -2,10 +2,11 @@
 #define FRAMEBUFFER_H
 
 #include "../gfx.h"
+#include "GL_Object.h"
 #include "Texture.h"
 #include "Renderbuffer.h"
 
-class Framebuffer {
+class Framebuffer : public GL_Object {
 	GLuint framebuffer;
 public:
 	Framebuffer();
@@ -27,7 +28,7 @@ public:
 	void draw_buffer_color(uint32_t n);
 
 	bool complete() const;
-	void destroy();
+	void destroy() override;
 };
 
 #endif 
