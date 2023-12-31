@@ -10,6 +10,7 @@
 #define GL_SILENCE_DEPRECATION
 #include <sstream>
 #include "Shader.h"
+#include "../Graphics.h"
 #include <glm/gtc/type_ptr.hpp>
 #include "../flgl.h"
 #include "../util/log.h"
@@ -158,13 +159,18 @@ bool Shader::linkPrograms(GLuint& vShader, GLuint& fShader, GLuint& prog){
 bool Shader::compileAndLink(const char* vFileName, const char* fFileName){
     bool flag = true;
     GLuint vShader, fShader;
-    assert(compileVertShader(vShader, vFileName));
-    assert(compileFragShader(fShader, fFileName));
-
+    if ((!compileVertShader(vShader, vFileName)) || (!compileFragShader(fShader, fFileName))) {
+        LOG_ERR("terminating flgl...");
+        Graphics::destroy();
+        assert(false);
+    }
     GLuint prog;
-    linkPrograms(vShader, fShader, prog);
+    if (!linkPrograms(vShader, fShader, prog)) {
+        LOG_ERR("terminating flgl...");
+        Graphics::destroy();
+        assert(false);
+    }
     Shader::programId = prog;
-    
     return flag;
 }
 
