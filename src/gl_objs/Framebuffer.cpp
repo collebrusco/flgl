@@ -17,12 +17,12 @@ Framebuffer::Framebuffer() {
 // }
 
 void Framebuffer::create() {
-	this->enlist();
 	framebuffer = 0;
 	glGenFramebuffers(1, &framebuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	LOG_DBG("created %d", framebuffer);
+	this->enlist(new Framebuffer(*this));
 }
 
 void Framebuffer::clear(GLbitfield mask) {

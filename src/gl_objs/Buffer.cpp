@@ -8,8 +8,8 @@ Buffer::Buffer(GLenum t) {
 }
 
 void Buffer::create() {
-	this->enlist();
 	glGenBuffers(1, &handle);
+	this->enlist(new Buffer(*this));
 	LOG_DBG("created %d", handle);
 }
 
