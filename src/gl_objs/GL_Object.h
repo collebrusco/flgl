@@ -7,7 +7,7 @@ private:
 	static std::unordered_set<GL_Object*> objects;
 protected:
 	GL_Object() = default;
-	void enlist();
+	void enlist(GL_Object*);
 	void delist();
 public:
 	virtual void destroy() = 0;

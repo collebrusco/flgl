@@ -8,9 +8,9 @@ Renderbuffer::Renderbuffer() {
 }
 
 void Renderbuffer::create() {
-	this->enlist();
 	glGenRenderbuffers(1, &handle);
 	LOG_DBG("created %d", handle);
+	this->enlist(new Renderbuffer(*this));
 }
 
 

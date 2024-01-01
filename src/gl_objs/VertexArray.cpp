@@ -7,9 +7,9 @@ VertexArray::VertexArray() {
 }
 
 void VertexArray::create() {
-	this->enlist();
 	glGenVertexArrays(1, &handle);
 	LOG_DBG("created %d", handle);
+	this->enlist(new VertexArray(*this));
 }
 
 void VertexArray::bind() const {

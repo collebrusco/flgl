@@ -86,9 +86,9 @@ Texture Texture::from_file(std::string file, bool pix) {
 }
 
 void Texture::create() {
-    this->enlist();
 	glGenTextures(1, &handle);
     LOG_DBG("created %d", handle);
+    this->enlist(new Texture(*this));
 }
 
 uint32_t Texture::id() const {

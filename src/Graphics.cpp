@@ -63,8 +63,11 @@ void Graphics::polygon_mode(GLenum mode, GLenum face) {
 
 void Graphics::destroy(){
     isinit = false;
+    LOG_INF("destroying objects...");
     GL_Object::destroy_all();
+    LOG_INF("destroying glfw...");
     glfwTerminate();
+    LOG_INF("gfx destroyed");
 }
 
 bool Graphics::is_init(){
