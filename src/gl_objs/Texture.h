@@ -45,6 +45,13 @@ public:
 		 	GLenum type,
 		 	const void * data=nullptr);
 
+	void alloc(GLint internalFormat,
+		 	GLsizei width,
+		 	GLsizei height,
+		 	GLenum format,
+		 	GLenum type,
+		 	const void * data=nullptr);
+
 	void alloc_rgb(GLsizei width,
 		 	GLsizei height,
 		 	const void * data=nullptr);
