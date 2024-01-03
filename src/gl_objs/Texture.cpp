@@ -134,13 +134,13 @@ void Texture::paramI(GLenum pname, GLint param) {
 }
 
 void Texture::alloc(GLenum target,
-					 	GLint level,
-					 	GLint internalFormat,
-					 	GLsizei width,
-					 	GLsizei height,
-					 	GLenum format,
-					 	GLenum type,
-		 				const void * data) {
+				 	GLint level,
+				 	GLint internalFormat,
+				 	GLsizei width,
+				 	GLsizei height,
+				 	GLenum format,
+				 	GLenum type,
+	 				const void * data) {
 	_w = width; _h = height;
 	bind();
 	glTexImage2D(target, level, internalFormat, width, height, 0, format, type, data);
