@@ -2,7 +2,7 @@
 #define VERTEX_BUFFER_H
 
 #include <vector>
-#include <glm.h>
+#include <flgl/glm.h>
 #include "../gfx.h"
 #include "Buffer.h"
 #include "VertexArray.h"
