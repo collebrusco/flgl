@@ -134,16 +134,27 @@ void Texture::paramI(GLenum pname, GLint param) {
 }
 
 void Texture::alloc(GLenum target,
-					 	GLint level,
-					 	GLint internalFormat,
-					 	GLsizei width,
-					 	GLsizei height,
-					 	GLenum format,
-					 	GLenum type,
-		 				const void * data) {
-	_w = width; _h = height;
-	bind();
-	glTexImage2D(target, level, internalFormat, width, height, 0, format, type, data);
+                    GLint level,
+                    GLint internalFormat,
+                    GLsizei width,
+                    GLsizei height,
+                    GLenum format,
+                    GLenum type,
+                    const void * data) {
+    _w = width; _h = height;
+    bind();
+    glTexImage2D(target, level, internalFormat, width, height, 0, format, type, data);
+}
+
+void Texture::alloc(GLint internalFormat,
+                    GLsizei width,
+                    GLsizei height,
+                    GLenum format,
+                    GLenum type,
+                    const void * data) {
+    _w = width; _h = height;
+    bind();
+    glTexImage2D(this->target, 0, internalFormat, width, height, 0, format, type, data);
 }
 
 void Texture::alloc_rgb(GLsizei width, GLsizei height, const void * data) {

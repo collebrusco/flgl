@@ -16,7 +16,7 @@ void GL_Object::delist() {
 void GL_Object::destroy_all() {
 	unordered_set<GL_Object*> set_copy = objects;
 	for (GL_Object* obj : set_copy) {
-		LOG_DBG("destroying %p", obj);
+		// LOG_DBG("destroying %p", obj);
 		obj->destroy();
 		delete obj;
 	}
