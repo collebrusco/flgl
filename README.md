@@ -1,14 +1,14 @@
 # flgl
-flgl is a graphics library meant to provide simple and consice access to opengl and windowing (glfw)  
+flgl is a graphics library meant to provide consice access to opengl and windowing (glfw)    
+     
+spinning up a window and an opengl context is very easy and fast with flgl. the idea is to include all of the abstractions I found myself repeating for each graphics project or experiment, along with all the dependencies, and the commonly needed linear algebra and image loading libraries (glm, stb_image).  
 
 flgl includes:
 * Windowing: windows, mouse and key input, callbacks, glfw
 * Low level abstractions for buffers, vertex arrays, textures, shaders, framebuffers, renderbuffers, etc.
 * Higher level abstractions for meshes, post-process buffers, loading textures from files, etc.
 * Shaders: Read, compile, link and upload to vert-frag shaders, several templates included (MVP, shadowcaster, perlin noise)
-* Math: includes glm and tools for orthographic and perspective cameras, model matricies & other odds & ends
-
-spinning up a simple interactive graphics application is very easy and consice with flgl. this ease allows for rapid prototyping which is really the reason I created it. everything I found myself repeating for each graphics project or experiment is in one place along with all the dependencies.
+* Math: includes glm and tools for orthographic and perspective cameras, model matricies & other odds & ends    
 
 for example, submodule add flgl and opening a window is this easy:  
 ```c++
