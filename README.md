@@ -1,7 +1,7 @@
 # flgl
 flgl is a graphics library meant to provide consice access to opengl and windowing (glfw)    
      
-spinning up a window and an opengl context is very easy and fast with flgl. the idea is to include all of the abstractions I found myself repeating for each graphics project or experiment, along with all the dependencies, and the commonly needed linear algebra and image loading libraries (glm, stb_image).  
+spinning up a window and a graphics program is very easy and fast with flgl. the idea is to include all of the abstractions I found myself repeating for each graphics project or experiment, along with all the dependencies, and the commonly needed linear algebra and image loading libraries (glm, stb_image).  
 
 flgl includes:
 * Windowing: windows, mouse and key input, callbacks, glfw
