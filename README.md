@@ -6,8 +6,8 @@ spinning up a window and a graphics program is very easy and fast with flgl. the
 flgl includes:
 * Windowing: windows, mouse and key input, callbacks, glfw
 * Low level abstractions for buffers, vertex arrays, textures, shaders, framebuffers, renderbuffers, etc.
-* Higher level abstractions for meshes, post-process buffers, loading textures from files, etc.
-* Shaders: Read, compile, link and upload to vert-frag shaders, several templates included (MVP, shadowcaster, perlin noise)
+* Higher level abstractions for meshes, post-process buffers, loading shaders and textures from files, etc.
+* Shader Templates: Several templates and algorithms for common shaders are included (MVP, perlin noise, etc)
 * Math: includes glm and tools for orthographic and perspective cameras, model matricies & other odds & ends    
 
 for example, submodule add flgl and opening a window is this easy:  
