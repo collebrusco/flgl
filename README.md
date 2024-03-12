@@ -1,13 +1,16 @@
-# franks low-fat graphics library (flgl)
+# flgl
 flgl is a graphics library meant to provide simple and consice access to opengl and windowing (glfw)  
 
 flgl includes:
-* Windowing: windows, mouse and key input, callbacks
+* Windowing: windows, mouse and key input, callbacks, glfw
 * Low level abstractions for buffers, vertex arrays, textures, shaders, framebuffers, renderbuffers, etc.
-* Higher level abstractions for various vertex types, post processing buffers, reading textures from files, etc.
+* Higher level abstractions for meshes, post-process buffers, loading textures from files, etc.
+* Shaders: Read, compile, link and upload to vert-frag shaders, several templates included (MVP, shadowcaster, perlin noise)
 * Math: includes glm and tools for orthographic and perspective cameras, model matricies & other odds & ends
 
-submodule add flgl and opening a window is this easy:  
+spinning up a simple interactive graphics application is very easy and consice with flgl. this ease allows for rapid prototyping which is really the reason I created it. everything I found myself repeating for each graphics project or experiment is in one place along with all the dependencies.
+
+for example, submodule add flgl and opening a window is this easy:  
 ```c++
 #include <flgl.h> // includes gl and window
 int main() {
@@ -93,7 +96,7 @@ postbuff.bind_for_sample();
 // draw
 ```
 ### Finally
-This will render a screen size quad
+This will render a screen size quad using default shaders
 ```c++
 int main() {
 	gl.init();
