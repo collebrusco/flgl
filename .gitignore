@@ -1,6 +1,10 @@
 **/.DS_Store
 *.DS_Store
 
+# cmake
+CMakeFiles/
+cmake_install.cmake
+
 # Prerequisites
 *.d
 
