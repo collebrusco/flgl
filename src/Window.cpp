@@ -96,12 +96,14 @@ GLFWwindow* Window::id() const {
 void Window::create(const char* t, size_t x, size_t y){
     title = t;
     active = false;
+
     handle = glfwCreateWindow((int)x, (int)y, title, NULL, NULL);
     if (!handle){ //redundant
         glfwTerminate();
         LOG_ERR("Failed to create window! Initialize glfw");
         assert(false);
     }
+    LOG_DBG("Window created");
     glfwGetFramebufferSize(handle, &_frame.x, &_frame.y);
     _aspect = (float)frame.x / (float)frame.y;
     active = true;
@@ -110,6 +112,10 @@ void Window::create(const char* t, size_t x, size_t y){
     WindowingCallbacks::attach(handle);
     
     this->context_current();
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+        LOG_ERR("Failed to initialize glad"); return;
+    }
+    LOG_DBG("context current, glad initialized");
     { // logging version
         const char* glversion = (const char*)glGetString(GL_VERSION);
         if(glversion) 
