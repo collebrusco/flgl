@@ -1,7 +1,7 @@
 #ifndef Window_h
 #define Window_h
 #include "gfx.h" 
-#include <glm/glm.hpp>
+#include <flgl/glm.h>
 
 struct Button {
     Button();

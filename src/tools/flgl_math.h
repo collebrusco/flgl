@@ -11,7 +11,7 @@
 #ifndef flgl_math_h
 #define flgl_math_h
 
-#include <glm/ext/matrix_transform.hpp>
+#include <flgl/glm.h>
 
 // Model matrix calculators
 // These generate model matricies from 2D or 3D position, rotation, scale, and optionally anchor points.
