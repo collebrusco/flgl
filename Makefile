@@ -57,10 +57,10 @@ RM = /opt/homebrew/Cellar/cmake/3.27.7/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/frankcollebrusco/dev/flgl_testing
+CMAKE_SOURCE_DIR = /Users/frankcollebrusco/dev/tanks
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/frankcollebrusco/dev/flgl_testing
+CMAKE_BINARY_DIR = /Users/frankcollebrusco/dev/tanks
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -132,14 +132,14 @@ install/strip/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(CMAKE_COMMAND) -E cmake_progress_start /Users/frankcollebrusco/dev/flgl_testing/CMakeFiles /Users/frankcollebrusco/dev/flgl_testing/lib/flgl//CMakeFiles/progress.marks
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 lib/flgl/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/frankcollebrusco/dev/flgl_testing/CMakeFiles 0
+	cd /Users/frankcollebrusco/dev/tanks && $(CMAKE_COMMAND) -E cmake_progress_start /Users/frankcollebrusco/dev/tanks/CMakeFiles /Users/frankcollebrusco/dev/tanks/lib/flgl//CMakeFiles/progress.marks
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 lib/flgl/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/frankcollebrusco/dev/tanks/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 lib/flgl/clean
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 lib/flgl/clean
 .PHONY : clean
 
 # The main clean target
@@ -148,22 +148,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 lib/flgl/preinstall
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 lib/flgl/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 lib/flgl/preinstall
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 lib/flgl/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /Users/frankcollebrusco/dev/tanks && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 lib/flgl/CMakeFiles/GLAD.dir/rule:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 lib/flgl/CMakeFiles/GLAD.dir/rule
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 lib/flgl/CMakeFiles/GLAD.dir/rule
 .PHONY : lib/flgl/CMakeFiles/GLAD.dir/rule
 
 # Convenience name for target.
@@ -172,12 +172,12 @@ GLAD: lib/flgl/CMakeFiles/GLAD.dir/rule
 
 # fast build rule for target.
 GLAD/fast:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/GLAD.dir/build.make lib/flgl/CMakeFiles/GLAD.dir/build
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/GLAD.dir/build.make lib/flgl/CMakeFiles/GLAD.dir/build
 .PHONY : GLAD/fast
 
 # Convenience name for target.
 lib/flgl/CMakeFiles/FLGL.dir/rule:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 lib/flgl/CMakeFiles/FLGL.dir/rule
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 lib/flgl/CMakeFiles/FLGL.dir/rule
 .PHONY : lib/flgl/CMakeFiles/FLGL.dir/rule
 
 # Convenience name for target.
@@ -186,7 +186,7 @@ FLGL: lib/flgl/CMakeFiles/FLGL.dir/rule
 
 # fast build rule for target.
 FLGL/fast:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/build
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/build
 .PHONY : FLGL/fast
 
 lib/glad/src/glad.o: lib/glad/src/glad.c.o
@@ -194,7 +194,7 @@ lib/glad/src/glad.o: lib/glad/src/glad.c.o
 
 # target to build an object file
 lib/glad/src/glad.c.o:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/GLAD.dir/build.make lib/flgl/CMakeFiles/GLAD.dir/lib/glad/src/glad.c.o
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/GLAD.dir/build.make lib/flgl/CMakeFiles/GLAD.dir/lib/glad/src/glad.c.o
 .PHONY : lib/glad/src/glad.c.o
 
 lib/glad/src/glad.i: lib/glad/src/glad.c.i
@@ -202,7 +202,7 @@ lib/glad/src/glad.i: lib/glad/src/glad.c.i
 
 # target to preprocess a source file
 lib/glad/src/glad.c.i:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/GLAD.dir/build.make lib/flgl/CMakeFiles/GLAD.dir/lib/glad/src/glad.c.i
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/GLAD.dir/build.make lib/flgl/CMakeFiles/GLAD.dir/lib/glad/src/glad.c.i
 .PHONY : lib/glad/src/glad.c.i
 
 lib/glad/src/glad.s: lib/glad/src/glad.c.s
@@ -210,7 +210,7 @@ lib/glad/src/glad.s: lib/glad/src/glad.c.s
 
 # target to generate assembly for a file
 lib/glad/src/glad.c.s:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/GLAD.dir/build.make lib/flgl/CMakeFiles/GLAD.dir/lib/glad/src/glad.c.s
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/GLAD.dir/build.make lib/flgl/CMakeFiles/GLAD.dir/lib/glad/src/glad.c.s
 .PHONY : lib/glad/src/glad.c.s
 
 src/Graphics.o: src/Graphics.cpp.o
@@ -218,7 +218,7 @@ src/Graphics.o: src/Graphics.cpp.o
 
 # target to build an object file
 src/Graphics.cpp.o:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/Graphics.cpp.o
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/Graphics.cpp.o
 .PHONY : src/Graphics.cpp.o
 
 src/Graphics.i: src/Graphics.cpp.i
@@ -226,7 +226,7 @@ src/Graphics.i: src/Graphics.cpp.i
 
 # target to preprocess a source file
 src/Graphics.cpp.i:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/Graphics.cpp.i
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/Graphics.cpp.i
 .PHONY : src/Graphics.cpp.i
 
 src/Graphics.s: src/Graphics.cpp.s
@@ -234,7 +234,7 @@ src/Graphics.s: src/Graphics.cpp.s
 
 # target to generate assembly for a file
 src/Graphics.cpp.s:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/Graphics.cpp.s
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/Graphics.cpp.s
 .PHONY : src/Graphics.cpp.s
 
 src/Window.o: src/Window.cpp.o
@@ -242,7 +242,7 @@ src/Window.o: src/Window.cpp.o
 
 # target to build an object file
 src/Window.cpp.o:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/Window.cpp.o
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/Window.cpp.o
 .PHONY : src/Window.cpp.o
 
 src/Window.i: src/Window.cpp.i
@@ -250,7 +250,7 @@ src/Window.i: src/Window.cpp.i
 
 # target to preprocess a source file
 src/Window.cpp.i:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/Window.cpp.i
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/Window.cpp.i
 .PHONY : src/Window.cpp.i
 
 src/Window.s: src/Window.cpp.s
@@ -258,7 +258,7 @@ src/Window.s: src/Window.cpp.s
 
 # target to generate assembly for a file
 src/Window.cpp.s:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/Window.cpp.s
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/Window.cpp.s
 .PHONY : src/Window.cpp.s
 
 src/flgl.o: src/flgl.cpp.o
@@ -266,7 +266,7 @@ src/flgl.o: src/flgl.cpp.o
 
 # target to build an object file
 src/flgl.cpp.o:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/flgl.cpp.o
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/flgl.cpp.o
 .PHONY : src/flgl.cpp.o
 
 src/flgl.i: src/flgl.cpp.i
@@ -274,7 +274,7 @@ src/flgl.i: src/flgl.cpp.i
 
 # target to preprocess a source file
 src/flgl.cpp.i:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/flgl.cpp.i
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/flgl.cpp.i
 .PHONY : src/flgl.cpp.i
 
 src/flgl.s: src/flgl.cpp.s
@@ -282,7 +282,7 @@ src/flgl.s: src/flgl.cpp.s
 
 # target to generate assembly for a file
 src/flgl.cpp.s:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/flgl.cpp.s
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/flgl.cpp.s
 .PHONY : src/flgl.cpp.s
 
 src/gl_objs/Buffer.o: src/gl_objs/Buffer.cpp.o
@@ -290,7 +290,7 @@ src/gl_objs/Buffer.o: src/gl_objs/Buffer.cpp.o
 
 # target to build an object file
 src/gl_objs/Buffer.cpp.o:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/Buffer.cpp.o
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/Buffer.cpp.o
 .PHONY : src/gl_objs/Buffer.cpp.o
 
 src/gl_objs/Buffer.i: src/gl_objs/Buffer.cpp.i
@@ -298,7 +298,7 @@ src/gl_objs/Buffer.i: src/gl_objs/Buffer.cpp.i
 
 # target to preprocess a source file
 src/gl_objs/Buffer.cpp.i:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/Buffer.cpp.i
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/Buffer.cpp.i
 .PHONY : src/gl_objs/Buffer.cpp.i
 
 src/gl_objs/Buffer.s: src/gl_objs/Buffer.cpp.s
@@ -306,7 +306,7 @@ src/gl_objs/Buffer.s: src/gl_objs/Buffer.cpp.s
 
 # target to generate assembly for a file
 src/gl_objs/Buffer.cpp.s:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/Buffer.cpp.s
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/Buffer.cpp.s
 .PHONY : src/gl_objs/Buffer.cpp.s
 
 src/gl_objs/Framebuffer.o: src/gl_objs/Framebuffer.cpp.o
@@ -314,7 +314,7 @@ src/gl_objs/Framebuffer.o: src/gl_objs/Framebuffer.cpp.o
 
 # target to build an object file
 src/gl_objs/Framebuffer.cpp.o:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/Framebuffer.cpp.o
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/Framebuffer.cpp.o
 .PHONY : src/gl_objs/Framebuffer.cpp.o
 
 src/gl_objs/Framebuffer.i: src/gl_objs/Framebuffer.cpp.i
@@ -322,7 +322,7 @@ src/gl_objs/Framebuffer.i: src/gl_objs/Framebuffer.cpp.i
 
 # target to preprocess a source file
 src/gl_objs/Framebuffer.cpp.i:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/Framebuffer.cpp.i
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/Framebuffer.cpp.i
 .PHONY : src/gl_objs/Framebuffer.cpp.i
 
 src/gl_objs/Framebuffer.s: src/gl_objs/Framebuffer.cpp.s
@@ -330,7 +330,7 @@ src/gl_objs/Framebuffer.s: src/gl_objs/Framebuffer.cpp.s
 
 # target to generate assembly for a file
 src/gl_objs/Framebuffer.cpp.s:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/Framebuffer.cpp.s
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/Framebuffer.cpp.s
 .PHONY : src/gl_objs/Framebuffer.cpp.s
 
 src/gl_objs/FramebufferRGBZ.o: src/gl_objs/FramebufferRGBZ.cpp.o
@@ -338,7 +338,7 @@ src/gl_objs/FramebufferRGBZ.o: src/gl_objs/FramebufferRGBZ.cpp.o
 
 # target to build an object file
 src/gl_objs/FramebufferRGBZ.cpp.o:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/FramebufferRGBZ.cpp.o
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/FramebufferRGBZ.cpp.o
 .PHONY : src/gl_objs/FramebufferRGBZ.cpp.o
 
 src/gl_objs/FramebufferRGBZ.i: src/gl_objs/FramebufferRGBZ.cpp.i
@@ -346,7 +346,7 @@ src/gl_objs/FramebufferRGBZ.i: src/gl_objs/FramebufferRGBZ.cpp.i
 
 # target to preprocess a source file
 src/gl_objs/FramebufferRGBZ.cpp.i:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/FramebufferRGBZ.cpp.i
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/FramebufferRGBZ.cpp.i
 .PHONY : src/gl_objs/FramebufferRGBZ.cpp.i
 
 src/gl_objs/FramebufferRGBZ.s: src/gl_objs/FramebufferRGBZ.cpp.s
@@ -354,7 +354,7 @@ src/gl_objs/FramebufferRGBZ.s: src/gl_objs/FramebufferRGBZ.cpp.s
 
 # target to generate assembly for a file
 src/gl_objs/FramebufferRGBZ.cpp.s:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/FramebufferRGBZ.cpp.s
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/FramebufferRGBZ.cpp.s
 .PHONY : src/gl_objs/FramebufferRGBZ.cpp.s
 
 src/gl_objs/GL_Object.o: src/gl_objs/GL_Object.cpp.o
@@ -362,7 +362,7 @@ src/gl_objs/GL_Object.o: src/gl_objs/GL_Object.cpp.o
 
 # target to build an object file
 src/gl_objs/GL_Object.cpp.o:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/GL_Object.cpp.o
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/GL_Object.cpp.o
 .PHONY : src/gl_objs/GL_Object.cpp.o
 
 src/gl_objs/GL_Object.i: src/gl_objs/GL_Object.cpp.i
@@ -370,7 +370,7 @@ src/gl_objs/GL_Object.i: src/gl_objs/GL_Object.cpp.i
 
 # target to preprocess a source file
 src/gl_objs/GL_Object.cpp.i:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/GL_Object.cpp.i
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/GL_Object.cpp.i
 .PHONY : src/gl_objs/GL_Object.cpp.i
 
 src/gl_objs/GL_Object.s: src/gl_objs/GL_Object.cpp.s
@@ -378,7 +378,7 @@ src/gl_objs/GL_Object.s: src/gl_objs/GL_Object.cpp.s
 
 # target to generate assembly for a file
 src/gl_objs/GL_Object.cpp.s:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/GL_Object.cpp.s
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/GL_Object.cpp.s
 .PHONY : src/gl_objs/GL_Object.cpp.s
 
 src/gl_objs/Renderbuffer.o: src/gl_objs/Renderbuffer.cpp.o
@@ -386,7 +386,7 @@ src/gl_objs/Renderbuffer.o: src/gl_objs/Renderbuffer.cpp.o
 
 # target to build an object file
 src/gl_objs/Renderbuffer.cpp.o:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/Renderbuffer.cpp.o
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/Renderbuffer.cpp.o
 .PHONY : src/gl_objs/Renderbuffer.cpp.o
 
 src/gl_objs/Renderbuffer.i: src/gl_objs/Renderbuffer.cpp.i
@@ -394,7 +394,7 @@ src/gl_objs/Renderbuffer.i: src/gl_objs/Renderbuffer.cpp.i
 
 # target to preprocess a source file
 src/gl_objs/Renderbuffer.cpp.i:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/Renderbuffer.cpp.i
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/Renderbuffer.cpp.i
 .PHONY : src/gl_objs/Renderbuffer.cpp.i
 
 src/gl_objs/Renderbuffer.s: src/gl_objs/Renderbuffer.cpp.s
@@ -402,7 +402,7 @@ src/gl_objs/Renderbuffer.s: src/gl_objs/Renderbuffer.cpp.s
 
 # target to generate assembly for a file
 src/gl_objs/Renderbuffer.cpp.s:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/Renderbuffer.cpp.s
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/Renderbuffer.cpp.s
 .PHONY : src/gl_objs/Renderbuffer.cpp.s
 
 src/gl_objs/Shader.o: src/gl_objs/Shader.cpp.o
@@ -410,7 +410,7 @@ src/gl_objs/Shader.o: src/gl_objs/Shader.cpp.o
 
 # target to build an object file
 src/gl_objs/Shader.cpp.o:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/Shader.cpp.o
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/Shader.cpp.o
 .PHONY : src/gl_objs/Shader.cpp.o
 
 src/gl_objs/Shader.i: src/gl_objs/Shader.cpp.i
@@ -418,7 +418,7 @@ src/gl_objs/Shader.i: src/gl_objs/Shader.cpp.i
 
 # target to preprocess a source file
 src/gl_objs/Shader.cpp.i:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/Shader.cpp.i
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/Shader.cpp.i
 .PHONY : src/gl_objs/Shader.cpp.i
 
 src/gl_objs/Shader.s: src/gl_objs/Shader.cpp.s
@@ -426,7 +426,7 @@ src/gl_objs/Shader.s: src/gl_objs/Shader.cpp.s
 
 # target to generate assembly for a file
 src/gl_objs/Shader.cpp.s:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/Shader.cpp.s
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/Shader.cpp.s
 .PHONY : src/gl_objs/Shader.cpp.s
 
 src/gl_objs/Texture.o: src/gl_objs/Texture.cpp.o
@@ -434,7 +434,7 @@ src/gl_objs/Texture.o: src/gl_objs/Texture.cpp.o
 
 # target to build an object file
 src/gl_objs/Texture.cpp.o:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/Texture.cpp.o
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/Texture.cpp.o
 .PHONY : src/gl_objs/Texture.cpp.o
 
 src/gl_objs/Texture.i: src/gl_objs/Texture.cpp.i
@@ -442,7 +442,7 @@ src/gl_objs/Texture.i: src/gl_objs/Texture.cpp.i
 
 # target to preprocess a source file
 src/gl_objs/Texture.cpp.i:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/Texture.cpp.i
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/Texture.cpp.i
 .PHONY : src/gl_objs/Texture.cpp.i
 
 src/gl_objs/Texture.s: src/gl_objs/Texture.cpp.s
@@ -450,7 +450,7 @@ src/gl_objs/Texture.s: src/gl_objs/Texture.cpp.s
 
 # target to generate assembly for a file
 src/gl_objs/Texture.cpp.s:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/Texture.cpp.s
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/Texture.cpp.s
 .PHONY : src/gl_objs/Texture.cpp.s
 
 src/gl_objs/VertexArray.o: src/gl_objs/VertexArray.cpp.o
@@ -458,7 +458,7 @@ src/gl_objs/VertexArray.o: src/gl_objs/VertexArray.cpp.o
 
 # target to build an object file
 src/gl_objs/VertexArray.cpp.o:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/VertexArray.cpp.o
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/VertexArray.cpp.o
 .PHONY : src/gl_objs/VertexArray.cpp.o
 
 src/gl_objs/VertexArray.i: src/gl_objs/VertexArray.cpp.i
@@ -466,7 +466,7 @@ src/gl_objs/VertexArray.i: src/gl_objs/VertexArray.cpp.i
 
 # target to preprocess a source file
 src/gl_objs/VertexArray.cpp.i:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/VertexArray.cpp.i
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/VertexArray.cpp.i
 .PHONY : src/gl_objs/VertexArray.cpp.i
 
 src/gl_objs/VertexArray.s: src/gl_objs/VertexArray.cpp.s
@@ -474,7 +474,7 @@ src/gl_objs/VertexArray.s: src/gl_objs/VertexArray.cpp.s
 
 # target to generate assembly for a file
 src/gl_objs/VertexArray.cpp.s:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/VertexArray.cpp.s
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/VertexArray.cpp.s
 .PHONY : src/gl_objs/VertexArray.cpp.s
 
 src/gl_objs/VertexBuffer.o: src/gl_objs/VertexBuffer.cpp.o
@@ -482,7 +482,7 @@ src/gl_objs/VertexBuffer.o: src/gl_objs/VertexBuffer.cpp.o
 
 # target to build an object file
 src/gl_objs/VertexBuffer.cpp.o:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/VertexBuffer.cpp.o
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/VertexBuffer.cpp.o
 .PHONY : src/gl_objs/VertexBuffer.cpp.o
 
 src/gl_objs/VertexBuffer.i: src/gl_objs/VertexBuffer.cpp.i
@@ -490,7 +490,7 @@ src/gl_objs/VertexBuffer.i: src/gl_objs/VertexBuffer.cpp.i
 
 # target to preprocess a source file
 src/gl_objs/VertexBuffer.cpp.i:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/VertexBuffer.cpp.i
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/VertexBuffer.cpp.i
 .PHONY : src/gl_objs/VertexBuffer.cpp.i
 
 src/gl_objs/VertexBuffer.s: src/gl_objs/VertexBuffer.cpp.s
@@ -498,7 +498,7 @@ src/gl_objs/VertexBuffer.s: src/gl_objs/VertexBuffer.cpp.s
 
 # target to generate assembly for a file
 src/gl_objs/VertexBuffer.cpp.s:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/VertexBuffer.cpp.s
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/gl_objs/VertexBuffer.cpp.s
 .PHONY : src/gl_objs/VertexBuffer.cpp.s
 
 src/tools/Camera.o: src/tools/Camera.cpp.o
@@ -506,7 +506,7 @@ src/tools/Camera.o: src/tools/Camera.cpp.o
 
 # target to build an object file
 src/tools/Camera.cpp.o:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/tools/Camera.cpp.o
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/tools/Camera.cpp.o
 .PHONY : src/tools/Camera.cpp.o
 
 src/tools/Camera.i: src/tools/Camera.cpp.i
@@ -514,7 +514,7 @@ src/tools/Camera.i: src/tools/Camera.cpp.i
 
 # target to preprocess a source file
 src/tools/Camera.cpp.i:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/tools/Camera.cpp.i
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/tools/Camera.cpp.i
 .PHONY : src/tools/Camera.cpp.i
 
 src/tools/Camera.s: src/tools/Camera.cpp.s
@@ -522,7 +522,7 @@ src/tools/Camera.s: src/tools/Camera.cpp.s
 
 # target to generate assembly for a file
 src/tools/Camera.cpp.s:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/tools/Camera.cpp.s
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/tools/Camera.cpp.s
 .PHONY : src/tools/Camera.cpp.s
 
 src/tools/DefaultMeshes.o: src/tools/DefaultMeshes.cpp.o
@@ -530,7 +530,7 @@ src/tools/DefaultMeshes.o: src/tools/DefaultMeshes.cpp.o
 
 # target to build an object file
 src/tools/DefaultMeshes.cpp.o:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/tools/DefaultMeshes.cpp.o
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/tools/DefaultMeshes.cpp.o
 .PHONY : src/tools/DefaultMeshes.cpp.o
 
 src/tools/DefaultMeshes.i: src/tools/DefaultMeshes.cpp.i
@@ -538,7 +538,7 @@ src/tools/DefaultMeshes.i: src/tools/DefaultMeshes.cpp.i
 
 # target to preprocess a source file
 src/tools/DefaultMeshes.cpp.i:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/tools/DefaultMeshes.cpp.i
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/tools/DefaultMeshes.cpp.i
 .PHONY : src/tools/DefaultMeshes.cpp.i
 
 src/tools/DefaultMeshes.s: src/tools/DefaultMeshes.cpp.s
@@ -546,7 +546,7 @@ src/tools/DefaultMeshes.s: src/tools/DefaultMeshes.cpp.s
 
 # target to generate assembly for a file
 src/tools/DefaultMeshes.cpp.s:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/tools/DefaultMeshes.cpp.s
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/tools/DefaultMeshes.cpp.s
 .PHONY : src/tools/DefaultMeshes.cpp.s
 
 src/tools/flgl_math.o: src/tools/flgl_math.cpp.o
@@ -554,7 +554,7 @@ src/tools/flgl_math.o: src/tools/flgl_math.cpp.o
 
 # target to build an object file
 src/tools/flgl_math.cpp.o:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/tools/flgl_math.cpp.o
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/tools/flgl_math.cpp.o
 .PHONY : src/tools/flgl_math.cpp.o
 
 src/tools/flgl_math.i: src/tools/flgl_math.cpp.i
@@ -562,7 +562,7 @@ src/tools/flgl_math.i: src/tools/flgl_math.cpp.i
 
 # target to preprocess a source file
 src/tools/flgl_math.cpp.i:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/tools/flgl_math.cpp.i
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/tools/flgl_math.cpp.i
 .PHONY : src/tools/flgl_math.cpp.i
 
 src/tools/flgl_math.s: src/tools/flgl_math.cpp.s
@@ -570,7 +570,7 @@ src/tools/flgl_math.s: src/tools/flgl_math.cpp.s
 
 # target to generate assembly for a file
 src/tools/flgl_math.cpp.s:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/tools/flgl_math.cpp.s
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/tools/flgl_math.cpp.s
 .PHONY : src/tools/flgl_math.cpp.s
 
 src/util/log.o: src/util/log.cpp.o
@@ -578,7 +578,7 @@ src/util/log.o: src/util/log.cpp.o
 
 # target to build an object file
 src/util/log.cpp.o:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/util/log.cpp.o
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/util/log.cpp.o
 .PHONY : src/util/log.cpp.o
 
 src/util/log.i: src/util/log.cpp.i
@@ -586,7 +586,7 @@ src/util/log.i: src/util/log.cpp.i
 
 # target to preprocess a source file
 src/util/log.cpp.i:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/util/log.cpp.i
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/util/log.cpp.i
 .PHONY : src/util/log.cpp.i
 
 src/util/log.s: src/util/log.cpp.s
@@ -594,7 +594,7 @@ src/util/log.s: src/util/log.cpp.s
 
 # target to generate assembly for a file
 src/util/log.cpp.s:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/util/log.cpp.s
+	cd /Users/frankcollebrusco/dev/tanks && $(MAKE) $(MAKESILENT) -f lib/flgl/CMakeFiles/FLGL.dir/build.make lib/flgl/CMakeFiles/FLGL.dir/src/util/log.cpp.s
 .PHONY : src/util/log.cpp.s
 
 # Help Target
@@ -673,6 +673,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /Users/frankcollebrusco/dev/flgl_testing && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /Users/frankcollebrusco/dev/tanks && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 
