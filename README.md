@@ -40,6 +40,7 @@ zoom += window.mouse.scroll;
 ### Shaders
 Tell flgl the path to your shader folder and write them there. Compile and use them with the provided object.
 ```c++
+glconfig.set_shader_path("src/shaders");
 Shader sh = Shader::from_source("vert_name", "frag_name");
 sh.bind();
 sh.uMat4("uModel", modelMatrix);
@@ -81,28 +82,6 @@ mesh.bind();
 ```
 
 ### Framebuffers
-Create a framebuffer and attach Texture or Renderbuffer flgl objects to it as needed. For example, an RGBZ buffer for post processing:
-```c++
-Framebuffer framebuffer; Texture tex; Renderbuffer depth;
-
-framebuffer.create();
-framebuffer.bind();
-
-tex.create();
-tex.bind();
-tex.alloc_rgb(w,h);
-tex.pixelate(false);
-
-framebuffer.attach_texture(tex, GL_COLOR_ATTACHMENT0);
-
-depth.create();
-depth.bind();
-depth.alloc(GL_DEPTH_COMPONENT, w, h);
-
-framebuffer.attach_depth_buffer(depth);
-
-assert(framebuffer.complete());
-```
 Create a framebuffer and attach Texture or Renderbuffer flgl objects to it as needed. For example, an RGBZ buffer for post processing:
 ```c++
 Framebuffer framebuffer; Texture tex; Renderbuffer depth;
