@@ -131,15 +131,18 @@ make
 
 ### Differences Across Platforms
 On **MacOS**, you have the option to use the included `macos_Makefile` which was my previous Mac based build system. This can reduce some of the CMake clutter if you're mac only.   
+
 For **Windows** users, CMake can build for the various Windows C++ compilers. My personally prefered method is to install the [winlibs MinGW clang compiler](https://winlibs.com/), [Git Bash](https://gitforwindows.org/), [Make for Windows](https://gnuwin32.sourceforge.net/packages/make.htm), and [CMake](https://cmake.org/). Then with Git Bash, run    
 `cmake -G "MinGW Makefiles" .` to generate makefiles that you can use with Git Bash and Make for Windows. This is the method I've verified.   
+       
 If you're a **Linux** user, I have a feeling you know how to build this already.    
     
      
       
      
 ## OLD BUILD SYSTEM
-I leave the documentation of the old native makefile build system as it is still included as an alternative that can be more comfortable on macos and linux. However the new CMake based system can create cross platform graphics apps.
+I leave the documentation of the old native makefile build system as it is still included as an alternative that can be more comfortable on macos and linux. However the new CMake based system is much more portable.    
+
 #### MacOs
 Running ```make dylib``` in the flgl directory will build libflgl.dylib in the flgl/bin/ directory. This is all you need to start programming graphics; it includes linkage to glfw, glad, stb & glm. 
 ```bash
