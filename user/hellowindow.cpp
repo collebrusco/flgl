@@ -5,7 +5,7 @@ LOG_MODULE(main);
 
 int main() {
 	gl.init();
-	window.create("tanks", 1280, 720);
+	window.create("hello window", 1280, 720);
 	
 	while (!window.should_close()) {
 
