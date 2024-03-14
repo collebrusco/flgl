@@ -18,7 +18,7 @@ void WindowingCallbacks::window_close_callback(GLFWwindow *handle){
 
 void WindowingCallbacks::cursor_callback(GLFWwindow *handle, double xp, double yp){
     Window& win = *reinterpret_cast<Window*>(glfwGetWindowUserPointer(handle));
-    glm::vec2 p = glm::vec2(xp,yp) * win.content_scale;
+    glm::vec2 p = glm::vec2(xp,yp) * win.frame_to_window;
 
     static uint32_t md = 0;
     if (!(++md%32)) {
@@ -96,7 +96,8 @@ void WindowingCallbacks::attach(GLFWwindow* handle) {
 // ================ Window ================
 
 Window::Window() : frame(_frame), width(_frame.x), height(_frame.y), aspect(_aspect), 
-                keyboard(_keyboard), mouse(_mouse), content_scale(cscale)
+                keyboard(_keyboard), mouse(_mouse), content_scale(cscale),
+                frame_to_window(fr2win)
 {}
 
 GLFWwindow* Window::id() const {
@@ -115,6 +116,8 @@ void Window::create(const char* t, size_t x, size_t y){
     }
     LOG_DBG("Window created");
     glfwGetFramebufferSize(handle, &_frame.x, &_frame.y);
+    int win_w,win_h; glfwGetWindowSize(handle,&win_w,&win_h);
+    fr2win = (float)_frame.x / (float)win_w;
     _aspect = (float)frame.x / (float)frame.y;
     active = true;
     glfwSetWindowUserPointer(handle, reinterpret_cast<void*>(this));
