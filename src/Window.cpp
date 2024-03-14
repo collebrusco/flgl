@@ -19,16 +19,6 @@ void WindowingCallbacks::window_close_callback(GLFWwindow *handle){
 void WindowingCallbacks::cursor_callback(GLFWwindow *handle, double xp, double yp){
     Window& win = *reinterpret_cast<Window*>(glfwGetWindowUserPointer(handle));
     glm::vec2 p = glm::vec2(xp,yp) * win.frame_to_window;
-
-    static uint32_t md = 0;
-    if (!(++md%32)) {
-        LOG_DBG("\ncallback passes %f,%f",xp,yp);
-        LOG_DBG("\tobject pos %f,%f",p.x,p.y);
-        int w,h; glfwGetWindowSize(win.handle,&w,&h);
-        LOG_DBG("\t\twin size %d,%d",w,h);
-        LOG_DBG("\t\tframe size %d,%d",win.frame.x,win.frame.y);
-    }
-
     win._mouse.delta = p - win.mouse.pos;
     win._mouse.delta.x = glm::clamp(win._mouse.delta.x, -100.0f, 100.0f);
     win._mouse.delta.y = glm::clamp(win._mouse.delta.y, -100.0f, 100.0f);
