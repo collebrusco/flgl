@@ -116,7 +116,7 @@ int main() {
 ```
 
 
-## Building
+# Building
 flgl now includes a cross platform build system via [CMake](https://cmake.org/). In the user/ directory, there is a template CMakeLists.txt that can build user applications with flgl.    
 The fastest way to setup an flgl app is submodule flgl under lib/flgl, copy the hellowindow.cpp and the user_CMakeLists.txt into your project directory as main.cpp and CMakeLists.txt, run cmake and build your project.   
 ```bash
@@ -134,13 +134,13 @@ On **MacOS**, you have the option to use the included `macos_Makefile` which was
 
 For **Windows** users, CMake can build for the various Windows C++ compilers. My personally prefered method is to install the [winlibs MinGW clang compiler](https://winlibs.com/), [Git Bash](https://gitforwindows.org/), [Make for Windows](https://gnuwin32.sourceforge.net/packages/make.htm), and [CMake](https://cmake.org/). Then with Git Bash, run    
 `cmake -G "MinGW Makefiles" .` to generate makefiles that you can use with Git Bash and Make for Windows. This is the method I've verified.   
-       
+
 If you're a **Linux** user, I have a feeling you know how to build this already.    
     
      
       
      
-## OLD BUILD SYSTEM
+## (Old Build System)
 I leave the documentation of the old native makefile build system as it is still included as an alternative that can be more comfortable on macos and linux. However the new CMake based system is much more portable.    
 
 #### MacOs
