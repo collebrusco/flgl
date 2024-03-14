@@ -136,8 +136,6 @@ void Window::create(const char* t, size_t x, size_t y){
 
     glfwGetWindowContentScale(handle, &cscale.x, &cscale.y);
 
-    LOG_DBG("content scale: %f,%f", cscale.x, cscale.y);
-
     glfwSwapInterval(1);
 }
 
