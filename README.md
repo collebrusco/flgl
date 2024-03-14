@@ -117,7 +117,17 @@ int main() {
 
 
 ## Building
-flgl now includes a cross platform build system via [CMake](https://cmake.org/). In the user/ directory, there is a template CMakeLists.txt that can build user applications with flgl. The fastest way to setup an flgl app is submodule flgl under lib/flgl, copy the hellowindow.cpp and the user_CMakeLists.txt into your project directory as main.cpp and CMakeLists.txt, run cmake and build your project.   
+flgl now includes a cross platform build system via [CMake](https://cmake.org/). In the user/ directory, there is a template CMakeLists.txt that can build user applications with flgl.    
+The fastest way to setup an flgl app is submodule flgl under lib/flgl, copy the hellowindow.cpp and the user_CMakeLists.txt into your project directory as main.cpp and CMakeLists.txt, run cmake and build your project.   
+```bash
+git submodule add https://github.com/collebrusco/flgl lib/flgl 
+git submodule update --init --recursive
+cp lib/flgl/user/hellowindow.cpp src/main.cpp
+cp lib/flgl/user/user_CMakeLists.txt CMakeLists.txt
+cmake . # a little more to this part on windows
+make 
+./bin/ExampleProject # or bin/Exampleproject.exe from cmd on windows
+```
 
 ### Differences Across Platforms
 On **MacOS**, you have the option to use the included `macos_Makefile` which was my previous Mac based build system. This can reduce some of the CMake clutter if you're mac only.   
