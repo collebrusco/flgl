@@ -1,7 +1,7 @@
 # flgl
 flgl is a cross platform graphics library meant to provide consice access to opengl and windowing (glfw)    
      
-spinning up a window and a graphics program is very easy and fast with flgl. the idea is to include all of the abstractions I found myself repeating for each graphics project or experiment, along with all the dependencies, and the commonly needed linear algebra and image loading libraries (glm, stb_image).  
+spinning up a window and a graphics program is very easy and fast with flgl. the idea is to include all of the abstractions I found myself repeating for each graphics project, along with all the dependencies, and the common linear algebra and image loading libraries (glm, stb_image).  
     
 for example, submodule add flgl and opening a window is this easy:  
 ```c++
@@ -21,8 +21,8 @@ flgl includes:
 * Windowing: windows, mouse and key input, callbacks, glfw
 * Low level abstractions for buffers, vertex arrays, textures, shaders, framebuffers, renderbuffers, etc.
 * Higher level abstractions for meshes, post-process buffers, loading shaders and textures from files, etc.
-* Shader Templates: Several templates and algorithms for common shaders are included (MVP, perlin noise, etc)
-* Math: includes glm and tools for orthographic and perspective cameras, model matricies & other odds & ends    
+* Shader Templates: A few template shaders and algorithms I frequently reuse (MVP, perlin noise)
+* Math: submodules glm; adds tools for orthographic and perspective cameras
    
 ### Windows  
 There is a default single window available through the flgl.h header, but nothing is stopping you from creating more.
@@ -48,15 +48,13 @@ sh.uFloat("uTime", time);
    
 ### Meshes
 flgl has abstractions for each individual gl object (vbo, vao, ibo) as well as higher level abstractions so that there is convenience for common usecases and flexibility for advanced ones.      
-Template ```VertexBuffer``` and ```Mesh``` objects with one of a number of vertex options. Defining your own only requires defining a template specialization that configures the vertex attribute pointers for your vertex as in opengl.    
+Template ```VertexBuffer``` and ```Mesh``` objects with one of a number of vertex options. Defining your own only requires defining a template specialization that configures the vertex attribute pointers for your vertex.    
 Here, Vt_classic is a vertex with 3 floats for position and 2 for UV.
 ```c++
 VertexArray vao;
 VertexBuffer<Vt_classic> vbo;
 ElementBuffer ibo;
-vao.create();
-vbo.create();
-ibo.create();
+vao.create(); vbo.create(); ibo.create();
 vao.bind();
 vbo.bind();
 vao.attach(vbo);
@@ -81,7 +79,7 @@ mesh = Mesh<Vt_classic>::from_vectors({{{-1.,-1., 0.}, {0.,0.}},
 mesh.bind();
 // render...
 ```
-This pattern persists throughout the library; in many other cases flgl starts with granular opengl abstractions and builds on them into preconfigured packages of functionality.
+    
 ### One more example: post processing
 ```c++
 PostProcessBuffer postbuff; // contains Framebuffer, Texture (RGB), Renderbuffer (depth)
@@ -135,7 +133,7 @@ On **MacOS**, you have the option to use the included `macos_Makefile` which was
 For **Windows** users, CMake can build for the various Windows C++ compilers. My personally prefered method is to install the [winlibs MinGW clang compiler](https://winlibs.com/), [Git Bash](https://gitforwindows.org/), [Make for Windows](https://gnuwin32.sourceforge.net/packages/make.htm), and [CMake](https://cmake.org/). Then with Git Bash, run    
 `cmake -G "MinGW Makefiles" .` to generate makefiles that you can use with Git Bash and Make for Windows. This is the method I've verified.   
 
-If you're a **Linux** user, I have a feeling you know how to build this already.    
+If you're a **Linux** user, you probably know how to build this already.    
     
      
       
