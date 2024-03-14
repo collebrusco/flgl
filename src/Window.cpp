@@ -118,7 +118,6 @@ void Window::create(const char* t, size_t x, size_t y){
         LOG_ERR("Failed to initialize glad"); return;
     }
 #endif
-    LOG_DBG("context current, glad initialized");
     { // logging version
         const char* glversion = (const char*)glGetString(GL_VERSION);
         if(glversion) 
