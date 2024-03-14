@@ -24,7 +24,9 @@ void WindowingCallbacks::cursor_callback(GLFWwindow *handle, double xp, double y
     if (!(++md%32)) {
         LOG_DBG("\ncallback passes %f,%f",xp,yp);
         LOG_DBG("\tobject pos %f,%f",p.x,p.y);
-        LOG_DBG("\t\twin size %d,%d",win.frame.x,win.frame.y);
+        int w,h; glfwGetWindowSize(win.handle,&w,&h);
+        LOG_DBG("\t\twin size %d,%d",w,h);
+        LOG_DBG("\t\tframe size %d,%d",win.frame.x,win.frame.y);
     }
 
     win._mouse.delta = p - win.mouse.pos;
