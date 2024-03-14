@@ -18,7 +18,7 @@ void WindowingCallbacks::window_close_callback(GLFWwindow *handle){
 
 void WindowingCallbacks::cursor_callback(GLFWwindow *handle, double xp, double yp){
     Window& win = *reinterpret_cast<Window*>(glfwGetWindowUserPointer(handle));
-    glm::vec2 p = glm::vec2(xp,yp) * win.content_scale;
+    glm::vec2 p = glm::vec2(xp,yp) * win.frame_to_window;
     win._mouse.delta = p - win.mouse.pos;
     win._mouse.delta.x = glm::clamp(win._mouse.delta.x, -100.0f, 100.0f);
     win._mouse.delta.y = glm::clamp(win._mouse.delta.y, -100.0f, 100.0f);
@@ -86,7 +86,8 @@ void WindowingCallbacks::attach(GLFWwindow* handle) {
 // ================ Window ================
 
 Window::Window() : frame(_frame), width(_frame.x), height(_frame.y), aspect(_aspect), 
-                keyboard(_keyboard), mouse(_mouse), content_scale(cscale)
+                keyboard(_keyboard), mouse(_mouse), content_scale(cscale),
+                frame_to_window(fr2win)
 {}
 
 GLFWwindow* Window::id() const {
@@ -96,13 +97,17 @@ GLFWwindow* Window::id() const {
 void Window::create(const char* t, size_t x, size_t y){
     title = t;
     active = false;
+
     handle = glfwCreateWindow((int)x, (int)y, title, NULL, NULL);
     if (!handle){ //redundant
         glfwTerminate();
         LOG_ERR("Failed to create window! Initialize glfw");
         assert(false);
     }
+    LOG_DBG("Window created");
     glfwGetFramebufferSize(handle, &_frame.x, &_frame.y);
+    int win_w,win_h; glfwGetWindowSize(handle,&win_w,&win_h);
+    fr2win = (float)_frame.x / (float)win_w;
     _aspect = (float)frame.x / (float)frame.y;
     active = true;
     glfwSetWindowUserPointer(handle, reinterpret_cast<void*>(this));
@@ -110,6 +115,12 @@ void Window::create(const char* t, size_t x, size_t y){
     WindowingCallbacks::attach(handle);
     
     this->context_current();
+
+#ifndef  __APPLE__
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+        LOG_ERR("Failed to initialize glad"); return;
+    }
+#endif
     { // logging version
         const char* glversion = (const char*)glGetString(GL_VERSION);
         if(glversion) 

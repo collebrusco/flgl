@@ -11,7 +11,7 @@
 #include <sstream>
 #include "Shader.h"
 #include "../Graphics.h"
-#include <glm/gtc/type_ptr.hpp>
+#include <flgl/glm.h>
 #include "../flgl.h"
 #include "../util/log.h"
 LOG_MODULE(Shader);

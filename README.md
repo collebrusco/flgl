@@ -1,7 +1,7 @@
 # flgl
-flgl is a graphics library meant to provide consice access to opengl and windowing (glfw)    
+flgl is a cross platform graphics library meant to provide consice access to opengl and windowing (glfw)    
      
-spinning up a window and a graphics program is very easy and fast with flgl. the idea is to include all of the abstractions I found myself repeating for each graphics project or experiment, along with all the dependencies, and the commonly needed linear algebra and image loading libraries (glm, stb_image).  
+spinning up a window and a graphics program is very easy and fast with flgl. the idea is to include all of the abstractions I found myself repeating for each graphics project, along with all the dependencies, and the common linear algebra and image loading libraries (glm, stb_image).  
     
 for example, submodule add flgl and opening a window is this easy:  
 ```c++
@@ -21,8 +21,8 @@ flgl includes:
 * Windowing: windows, mouse and key input, callbacks, glfw
 * Low level abstractions for buffers, vertex arrays, textures, shaders, framebuffers, renderbuffers, etc.
 * Higher level abstractions for meshes, post-process buffers, loading shaders and textures from files, etc.
-* Shader Templates: Several templates and algorithms for common shaders are included (MVP, perlin noise, etc)
-* Math: includes glm and tools for orthographic and perspective cameras, model matricies & other odds & ends    
+* Shader Templates: A few template shaders and algorithms I frequently reuse (MVP, perlin noise)
+* Math: submodules glm; adds tools for orthographic and perspective cameras
    
 ### Windows  
 There is a default single window available through the flgl.h header, but nothing is stopping you from creating more.
@@ -47,16 +47,14 @@ sh.uFloat("uTime", time);
 ```
    
 ### Meshes
-flgl has abstractions for each individual gl object (vbo, vao, ibo) as well as higher level abstractions so that there is convenience for common usecases and flexibility for advanced ones.      
-Template ```VertexBuffer``` and ```Mesh``` objects with one of a number of vertex options. Defining your own only requires defining a template specialization that configures the vertex attribute pointers for your vertex as in opengl.    
+flgl has low level abstractions for each individual gl object (vbo, vao, ibo) as well as higher level abstractions that package common object combinations and operations.
+Template ```VertexBuffer``` and ```Mesh``` objects with one of a number of vertex struct options, or create your own. Defining your own only requires defining a template specialization that configures the vertex attribute pointers for your vertex type.    
 Here, Vt_classic is a vertex with 3 floats for position and 2 for UV.
 ```c++
 VertexArray vao;
 VertexBuffer<Vt_classic> vbo;
 ElementBuffer ibo;
-vao.create();
-vbo.create();
-ibo.create();
+vao.create(); vbo.create(); ibo.create();
 vao.bind();
 vbo.bind();
 vao.attach(vbo);
@@ -67,7 +65,7 @@ vbo.buffer({{{-1.,-1., 0.}, {0.,0.}},
 ibo.bind();
 ibo.buffer({0, 2, 1,	0, 2, 3});
 vao.unbind(); vbo.unbind(); ibo.unbind();
-
+// you mesh is now configured, use:
 vao.bind();
 // render...
 
@@ -81,12 +79,61 @@ mesh = Mesh<Vt_classic>::from_vectors({{{-1.,-1., 0.}, {0.,0.}},
 mesh.bind();
 // render...
 ```
-This pattern persists throughout the library; in many other cases flgl starts with granular opengl abstractions and builds on them into preconfigured packages of functionality.
-### One more example: post processing
+
+### Framebuffers
+Create a framebuffer and attach Texture or Renderbuffer flgl objects to it as needed. For example, an RGBZ buffer for post processing:
+```c++
+Framebuffer framebuffer; Texture tex; Renderbuffer depth;
+
+framebuffer.create();
+framebuffer.bind();
+
+tex.create();
+tex.bind();
+tex.alloc_rgb(w,h);
+tex.pixelate(false);
+
+framebuffer.attach_texture(tex, GL_COLOR_ATTACHMENT0);
+
+depth.create();
+depth.bind();
+depth.alloc(GL_DEPTH_COMPONENT, w, h);
+
+framebuffer.attach_depth_buffer(depth);
+
+assert(framebuffer.complete());
+```
+Create a framebuffer and attach Texture or Renderbuffer flgl objects to it as needed. For example, an RGBZ buffer for post processing:
+```c++
+Framebuffer framebuffer; Texture tex; Renderbuffer depth;
+
+framebuffer.create();
+framebuffer.bind();
+
+tex.create();
+tex.bind();
+tex.alloc_rgb(w,h);
+tex.pixelate(false);
+
+framebuffer.attach_texture(tex, GL_COLOR_ATTACHMENT0);
+
+depth.create();
+depth.bind();
+depth.alloc(GL_DEPTH_COMPONENT, w, h);
+
+framebuffer.attach_depth_buffer(depth);
+
+assert(framebuffer.complete());
+```
+       
+Alternatively, there is a compound object for this:
+       
 ```c++
 PostProcessBuffer postbuff; // contains Framebuffer, Texture (RGB), Renderbuffer (depth)
-postbuff.create(w, h);
-// in render loop ...
+postbuff.create(w, h); // done
+
+
+// later, in render loop ...
 postbuff.bind_for_render();
 postbuff.clear();
 // draw
@@ -96,7 +143,7 @@ postbuff.bind_for_sample();
 // draw
 ```
 ### Finally
-This will render a screen size quad using default shaders
+This will render a screen size quad using default shaders and a default quad mesh:
 ```c++
 int main() {
 	gl.init();
@@ -115,8 +162,35 @@ int main() {
 }
 ```
 
+There is more to flgl, and I need to do a complete write up. This library is mostly just for me but if anyone is curious to use it feel free, and feel free to reach out directly with questions. It certainly helps me quickly prototype graphics programs, so it may help you. It should be easy to build projects with this library on mac, windows, or linux and that process is detailed below.
 
-## Building
+# Building
+flgl now includes a cross platform build system via [CMake](https://cmake.org/). In the user/ directory, there is a template CMakeLists.txt that can build user applications with flgl.    
+The fastest way to setup an flgl app is submodule flgl under lib/flgl, copy the hellowindow.cpp and the user_CMakeLists.txt into your project directory as main.cpp and CMakeLists.txt, run cmake and build your project.   
+```bash
+git submodule add https://github.com/collebrusco/flgl lib/flgl 
+git submodule update --init --recursive
+cp lib/flgl/user/hellowindow.cpp src/main.cpp
+cp lib/flgl/user/user_CMakeLists.txt CMakeLists.txt
+cmake . # a little more to this part on windows
+make 
+./bin/ExampleProject # or bin/Exampleproject.exe from cmd on windows
+```
+
+### Differences Across Platforms
+On **MacOS**, you have the option to use the included `macos_Makefile` which was my previous Mac based build system. This can reduce some of the CMake clutter if you're mac only.   
+
+For **Windows** users, CMake can build for the various Windows C++ compilers. My personally prefered method is to install the [winlibs MinGW clang compiler](https://winlibs.com/), [Git Bash](https://gitforwindows.org/), [Make for Windows](https://gnuwin32.sourceforge.net/packages/make.htm), and [CMake](https://cmake.org/). Then with Git Bash, run    
+`cmake -G "MinGW Makefiles" .` to generate makefiles that you can use with Git Bash and Make for Windows. This is the method I've verified, however note that CMake is able to build Visual Studio projects if you prefer to use that.       
+
+If you're a **Linux** user, you probably know how to build this already.    
+    
+     
+      
+     
+## (Old Build System)
+I leave the documentation of the old native makefile build system as it is still included as an alternative that can be more comfortable on macos and linux. However the new CMake based system is much more portable.    
+
 #### MacOs
 Running ```make dylib``` in the flgl directory will build libflgl.dylib in the flgl/bin/ directory. This is all you need to start programming graphics; it includes linkage to glfw, glad, stb & glm. 
 ```bash
@@ -181,6 +255,3 @@ a.out: $(OBJ)
 clean:
 	rm -rf $(BIN) $(OBJ) 
 ```
-
-#### Linux
-TBD This will build on linux but I've yet to get on a linux machine & hash it out. Coming soon

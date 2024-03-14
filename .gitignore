@@ -4,6 +4,8 @@
 # cmake
 CMakeFiles/
 cmake_install.cmake
+Makefile
+CMakeCache.txt
 
 # Prerequisites
 *.d

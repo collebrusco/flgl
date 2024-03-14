@@ -1,7 +1,7 @@
 #ifndef Window_h
 #define Window_h
 #include "gfx.h" 
-#include <glm/glm.hpp>
+#include <flgl/glm.h>
 
 struct Button {
     Button();
@@ -51,6 +51,7 @@ private:
     Keyboard _keyboard;
     Mouse _mouse;
     glm::vec2 cscale;
+    float fr2win;
 public:
     glm::ivec2 const& frame;
     int const& width;
@@ -59,6 +60,7 @@ public:
     Keyboard const& keyboard;
     Mouse const& mouse;
     glm::vec2 const& content_scale;
+    float const& frame_to_window;
 
     Window();
     GLFWwindow* id() const;
