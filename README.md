@@ -1,5 +1,5 @@
 # flgl
-flgl is a cross platform graphics library meant to provide consice access to opengl and windowing (glfw)    
+flgl is a cross platform graphics library meant to provide concise access to opengl and windowing (glfw)    
      
 spinning up a window and a graphics program is very easy and fast with flgl. the idea is to include all of the abstractions I found myself repeating for each graphics project, along with all the dependencies, and the common linear algebra and image loading libraries (glm, stb_image).  
     
@@ -9,26 +9,26 @@ for example, submodule add flgl and opening a window is this easy:
 int main() {
 	gl.init();
 	window.create("title", 480, 360);
-	while (!window.should_close()) {
+	while (!window.should_close()) { 
 		window.update();
-	}
+	} 
 	gl.destroy();
 	return 0;
 }
 ```
     
 flgl includes:
-* Windowing: windows, mouse and key input, callbacks, glfw
+* Windowing: windows, mouse and key input, callback setup, glfw
 * Low level abstractions for buffers, vertex arrays, textures, shaders, framebuffers, renderbuffers, etc.
 * Higher level abstractions for meshes, post-process buffers, loading shaders and textures from files, etc.
 * Shader Templates: A few template shaders and algorithms I frequently reuse (MVP, perlin noise)
 * Math: submodules glm; adds tools for orthographic and perspective cameras
    
-### Windows  
-There is a default single window available through the flgl.h header, but nothing is stopping you from creating more.
+### Window Objects  
+There is a default statically allocated single window available through the flgl.h header because most use cases are single window. However there is nothing special about it and you can create more.   
 ```c++
 Window window2;
-window2.create("2nd window", 480, 480);
+window2.create("2nd window", 480, 480); // second window
 ```
 Windows also contain their input
 ```c++
@@ -40,7 +40,7 @@ zoom += window.mouse.scroll;
 ### Shaders
 Tell flgl the path to your shader folder and write them there. Compile and use them with the provided object.
 ```c++
-glconfig.set_shader_path("src/shaders");
+glconfig.set_shader_path("src/shaders"); 
 Shader sh = Shader::from_source("vert_name", "frag_name");
 sh.bind();
 sh.uMat4("uModel", modelMatrix);
@@ -71,9 +71,9 @@ vao.bind();
 // render...
 
 // or, more simply, 
-mesh = Mesh<Vt_classic>::from_vectors({{{-1.,-1., 0.}, {0.,0.}},
-				       {{-1., 1., 0.}, {0.,1.}},
-				       {{ 1., 1., 0.}, {1.,1.}},
+mesh = Mesh<Vt_classic>::from_vectors({{{-1.,-1., 0.}, {0.,0.}},	
+				       {{-1., 1., 0.}, {0.,1.}},	
+				       {{ 1., 1., 0.}, {1.,1.}},	
 				       {{ 1.,-1., 0.}, {1.,0.}}}
 				       ,
 				       {0, 2, 1,	0, 2, 3});
