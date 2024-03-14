@@ -25,7 +25,7 @@ flgl includes:
 * Math: submodules glm; adds tools for orthographic and perspective cameras
    
 ### Window Objects  
-There is a default statically allocated single window available through the flgl.h header because most use cases are single window. However there is nothing special about it and you can create more.   
+There is a default statically allocated single window available through the flgl.h header, which is convenient for single window applications. However there is nothing special about it and you can create more or not initialize it and create your own.   
 ```c++
 Window window2;
 window2.create("2nd window", 480, 480); // second window
