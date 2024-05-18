@@ -12,10 +12,10 @@ protected:
 	uint32_t handle;
 	GLenum target;
 	uint32_t _w, _h;
-	Texture(std::string file, bool pix=false);
+	Texture(std::string const& file, bool pix=false);
 public:
 	// presets
-	static Texture from_file(std::string file, bool pix=false);
+	static Texture from_file(std::string const& file, bool pix=false);
 	void pixelate(bool pix=true);
 	void wrap(GLenum wrap);
 

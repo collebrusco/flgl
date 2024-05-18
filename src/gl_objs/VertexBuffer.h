@@ -16,6 +16,12 @@
 typedef glm::vec3 Vertex_3f;
 typedef glm::vec2 Vertex_2f;
 
+struct _PACKED_ Vertex_2fpos_2fuv {
+	glm::vec2 pos;
+	glm::vec2 uv;
+}; 
+typedef Vertex_2fpos_2fuv Vt_2Dclassic;
+
 struct _PACKED_ Vertex_3fpos_2fuv {
 	glm::vec3 pos;
 	glm::vec2 uv;
