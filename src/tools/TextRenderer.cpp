@@ -13,7 +13,6 @@ glm::vec2 TextRenderer::tl_from_char(char ch) {
 	uint8_t n = (uint8_t)ch;
 	res.x = (((n-32)%18) * 7) + 1;
 	res.y = (((n-32)/18) * 9) + 1;
-	LOG_DBG("from char %c we get %d,%d", ch, res.x, res.y);
 	return static_cast<vec2>(res);
 }
 
@@ -36,15 +35,17 @@ void TextRenderer::destroy_text_rendering() {
 void TextRenderer::set_color(glm::vec3 const& color) {
 	text_color = color;
 }
-#include <flgl/tools.h>
-void TextRenderer::set_text(std::string const& text) {
+
+void TextRenderer::_set_text(char* text) {
 	vector<Vt_2Dclassic> verts;
 	vector<uint32_t> elems;
 	ivec2 cursor{0,0};
 	const vec2 char_uv_size = {1./128.,1./64.};
 	vec2 charpos;
 	size_t i = 0;
-	for (auto ch : text) {
+
+	while (*text) {
+		char ch = *text; text++;
 		if (ch != '\n' && (ch < 32 || ch > 127)) ch = '*';
 		switch (ch) {
 		case '\n':
@@ -72,9 +73,6 @@ void TextRenderer::set_text(std::string const& text) {
 	}
 
 	string_mesh.update(verts, elems);
-
-	// string_mesh.destroy();
-	// string_mesh = DefaultMeshes::tile<Vt_2Dclassic>();
 }
 
 void TextRenderer::render(int x, int y, int scale) const {
@@ -91,8 +89,6 @@ void TextRenderer::render(int x, int y, int scale) const {
 	text_shader.uVec2("uTextPos", p);
 	text_shader.uVec2("uScale", s);
 	text_shader.uVec3("uColor", text_color);
-
-	// LOG_DBG("s: %e,%e,    p: %e,%e", s.x, s.y, p.x, p.y);
 
 	gl.draw_mesh(string_mesh);
 
