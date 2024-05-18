@@ -21,6 +21,8 @@ struct Mesh {
 	// ================ member function summary ================
 	// static Mesh<Vt> from_vectors(std::vector<Vt> const& verts, std::vector<uint32_t> const& elems);
 	// static Mesh<Vt> from_arrays(size_t numV, Vt* verts, size_t numE, uint32_t* elems);
+	// static void update(std::vector<Vt> const& verts, std::vector<uint32_t> const& elems);
+	// static void update(size_t numV, Vt* verts, size_t numE, uint32_t* elems);
 	// void create();
 	// void bind() const;
 	// static void unbind();
@@ -52,6 +54,28 @@ struct Mesh {
 		mesh.vbo.unbind();
 		mesh.ibo.unbind();
 		return mesh;
+	}
+
+	void update(std::vector<Vt> const& verts, std::vector<uint32_t> const& elems) {
+		this->vao.bind();
+		this->vbo.bind();
+		this->vbo.buffer(verts);
+		this->ibo.bind();
+		this->ibo.buffer(elems);
+		this->vao.unbind();
+		this->vbo.unbind();
+		this->ibo.unbind();
+	}
+
+	void update(size_t numV, Vt* verts, size_t numE, uint32_t* elems) {
+		this->vao.bind();
+		this->vbo.bind();
+		this->vbo.buffer_data(numV, verts);
+		this->ibo.bind();
+		this->ibo.buffer_data(numE, elems);
+		this->vao.unbind();
+		this->vbo.unbind();
+		this->ibo.unbind();
 	}
 
 	void create() {

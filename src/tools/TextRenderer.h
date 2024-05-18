@@ -4,6 +4,7 @@
 #include <flgl.h>
 #include <flgl/glm.h>
 #include <string>
+#include <vector>
 
 class TextRenderer {
 private:
@@ -12,6 +13,7 @@ private:
 	static glm::ivec2 bl_from_char(char); // return bot left corner pixel pos of char in font or (-1,-1) if n/a
 
 	Mesh<Vt_2Dclassic> string_mesh;
+	glm::vec3 text_color;	
 
 public:
 	TextRenderer();
