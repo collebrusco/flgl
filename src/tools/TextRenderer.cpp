@@ -8,8 +8,13 @@ Shader TextRenderer::text_shader;
 Texture TextRenderer::font;
 
 
-glm::ivec2 TextRenderer::bl_from_char(char) {
-	return {0,0};
+glm::vec2 TextRenderer::tl_from_char(char ch) {
+	ivec2 res;
+	uint8_t n = (uint8_t)ch;
+	res.x = (((n-32)%18) * 7) + 1;
+	res.y = (((n-32)/18) * 9) + 1;
+	LOG_DBG("from char %c we get %d,%d", ch, res.x, res.y);
+	return static_cast<vec2>(res);
 }
 
 TextRenderer::TextRenderer() : text_color(1.,1.,1.) {
@@ -36,20 +41,35 @@ void TextRenderer::set_text(std::string const& text) {
 	vector<Vt_2Dclassic> verts;
 	vector<uint32_t> elems;
 	ivec2 cursor{0,0};
-	const vec2 char_uv_size = {5./128.,7./64.};
+	const vec2 char_uv_size = {1./128.,1./64.};
+	vec2 charpos;
+	size_t i = 0;
+	for (auto ch : text) {
+		if (ch != '\n' && (ch < 32 || ch > 127)) ch = '*';
+		switch (ch) {
+		case '\n':
+			cursor.x = 0; cursor.y -= 9;
+			break;
+		case ' ':
+			cursor.x += 7;
+			break;
+		default:
+			charpos = tl_from_char(ch);
+			verts.push_back({static_cast<vec2>(cursor) + vec2(0.,0.), (charpos + vec2(0.,7.)) * char_uv_size });
+			verts.push_back({static_cast<vec2>(cursor) + vec2(5.,0.), (charpos + vec2(5.,7.)) * char_uv_size });
+			verts.push_back({static_cast<vec2>(cursor) + vec2(5.,7.), (charpos + vec2(5.,0.)) * char_uv_size });
+			verts.push_back({static_cast<vec2>(cursor) + vec2(0.,7.), (charpos + vec2(0.,0.)) * char_uv_size });
 
-	// todo setup text...
-	verts.push_back({ {0.,0.}, {1./128., 1.-(11./64.)} });
-	verts.push_back({ {5.,0.}, {6./128., 1.-(11./64.)} });
-	verts.push_back({ {0.,7.}, {1./128., 1.-(18./64.)} });
-
-
-	verts.push_back({ {5.,0.}, {6./128., 1.-(11./64.)} });
-	verts.push_back({ {5.,7.}, {6./128., 1.-(18./64.)} });
-	verts.push_back({ {0.,7.}, {1./128., 1.-(18./64.)} });
-
-	elems = {0,1,2,	3,4,5};
-	// todo setup text...
+			elems.push_back(i + 0);
+			elems.push_back(i + 2);
+			elems.push_back(i + 1);
+			elems.push_back(i + 0);
+			elems.push_back(i + 2);
+			elems.push_back(i + 3);
+			i += 4;
+			cursor.x += 7;
+		}
+	}
 
 	string_mesh.update(verts, elems);
 

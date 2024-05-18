@@ -10,7 +10,7 @@ class TextRenderer {
 private:
 	static Shader text_shader;
 	static Texture font;
-	static glm::ivec2 bl_from_char(char); // return bot left corner pixel pos of char in font or (-1,-1) if n/a
+	static glm::vec2 tl_from_char(char); // return bot left corner pixel pos of char in font or (-1,-1) if n/a
 
 	Mesh<Vt_2Dclassic> string_mesh;
 	glm::vec3 text_color;	
