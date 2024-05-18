@@ -32,6 +32,16 @@ Mesh<Vt_classic> DefaultMeshes::tile() {
 									    	{0, 2, 1,	0, 2, 3});
 }
 
+template<>
+Mesh<Vt_2Dclassic> DefaultMeshes::tile() {
+	return Mesh<Vt_2Dclassic>::from_vectors({{{-1.,-1.}, {0.,0.}},
+									    	 {{-1., 1.}, {0.,1.}},
+									    	 {{ 1., 1.}, {1.,1.}},
+									    	 {{ 1.,-1.}, {1.,0.}}}
+									    	 ,
+									    	 {0, 2, 1,	0, 2, 3});
+}
+
 
 template<>
 Mesh<Vt_pn> DefaultMeshes::tile() {

@@ -11,9 +11,10 @@ out vec2 iUV;
 void main() {
     
     iUV = aUV;
+    vec2 pos = aPos;
 
-    aPos = aPos * uScale;
-    aPos = aPos + uTextPos;
+    pos = pos * uScale;
+    pos = pos + uTextPos;
     
-    gl_Position = vec4(aPos, 0.f, 1.0f);
+    gl_Position = vec4(pos, 0.f, 1.0f);
 }

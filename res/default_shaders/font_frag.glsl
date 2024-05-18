@@ -8,6 +8,8 @@ in vec2 iUV;
 
 void main(){
     vec4 c = texture(tex, iUV);
-    if (c.w < 0.1) discard;
-    outColor = vec4(uColor, 1.f);
+    if (c.a < 0.1) discard;
+    outColor = c;
+    // outColor = vec4(uColor, 1.f);
+    // outColor = vec4(1.f);
 }
