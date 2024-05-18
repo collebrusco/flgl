@@ -25,7 +25,7 @@ void Texture::wrap(GLenum wrap) {
     this->paramI(GL_TEXTURE_WRAP_T, wrap);
 }
 
-Texture::Texture(std::string file, bool pix) : Texture(GL_TEXTURE_2D) {
+Texture::Texture(std::string const& file, bool pix) : Texture(GL_TEXTURE_2D) {
 	int w, h, c;
     std::string path = glconfig.asset_path() + file + ".png";
     { // verify filepath
@@ -81,7 +81,7 @@ Texture::Texture(std::string file, bool pix) : Texture(GL_TEXTURE_2D) {
     stbi_image_free(pixels);
 }
 
-Texture Texture::from_file(std::string file, bool pix) {
+Texture Texture::from_file(std::string const& file, bool pix) {
     return Texture(file, pix);
 }
 
