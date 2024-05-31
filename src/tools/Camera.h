@@ -24,10 +24,19 @@ class Camera {
 private:
     glm::ivec2 prev_frame;
     bool should_update;
+    union {
+        struct {
+            bool view : 4;
+            bool proj : 4;
+        } mat;
+        uint8_t val;
+    } needs_inverses;
 protected:
     glm::vec3 pos, look, up;
     glm::mat4 _view;
     glm::mat4 _proj;
+    glm::mat4 _iview;
+    glm::mat4 _iproj;
     float near, far;
 public:
     Camera();
@@ -51,6 +60,8 @@ public:
     virtual glm::mat4 const& updateProj() = 0;
     glm::mat4 const& view() const;
     glm::mat4 const& proj() const;
+    glm::mat4 const& iview();
+    glm::mat4 const& iproj();
 };
 
 class OrthoCamera : public Camera {
@@ -64,7 +75,7 @@ public:
     void setViewWidth(float vw);
     float& getViewWidth();
     float readViewWidth() const;
-    glm::mat4 const& updateProj() override ;
+    glm::mat4 const& updateProj() override final ;
 };
 
 class PerspectiveCamera : public Camera {
@@ -78,7 +89,7 @@ public:
     void setFOV(float fv);
     float& getFOV();
     float readFOV() const;
-    glm::mat4 const& updateProj() override;
+    glm::mat4 const& updateProj() override final;
     void setMouseControl(bool);
     void update() override;
 };

@@ -8,15 +8,16 @@
 
 #include "Camera.h"
 #include "../inc/flgl.h"
-
-#define IN_FLGL_ 
+#include <flgl/logger.h>
+LOG_MODULE(glcam);
 
 Camera::Camera() {
     should_update = true;
+    needs_inverses.val = 0x11;
 }
 
 void Camera::update(){
-    if (shouldUpdate() || prev_frame != IN_FLGL_ window.frame){
+    if (shouldUpdate() || prev_frame != window.frame){
         this->updateProj();
         this->updateView();
         should_update = false;
@@ -30,9 +31,24 @@ glm::mat4 const& Camera::updateView(){
 }
 glm::mat4 const& Camera::view() const {return _view;}
 glm::mat4 const& Camera::proj() const {return _proj;}
+glm::mat4 const& Camera::iview() {
+    if (needs_inverses.mat.view) {
+        _iview = glm::inverse(_view);
+        needs_inverses.mat.view = false;
+    }
+    return _iview;
+}
+glm::mat4 const& Camera::iproj() {
+    if (needs_inverses.mat.proj) {
+        _iproj = glm::inverse(_proj);
+        needs_inverses.mat.proj = false;
+    }
+    return _iproj;
+}
 
 void Camera::setShouldUpdate() { 
     should_update = true;
+    needs_inverses.val = 0x11;
 }
 
 bool Camera::shouldUpdate() const {
@@ -106,11 +122,11 @@ float& OrthoCamera::getViewWidth(){
 }
 glm::mat4 const& OrthoCamera::updateProj()  {
     setShouldUpdate();
-    glm::vec2 orthoDims = glm::vec2(viewWidth, viewWidth / IN_FLGL_ window.aspect);
+    glm::vec2 orthoDims = glm::vec2(viewWidth, viewWidth / window.aspect);
 
     glm::vec4 lrbt = (lrbtMat * orthoDims);
 
-    orthoDims.y = orthoDims.x / IN_FLGL_ window.aspect;
+    orthoDims.y = orthoDims.x / window.aspect;
     lrbt = (lrbtMat * orthoDims);
     _proj = glm::ortho(lrbt.x, lrbt.y, lrbt.z, lrbt.w, near, far);
     return _proj;
@@ -153,14 +169,14 @@ float PerspectiveCamera::readFOV() const {
 
 glm::mat4 const& PerspectiveCamera::updateProj(){
     setShouldUpdate();
-    _proj = glm::perspective(fov, IN_FLGL_ window.aspect, near, far);
+    _proj = glm::perspective(fov, window.aspect, near, far);
     return _proj;
 }
 
 void PerspectiveCamera::update(){
     if (mouseControlled){
-        phi += IN_FLGL_ window.mouse.delta.y * 0.01; //TODO: mouse sensitivity / move control elsewhere
-        theta -= IN_FLGL_ window.mouse.delta.x * 0.01;
+        phi += window.mouse.delta.y * 0.01; //TODO: mouse sensitivity / move control elsewhere
+        theta -= window.mouse.delta.x * 0.01;
         glm::vec3 anchor = glm::vec3(-cos(theta), 0.0, sin(theta));
         look = glm::vec3(-1 * sin(phi) * sin(theta),
                     cos(phi),
