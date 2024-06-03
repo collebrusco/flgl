@@ -77,6 +77,21 @@ void VertexBuffer<Vt_pn>::attach_to_vao(VertexArray const& vao) const {
 }
 
 template <>
+void VertexBuffer<Vt_2p2n>::attach_to_vao(VertexArray const& vao) const {
+	vao.bind();
+	this->bind();
+	vao.attrib(0,							// layout index
+			   2, GL_FLOAT,					// dimension and repr
+			   sizeof(Vt_2p2n), 			// size of vertex
+			   offsetof(Vt_2p2n,pos));		// offset of member
+
+	vao.attrib(1,							// layout index
+			   2, GL_FLOAT,					// dimension and repr
+			   sizeof(Vt_2p2n), 			// size of vertex
+			   offsetof(Vt_2p2n,norm));		// offset of member
+}
+
+template <>
 void VertexBuffer<Vertex_3f>::attach_to_vao(VertexArray const& vao) const {
 	vao.bind();
 	this->bind();

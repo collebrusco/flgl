@@ -41,6 +41,12 @@ struct _PACKED_ Vertex_3fpos_3fnorm {
 }; 
 typedef Vertex_3fpos_3fnorm Vt_pn;
 
+struct _PACKED_ Vertex_2fpos_2fnorm {
+	glm::vec2 pos;
+	glm::vec2 norm;
+}; 
+typedef Vertex_2fpos_2fnorm Vt_2p2n;
+
 
 template<typename Vert>
 class VertexBuffer : public Buffer {
