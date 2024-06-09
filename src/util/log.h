@@ -36,48 +36,48 @@ public:
 	flgl_logger(const char* n="Global");
 	~flgl_logger();
 
-	template<typename...Args>
-	void log_dbg(std::string fmt, Args... args) {
-		_log_out("DEBUG", modname, fmt, args...);
-	}
-	template<typename...Args>
-	void log_inf(std::string fmt, Args... args) {
-		_log_out("INFO ", modname, fmt, args...);
-	}
-	template<typename...Args>
-	void log_wrn(std::string fmt, Args... args) {
-		_log_out("WARN ", modname, fmt, args...);
-	}
-	template<typename...Args>
-	void log_err(std::string fmt, Args... args) {
-		_log_out("ERROR", modname, fmt, args...);
-	}
-
 	#if _LOG_LEVEL >= LOG_DEBUG 
 	    #define LOG_DBG _logger.log_dbg
+		template<typename...Args>
+		void log_dbg(std::string fmt, Args... args) {
+			_log_out("DEBUG", modname, fmt, args...);
+		}
 	#else 
-	    #define LOG_DBG(grbg) 
+	    #define LOG_DBG(...) ((void)0)
 	#endif 
 
 	#if _LOG_LEVEL >= LOG_INFO 
 	    #define LOG_INF _logger.log_inf
+		template<typename...Args>
+		void log_inf(std::string fmt, Args... args) {
+			_log_out("INFO ", modname, fmt, args...);
+		}
 	#else 
-	    #define LOG_INF(grbg) 
+	    #define LOG_INF(...) ((void)0)
 	#endif 
 
 	#if _LOG_LEVEL >= LOG_WARN 
 	    #define LOG_WRN _logger.log_wrn
+		template<typename...Args>
+		void log_wrn(std::string fmt, Args... args) {
+			_log_out("WARN ", modname, fmt, args...);
+		}
 	#else 
-	    #define LOG_WRN(grbg) 
+	    #define LOG_WRN(...) ((void)0)
 	#endif 
 
 	#if _LOG_LEVEL >= LOG_ERROR 
 	    #define LOG_ERR _logger.log_err
+		template<typename...Args>
+		void log_err(std::string fmt, Args... args) {
+			_log_out("ERROR", modname, fmt, args...);
+		}
 	#else 
-	    #define LOG_ERR(grbg) 
+	    #define LOG_ERR(...) ((void)0)
 	#endif
 
 };
+
 
 
 #endif // LOGGIN_H
