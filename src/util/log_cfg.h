@@ -6,7 +6,7 @@
 #define LOG_DEBUG 4
 
 // level setting
-#define _LOG_LEVEL LOG_DEBUG
+#define _LOG_LEVEL LOG_INFO
 
 
 // file settings

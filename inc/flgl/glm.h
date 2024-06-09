@@ -1,6 +1,7 @@
 #ifndef FLGL_GLM_H
 #define FLGL_GLM_H
 #define GLM_FORCE_SWIZZLE
+#include <stdint.h>
 #include "../../lib/glm/glm/glm.hpp"
 #include "../../lib/glm/glm/gtc/type_ptr.hpp"
 #include "../../lib/glm/glm/glm.hpp"
