@@ -44,6 +44,7 @@ public:
     
     void setShouldUpdate();
     bool shouldUpdate() const;
+    bool update_condition() const;
     glm::vec3& getPos();
     glm::vec3& getLook();
     glm::vec3& getUp();

@@ -55,6 +55,10 @@ bool Camera::shouldUpdate() const {
     return should_update;
 }
 
+bool Camera::update_condition() const {
+    return shouldUpdate() || prev_frame != window.frame;
+}
+
 glm::vec3 &Camera::getPos() { 
     setShouldUpdate();
     return pos;
