@@ -17,10 +17,11 @@ Camera::Camera() {
 }
 
 void Camera::update(){
-    if (shouldUpdate() || prev_frame != window.frame){
+    if (this->update_condition()){
         this->updateProj();
         this->updateView();
         should_update = false;
+        prev_frame = window.frame;
     }
 }
 glm::mat4 const& Camera::updateView(){
@@ -127,11 +128,7 @@ float& OrthoCamera::getViewWidth(){
 glm::mat4 const& OrthoCamera::updateProj()  {
     setShouldUpdate();
     glm::vec2 orthoDims = glm::vec2(viewWidth, viewWidth / window.aspect);
-
     glm::vec4 lrbt = (lrbtMat * orthoDims);
-
-    orthoDims.y = orthoDims.x / window.aspect;
-    lrbt = (lrbtMat * orthoDims);
     _proj = glm::ortho(lrbt.x, lrbt.y, lrbt.z, lrbt.w, near, far);
     return _proj;
 }

@@ -17,6 +17,7 @@ Framebuffer::Framebuffer() {
 // }
 
 void Framebuffer::create() {
+	if (framebuffer != 0xFFFFFFFF) LOG_WRN("framebuffer re-created without destroying fbuff %d first!", framebuffer);
 	framebuffer = 0;
 	glGenFramebuffers(1, &framebuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
