@@ -22,5 +22,6 @@ glm::mat4 genModelMat3d(glm::vec3 pos, glm::vec3 rotation, glm::vec3 scale);
 
 // vector help
 glm::vec2 angleToVector(float degrees);
+float vectorToAngle(glm::vec2 vec);
 
 #endif /* flgl_math_h */

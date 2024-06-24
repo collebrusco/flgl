@@ -45,5 +45,11 @@ glm::mat4 genModelMat3d(glm::vec3 pos, glm::vec3 rotation, glm::vec3 scale){
 }
 
 glm::vec2 angleToVector(float degrees){
+    /* TODO make this be angle from (0, 1) */
     return glm::vec2(glm::cos(glm::radians(degrees)), glm::sin(glm::radians(degrees)));
+}
+
+float vectorToAngle(glm::vec2 vec) {
+    float a = glm::degrees(acos(glm::dot(glm::normalize(vec), glm::vec2(0.0f, 1.0f))));
+    return vec.x > 0.f ? 360.f - a : a;
 }
