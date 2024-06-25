@@ -7,10 +7,16 @@
 #include "Buffer.h"
 #include "VertexArray.h"
 
-#define _PACKED_ __attribute__((packed))
+#ifndef _WIN32
+	#define _PACKED_ __attribute__((packed))
+#else
+	#define _PACKED_ 
+#endif
 
-/*
-	Here there are a few pre-config'd vertex options to choose from
+/**
+ * Here there are a few pre-config'd vertex options to choose from
+ * If you want to use any of these vertex structs, you can setup 
+ * the attribute pointers of a vao with vao.attach(vbo);
 */
 
 typedef glm::vec3 Vertex_3f;
