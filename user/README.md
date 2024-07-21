@@ -15,6 +15,6 @@ Because I like using a bash command line, my personally prefered method is to in
 Add the minGW and make executables to your path and then with Git Bash, run 
 `cmake -G "MinGW Makefiles" .` followed by `make` and build your exe. Don't move the exe; create a shortcut if you'd like.       
       
-CMake is also capable of working with Visual Studio and other Windows build systems.
+CMake is also capable of working with Visual Studio and other Windows build systems. Google that but if you're into Visual studio you can have CMake generate a solution for you that you can just double click and get into VS's IDE with. That'll work with these projects as well
 
       
