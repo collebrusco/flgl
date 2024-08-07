@@ -22,3 +22,6 @@ cm:
 ca:
 	rm -rf ./build/
 	
+.PHONY: r
+r: default
+	./build/untitled
