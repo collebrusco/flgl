@@ -14,6 +14,10 @@ include_directories(inc lib/glfw/include lib/glad/include ${OPENGL_INCLUDE_DIR})
 
 file(GLOB_RECURSE FLGL_SOURCES "src/*.cpp")
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wunused-variable -Werror=unused-variable")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=return-type")
+
 add_library(${PROJECT_NAME} ${FLGL_SOURCES})
 target_link_libraries(${PROJECT_NAME} PRIVATE ${OPENGL_gl_LIBRARY})
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/include)

@@ -78,7 +78,7 @@ void Graphics::draw_elements(GLenum mode, GLsizei count, GLenum type) {
     glDrawElements(mode, count, type, nullptr);
 }
 
-void Graphics::draw_vao_ibo(VertexArray const& vao, ElementBuffer const& ibo, GLenum mode) {
+void Graphics::draw_vao_ibo(ElementBuffer const& ibo, GLenum mode) {
     draw_elements(mode, ibo.num_elements());
 }
 

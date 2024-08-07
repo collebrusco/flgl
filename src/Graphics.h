@@ -36,7 +36,7 @@ public:
     
     static void draw_arrays(GLenum mode, GLint first, GLsizei count); 
     static void draw_elements(GLenum mode, GLsizei count, GLenum type=GL_UNSIGNED_INT);
-    static void draw_vao_ibo(VertexArray const& vao, ElementBuffer const& ibo, GLenum mode=GL_TRIANGLES);
+    static void draw_vao_ibo(ElementBuffer const& ibo, GLenum mode=GL_TRIANGLES);
     template<typename Vt>
     static void draw_mesh(Mesh<Vt> mesh, GLenum mode=GL_TRIANGLES) {
         mesh.vao.bind();
