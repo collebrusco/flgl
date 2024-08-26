@@ -5,7 +5,10 @@
 
 struct Button {
     Button();
-    bool down, pressed, released, last;
+    bool down       : 1; 
+    bool pressed    : 1; 
+    bool released   : 1; 
+    bool last       : 1;
 };
 
 class Keyboard {
