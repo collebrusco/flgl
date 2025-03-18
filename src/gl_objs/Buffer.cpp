@@ -17,6 +17,10 @@ void Buffer::bind() const {
 	glBindBuffer(type, handle);
 }
 
+void Buffer::create_bind() {
+	this->create(); this->bind();
+}
+
 void Buffer::unbind() const {
 	glBindBuffer(type, 0);
 }

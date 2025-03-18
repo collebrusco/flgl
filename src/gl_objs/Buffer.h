@@ -14,6 +14,7 @@ public:
 	Buffer(GLenum);
 	void create();
 	void bind() const;
+	void create_bind();
 	void unbind() const;
 	uint32_t num_elements() const;
 	static void unbind_vbo();

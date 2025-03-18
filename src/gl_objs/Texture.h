@@ -24,6 +24,7 @@ public:
 
 	uint32_t id() const;
 	void bind() const;
+	void create_bind();
 	static void active_unit(texture_unit_t unit);
 	void bind_to_unit(texture_unit_t unit) const;
 	void unbind() const;

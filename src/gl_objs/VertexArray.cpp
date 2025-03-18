@@ -16,6 +16,10 @@ void VertexArray::bind() const {
 	glBindVertexArray(handle);
 }
 
+void VertexArray::create_bind() {
+	this->create(); this->bind();
+}
+
 void VertexArray::unbind() {
 	glBindVertexArray(0);
 }

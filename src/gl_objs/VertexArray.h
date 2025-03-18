@@ -13,6 +13,7 @@ public:
 	VertexArray();
 	void create();
 	void bind() const;
+	void create_bind();
 	static void unbind();
 	uint32_t id() const;
 	bool active() const;
