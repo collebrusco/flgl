@@ -23,7 +23,7 @@
 class Camera {
 private:
     bool should_update;
-    union {
+    mutable union {
         struct {
             bool view : 4;
             bool proj : 4;
@@ -35,8 +35,8 @@ protected:
     glm::vec3 pos, look, up;
     glm::mat4 _view;
     glm::mat4 _proj;
-    glm::mat4 _iview;
-    glm::mat4 _iproj;
+    mutable glm::mat4 _iview;
+    mutable glm::mat4 _iproj;
     float near, far;
 public:
     Camera();
@@ -61,8 +61,8 @@ public:
     virtual glm::mat4 const& updateProj() = 0;
     glm::mat4 const& view() const;
     glm::mat4 const& proj() const;
-    glm::mat4 const& iview();
-    glm::mat4 const& iproj();
+    glm::mat4 const& iview() const;
+    glm::mat4 const& iproj() const;
 };
 
 class OrthoCamera : public Camera {

@@ -32,14 +32,14 @@ glm::mat4 const& Camera::updateView(){
 }
 glm::mat4 const& Camera::view() const {return _view;}
 glm::mat4 const& Camera::proj() const {return _proj;}
-glm::mat4 const& Camera::iview() {
+glm::mat4 const& Camera::iview() const {
     if (needs_inverses.mat.view) {
         _iview = glm::inverse(_view);
         needs_inverses.mat.view = false;
     }
     return _iview;
 }
-glm::mat4 const& Camera::iproj() {
+glm::mat4 const& Camera::iproj() const {
     if (needs_inverses.mat.proj) {
         _iproj = glm::inverse(_proj);
         needs_inverses.mat.proj = false;
