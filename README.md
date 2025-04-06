@@ -144,23 +144,15 @@ int main() {
 There is more to flgl, and I need to do a complete write up. This library is mostly just for me but if anyone is curious to use it feel free, and feel free to reach out directly with questions. It certainly helps me quickly prototype graphics programs, so it may help you. It should be easy to build projects with this library on mac, windows, or linux and that process is detailed below.
 
 # Building
-flgl now includes a cross platform build system via [CMake](https://cmake.org/). In the user/ directory, there is a template CMakeLists.txt that can build user applications with flgl.    
-The fastest way to setup an flgl app is submodule flgl under lib/flgl, copy the hellowindow.cpp and the user_CMakeLists.txt into your project directory as main.cpp and CMakeLists.txt, run cmake and build your project.   
+flgl now includes a cross platform build system via [CMake](https://cmake.org/). In the user/ directory, there is a [README with more information and some starter build files](https://github.com/collebrusco/flgl/tree/main/user). There's also a getting started script (mac/linux, win reqs a makefile tweak) so that you can create and run a new gfx project that opens a blank window with:    
 ```bash
-git submodule add https://github.com/collebrusco/flgl lib/flgl 
+git init
+git submodule add git@github.com:collebrusco/flgl lib/flgl
 git submodule update --init --recursive
-cp lib/flgl/user/hellowindow.cpp src/main.cpp
-cp lib/flgl/user/user_CMakeLists.txt CMakeLists.txt
-cmake . # a little more to this part on windows
-make 
-./bin/ExampleProject # or bin/Exampleproject.exe from cmd on windows
+source lib/flgl/user/setup.sh
+make r
 ```
 
-### Differences Across Platforms
-On **MacOS**, you have the option to use the included `macos_Makefile` which was my previous Mac based build system. This can reduce some of the CMake clutter if you're mac only.   
 
-For **Windows** users, CMake can build for the various Windows C++ compilers. My personally prefered method is to install the [winlibs MinGW clang compiler](https://winlibs.com/), [Git Bash](https://gitforwindows.org/), [Make for Windows](https://gnuwin32.sourceforge.net/packages/make.htm), and [CMake](https://cmake.org/). Then with Git Bash, run    
-`cmake -G "MinGW Makefiles" .` to generate makefiles that you can use with Git Bash and Make for Windows. This is the method I've verified, however note that CMake is able to build Visual Studio projects if you prefer to use that.       
 
-If you're a **Linux** user, you know how to build this!
-    
+
