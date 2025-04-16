@@ -9,8 +9,8 @@ using namespace glm;
 
 Driver::Driver() :  _close(false),
                     _dt(1.f/60.f),
-                    _launch_timer(SECONDS),
-                    delta_timer(SECONDS)
+                    _launch_timer(Stopwatch::SECONDS),
+                    delta_timer(Stopwatch::SECONDS)
 {}
 
 vec2 Driver::world_mouse(vec2 mp, Camera& cam) const {
@@ -25,8 +25,8 @@ void Driver::exit() {
 }
 
 #ifdef BENCHMARK
-static Stopwatch t_upd(MICROSECONDS);
-static Stopwatch t_ren(MICROSECONDS);
+static Stopwatch t_upd(Stopwatch::MICROSECONDS);
+static Stopwatch t_ren(Stopwatch::MICROSECONDS);
 #endif /* BENCHMARK */
 
 

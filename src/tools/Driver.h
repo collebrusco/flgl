@@ -10,7 +10,7 @@
 #include <cstddef>
 #include <flgl.h>
 #include <flgl/tools.h>
-#include "Stopwatch.h"
+#include "../util/stopwatch.h"
 
 /* usage: DRIVER_MAIN_FUNCTION(main, <name of your implementation>); */
 #define DRIVER_MAIN_FUNCTION(main_name, Classname) int main_name() {Classname *driver = new Classname(); driver->start(); delete driver; return 0;}
