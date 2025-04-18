@@ -90,6 +90,10 @@ void Driver::loop() {
 void Driver::start() {
     _launch_timer.start();
     user_create();
+    if (!gl.is_init()) {
+        LOG_ERR("user create did not init the gl or create window, driver will fail");
+        return;
+    }
     LOG_INF("created, loop:");
     while (!_close && !window.should_close()) {
        loop();
