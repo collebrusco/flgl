@@ -82,7 +82,6 @@ public:
 
 class PerspectiveCamera : public Camera {
     float fov;
-    bool mouseControlled;
 public:
     float phi, theta;
     PerspectiveCamera();
@@ -92,8 +91,18 @@ public:
     float& getFOV();
     float readFOV() const;
     virtual glm::mat4 const& updateProj() override final;
-    void setMouseControl(bool);
-    void update() override final;
+};
+
+class MousePerspectiveCamera : public PerspectiveCamera {
+    float mult;
+public:
+    void enable_look(float mult = 1.);
+    void disable_look();
+    void point(glm::vec3 l);
+    glm::vec2 sens;
+    MousePerspectiveCamera();
+    MousePerspectiveCamera(glm::vec3 p, glm::vec3 l, glm::vec3 u, float n, float f, float fv);
+    virtual void update() override final;
 };
 
 #endif /* Camera_h */

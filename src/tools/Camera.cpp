@@ -141,7 +141,7 @@ void OrthoCamera::setViewWidth(float vw) {
 
 //********************************ORTHO********************************
 PerspectiveCamera::PerspectiveCamera(){
-    phi = 3.14/2; theta = 0; mouseControlled = false;
+    phi = (3.14159265*0.5); theta = (0);
     pos = glm::vec3(0.f, 0.f, 1.f);
     look = glm::vec3(0.f, 0.f, -1.f);
     up = glm::vec3(0.f, 1.f, 0.f);
@@ -151,7 +151,7 @@ PerspectiveCamera::PerspectiveCamera(){
 }
 
 PerspectiveCamera::PerspectiveCamera(glm::vec3 p, glm::vec3 l, glm::vec3 u, float n, float f, float fv){
-    pos = p; look = l; up = u; near = n; far = f; fov = glm::radians(fv); phi = 3.14/2; theta = 0; mouseControlled = false;
+    pos = p; look = l; up = u; near = n; far = f; fov = glm::radians(fv); phi = (3.14159265*0.5); theta = (0);
 }
 
 void PerspectiveCamera::setFOV(float fv){
@@ -174,19 +174,43 @@ glm::mat4 const& PerspectiveCamera::updateProj(){
     return _proj;
 }
 
-void PerspectiveCamera::update(){
-    if (mouseControlled){
-        phi += window.mouse.delta.y * 0.01; //TODO: mouse sensitivity / move control elsewhere
-        theta -= window.mouse.delta.x * 0.01;
-        glm::vec3 anchor = glm::vec3(-cos(theta), 0.0, sin(theta));
-        look = glm::vec3(-1 * sin(phi) * sin(theta),
-                    cos(phi),
-                    -1 * sin(phi) * cos(theta));
+void MousePerspectiveCamera::enable_look(float mult) {
+    this->mult = mult;
+    window.grab_mouse();
+}
+
+void MousePerspectiveCamera::disable_look() {
+    mult = 0.;
+    window.set_mouse_grab(false);
+}
+
+void MousePerspectiveCamera::point(glm::vec3 l) {
+    this->look = l;
+    l.y = 0;
+    l = glm::normalize(l);
+    this->up = cross(look, l);
+}
+
+MousePerspectiveCamera::MousePerspectiveCamera() : PerspectiveCamera(), sens(0.002)
+{
+}
+
+MousePerspectiveCamera::MousePerspectiveCamera(glm::vec3 p, glm::vec3 l, glm::vec3 u, float n, float f, float fv) 
+: PerspectiveCamera(p, l, u, n, f, fv), sens(0.01)
+{
+}
+
+void MousePerspectiveCamera::update()
+{
+    if (mult != 0. && (window.mouse.delta.x != 0 || window.mouse.delta.y != 0)) {
+        setShouldUpdate();
+        phi += window.mouse.delta.y * sens.y;
+        theta -= window.mouse.delta.x * sens.x;
+        glm::vec3 anchor = glm::vec3(-glm::cos(theta), 0.0, glm::sin(theta));
+        look = glm::vec3(-1 * glm::sin(phi) * glm::sin(theta),
+                    glm::cos(phi),
+                    -1 * glm::sin(phi) * glm::cos(theta));
         up = cross(look, anchor);
     }
     this->Camera::update();
-}
-
-void PerspectiveCamera::setMouseControl(bool f){
-    mouseControlled = f;
 }

@@ -27,7 +27,7 @@ public:
     static void destroy();
     static void clear();
     static void clear(GLbitfield mask);
-    static void set_clear_color(float, float, float, float);
+    static void set_clear_color(float, float, float, float a = 0.f);
 
     static void polygon_mode(GLenum mode, GLenum face=GL_FRONT_AND_BACK);
 
