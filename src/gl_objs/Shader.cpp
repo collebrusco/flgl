@@ -254,6 +254,11 @@ void Shader::uMat3(const char* varName, const glm::mat3& mat) const{
     glUniformMatrix3fv(loc, 1, GL_FALSE, glm::value_ptr(mat));
 }
 
+void Shader::uViewProj(glm::mat4 const &v, glm::mat4 const &p, std::string const &vn, std::string const &pn) {
+    this->uMat4(vn.c_str(), v);
+    this->uMat4(pn.c_str(), p);
+}
+
 const GLuint& Shader::programID() const {
     return programId;
 }

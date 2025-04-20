@@ -13,6 +13,7 @@ protected:
 public:
 	virtual void destroy() = 0;
 	static void destroy_all();
+	static size_t nobjs();
 };
 
 #endif

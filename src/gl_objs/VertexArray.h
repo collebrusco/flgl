@@ -32,8 +32,8 @@ public:
 				GLsizei divisor = 0);
 
 	template<typename Attr>
-	void attach(InstanceBuffer<Attr> const& ib) {
-		ib.attach_to_vao(*this);
+	void attach(InstanceBuffer<Attr> const& ib, size_t idx = ~((size_t)0)) {
+		ib.attach_to_vao(*this, idx == ~((size_t)0) ? max_index()+1 : idx);
 	}
 
 	template<typename Vert>

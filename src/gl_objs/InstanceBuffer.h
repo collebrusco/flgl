@@ -41,7 +41,7 @@ public:
 		return sizeof(Attrib);
 	}
 
-	void attach_to_vao(VertexArray&) const;
+	void attach_to_vao(VertexArray&, size_t idx) const;
 };
 
 

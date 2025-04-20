@@ -22,3 +22,7 @@ void GL_Object::destroy_all() {
 	}
 	objects.clear();
 }
+
+size_t GL_Object::nobjs() {
+    return objects.size();
+}

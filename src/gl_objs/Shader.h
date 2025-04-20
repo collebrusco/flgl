@@ -44,6 +44,8 @@ public:
     
     void uMat4(const char* varName, const glm::mat4& mat4) const;
     void uMat3(const char* varName, const glm::mat3& mat4) const;
+
+    void uViewProj(glm::mat4 const& v, glm::mat4 const& p, std::string const& vn = "uView", std::string const& pn = "uProj");
     
     bool operator==(const Shader&) const;
 };
