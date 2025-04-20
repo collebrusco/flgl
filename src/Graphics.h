@@ -10,6 +10,7 @@
 #include "gl_objs/FramebufferRGBZ.h"
 #include "gl_objs/VertexBuffer.h"
 #include "gl_objs/VertexArray.h"
+#include "gl_objs/InstanceBuffer.h"
 #include "gl_objs/Mesh.h"
 
 /*
