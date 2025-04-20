@@ -38,7 +38,7 @@ void Buffer::unbind_ibo() {
 }
 
 bool Buffer::active() const {
-	return handle == 0xFFFFFFFF;
+	return handle != 0xFFFFFFFF;
 }
 
 void Buffer::destroy() {

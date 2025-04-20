@@ -77,7 +77,7 @@ public:
     void setViewWidth(float vw);
     float& getViewWidth();
     float readViewWidth() const;
-    virtual glm::mat4 const& updateProj() override;
+    virtual glm::mat4 const& updateProj() override final;
 };
 
 class PerspectiveCamera : public Camera {
@@ -93,7 +93,7 @@ public:
     float readFOV() const;
     virtual glm::mat4 const& updateProj() override final;
     void setMouseControl(bool);
-    void update() override;
+    void update() override final;
 };
 
 #endif /* Camera_h */

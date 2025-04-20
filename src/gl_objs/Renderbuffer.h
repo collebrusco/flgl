@@ -21,7 +21,7 @@ public:
 
 	void alloc(GLenum target, GLsizei width, GLsizei height);
 
-	void destroy() override;
+	void destroy() override final;
 };
 
 #endif

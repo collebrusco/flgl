@@ -7,8 +7,12 @@
 template<typename T>
 class VertexBuffer;
 
+template<typename T>
+class InstanceBuffer;
+
 class VertexArray : public GL_Object {
 	uint32_t handle;
+	uint32_t maxi;
 public:
 	VertexArray();
 	void create();
@@ -16,14 +20,21 @@ public:
 	void create_bind();
 	static void unbind();
 	uint32_t id() const;
+	uint32_t max_index() const;
 	bool active() const;
-	void destroy() override;
+	void destroy() override final;
 
-	static void attrib(GLuint index,
-			 		   GLint dimension,
-			 		   GLenum type,
-			 		   GLsizei stride,
-			 		   size_t offset);
+	void attrib(GLuint index,
+				GLint dimension,
+				GLenum type,
+				GLsizei stride,
+				size_t offset,
+				GLsizei divisor = 0);
+
+	template<typename Attr>
+	void attach(InstanceBuffer<Attr> const& ib) {
+		ib.attach_to_vao(*this);
+	}
 
 	template<typename Vert>
 	void attach(VertexBuffer<Vert> const& vb) {

@@ -57,7 +57,7 @@ public:
 		 	GLsizei height,
 		 	const void * data=nullptr);
 
-	void destroy() override;
+	void destroy() override final;
 };
 
 #endif /* TEXTURE_H */

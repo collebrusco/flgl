@@ -43,6 +43,16 @@ public:
         draw_elements(mode, mesh.ibo.num_elements(), GL_UNSIGNED_INT);
         mesh.vao.unbind();
     }
+
+    static void draw_arrays_instanced(GLenum mode, GLint first, GLsizei count, GLsizei instance_count); 
+    static void draw_elements_instanced(GLenum mode, GLsizei count, GLsizei instance_count, GLenum type=GL_UNSIGNED_INT);
+    static void draw_vao_ibo_instanced(ElementBuffer const& ibo, GLsizei instance_count, GLenum mode=GL_TRIANGLES);
+    template<typename Vt>
+    static void draw_mesh_instanced(Mesh<Vt> mesh, GLsizei instance_count, GLenum mode=GL_TRIANGLES) {
+        mesh.vao.bind();
+        draw_elements_instanced(mode, mesh.ibo.num_elements(), instance_count, GL_UNSIGNED_INT);
+        mesh.vao.unbind();
+    }
 };
 
 #endif /* Graphics_h */

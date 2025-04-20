@@ -7,12 +7,12 @@ LOG_MODULE(VertexBuffer);
 // these should bind the vao, then vbo, then setup & enable vertex attrib ptrs
 
 template <>
-void VertexBuffer<void>::attach_to_vao(VertexArray const& vao) const { (void)vao;
+void VertexBuffer<void>::attach_to_vao(VertexArray& vao) const { (void)vao;
 	LOG_ERR("instantiate Vertexbuffer with vertex type as template argument");
 }
 
 template <>
-void VertexBuffer<Vt_2Dclassic>::attach_to_vao(VertexArray const& vao) const {
+void VertexBuffer<Vt_2Dclassic>::attach_to_vao(VertexArray& vao) const {
 	vao.bind();
 	this->bind();
 	vao.attrib(0,								// layout index
@@ -27,7 +27,7 @@ void VertexBuffer<Vt_2Dclassic>::attach_to_vao(VertexArray const& vao) const {
 }
 
 template <>
-void VertexBuffer<Vt_classic>::attach_to_vao(VertexArray const& vao) const {
+void VertexBuffer<Vt_classic>::attach_to_vao(VertexArray& vao) const {
 	vao.bind();
 	this->bind();
 	vao.attrib(0,								// layout index
@@ -42,7 +42,7 @@ void VertexBuffer<Vt_classic>::attach_to_vao(VertexArray const& vao) const {
 }
 
 template <>
-void VertexBuffer<Vt_pun>::attach_to_vao(VertexArray const& vao) const {
+void VertexBuffer<Vt_pun>::attach_to_vao(VertexArray& vao) const {
 	vao.bind();
 	this->bind();
 	vao.attrib(0,							// layout index
@@ -62,7 +62,7 @@ void VertexBuffer<Vt_pun>::attach_to_vao(VertexArray const& vao) const {
 }
 
 template <>
-void VertexBuffer<Vt_pn>::attach_to_vao(VertexArray const& vao) const {
+void VertexBuffer<Vt_pn>::attach_to_vao(VertexArray& vao) const {
 	vao.bind();
 	this->bind();
 	vao.attrib(0,							// layout index
@@ -77,7 +77,7 @@ void VertexBuffer<Vt_pn>::attach_to_vao(VertexArray const& vao) const {
 }
 
 template <>
-void VertexBuffer<Vt_2p2n>::attach_to_vao(VertexArray const& vao) const {
+void VertexBuffer<Vt_2p2n>::attach_to_vao(VertexArray& vao) const {
 	vao.bind();
 	this->bind();
 	vao.attrib(0,							// layout index
@@ -92,7 +92,7 @@ void VertexBuffer<Vt_2p2n>::attach_to_vao(VertexArray const& vao) const {
 }
 
 template <>
-void VertexBuffer<Vertex_3f>::attach_to_vao(VertexArray const& vao) const {
+void VertexBuffer<Vertex_3f>::attach_to_vao(VertexArray& vao) const {
 	vao.bind();
 	this->bind();
 	vao.attrib(0,						// layout index
@@ -102,7 +102,7 @@ void VertexBuffer<Vertex_3f>::attach_to_vao(VertexArray const& vao) const {
 }
 
 template <>
-void VertexBuffer<Vertex_2f>::attach_to_vao(VertexArray const& vao) const {
+void VertexBuffer<Vertex_2f>::attach_to_vao(VertexArray& vao) const {
 	vao.bind();
 	this->bind();
 	vao.attrib(0,						// layout index

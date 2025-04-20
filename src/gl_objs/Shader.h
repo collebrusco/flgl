@@ -28,7 +28,7 @@ public:
     
     void bind() const;
     void unbind() const;
-    void destroy() override;
+    void destroy() override final;
 
     void uVec4(const char* varName, const glm::vec4& vec) const;
     void uVec3(const char* varName, const glm::vec3& vec) const;

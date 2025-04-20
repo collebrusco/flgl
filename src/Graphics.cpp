@@ -74,6 +74,10 @@ bool Graphics::is_init(){
     return isinit;
 }
 
+void Graphics::wireframe(bool en) {
+    glPolygonMode(GL_FRONT_AND_BACK, en ? GL_LINE : GL_FILL);
+}
+
 void Graphics::draw_elements(GLenum mode, GLsizei count, GLenum type) {
     glDrawElements(mode, count, type, nullptr);
 }
@@ -82,12 +86,21 @@ void Graphics::draw_vao_ibo(ElementBuffer const& ibo, GLenum mode) {
     draw_elements(mode, ibo.num_elements());
 }
 
+
 void Graphics::draw_arrays(GLenum mode, GLint first, GLsizei count) {
     glDrawArrays(mode, first, count);
 }
 
-void Graphics::wireframe(bool en) {
-    glPolygonMode(GL_FRONT_AND_BACK, en ? GL_LINE : GL_FILL);
+void Graphics::draw_arrays_instanced(GLenum mode, GLint first, GLsizei count, GLsizei instance_count) {
+    glDrawArraysInstanced(mode, first, count, instance_count);
+}
+
+void Graphics::draw_elements_instanced(GLenum mode, GLsizei count, GLsizei instance_count, GLenum type) {
+    glDrawElementsInstanced(mode, count, type, nullptr, instance_count);
+}
+
+void Graphics::draw_vao_ibo_instanced(ElementBuffer const &ibo, GLsizei instance_count, GLenum mode) {
+    draw_elements_instanced(mode, ibo.num_elements(), instance_count);
 }
 
 

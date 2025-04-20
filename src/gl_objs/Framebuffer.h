@@ -28,7 +28,7 @@ public:
 	void draw_buffer_color(uint32_t n);
 
 	bool complete() const;
-	void destroy() override;
+	void destroy() override final;
 };
 
 #endif 
