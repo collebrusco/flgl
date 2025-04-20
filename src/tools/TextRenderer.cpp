@@ -65,8 +65,8 @@ void TextRenderer::_set_text(char* text) {
 			elems.push_back(i + 2);
 			elems.push_back(i + 1);
 			elems.push_back(i + 0);
-			elems.push_back(i + 2);
 			elems.push_back(i + 3);
+			elems.push_back(i + 2);
 			i += 4;
 			cursor.x += 7;
 		}
@@ -78,6 +78,10 @@ void TextRenderer::_set_text(char* text) {
 void TextRenderer::render(int x, int y, int scale) const {
 	text_shader.bind();
 	font.bind();
+
+	glFrontFace(GL_CW);
+	glCullFace(GL_BACK);
+	glEnable(GL_CULL_FACE);
 
 	vec2 p = {((((float)x) / window.frame.x)*2.)-1., ((1.-(((float)y) / window.frame.y))*2.)-1.};
 

@@ -2,6 +2,10 @@
 // #include "../util/log.h"
 // LOG_MODULE(DefaultMeshes);
 
+/**
+ * all of these are CW wound except Vt_pn
+ */
+
 template<>
 Mesh<Vertex_2f> DefaultMeshes::tile() {
 	return Mesh<Vertex_2f>::from_vectors({{-1.,-1.},
@@ -9,7 +13,7 @@ Mesh<Vertex_2f> DefaultMeshes::tile() {
 									      { 1., 1.},
 									      { 1.,-1.}}
 									      ,
-									      {0, 2, 1,	0, 2, 3});
+									      {0, 2, 1,	0, 3, 2});
 }
 
 template<>
@@ -19,7 +23,7 @@ Mesh<Vertex_3f> DefaultMeshes::tile() {
 									      { 1., 1., 0.},
 									      { 1.,-1., 0.}}
 									      ,
-									      {0, 2, 1,	0, 2, 3});
+									      {0, 2, 1,	0, 3, 2});
 }
 
 template<>
@@ -29,7 +33,7 @@ Mesh<Vt_classic> DefaultMeshes::tile() {
 									    	{{ 1., 1., 0.}, {1.,1.}},
 									    	{{ 1.,-1., 0.}, {1.,0.}}}
 									    	,
-									    	{0, 2, 1,	0, 2, 3});
+									    	{0, 2, 1,	0, 3, 2});
 }
 
 template<>
@@ -39,7 +43,7 @@ Mesh<Vt_2Dclassic> DefaultMeshes::tile() {
 									    	 {{ 1., 1.}, {1.,1.}},
 									    	 {{ 1.,-1.}, {1.,0.}}}
 									    	 ,
-									    	 {0, 2, 1,	0, 2, 3});
+									    	 {0, 2, 1,	0, 3, 2});
 }
 
 
