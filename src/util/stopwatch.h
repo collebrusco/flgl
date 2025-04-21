@@ -6,10 +6,10 @@
 class Stopwatch {
 public:
     enum TimeUnit {
-        SECONDS = 1000000000,
-        MILLISECONDS = 1000000,
-        MICROSECONDS = 1000,
-        NANOSECONDS = 1
+        SECONDS = 0,
+        MILLISECONDS = 1,
+        MICROSECONDS = 2,
+        NANOSECONDS = 3
     };
     Stopwatch(TimeUnit tu = SECONDS);
     void setUnit(TimeUnit);

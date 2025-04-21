@@ -34,12 +34,27 @@ double Stopwatch::read() const {
 }
 
 double Stopwatch::read(TimeUnit tu) const {
+    double divisor;
+    switch (tu) {
+    case SECONDS:
+        divisor = 1000000000.;
+        break;
+    case MILLISECONDS:
+        divisor = 1000000.;
+        break;
+    case MICROSECONDS:
+        divisor = 1000.;
+        break;
+    case NANOSECONDS:
+        divisor = 1.;
+        break;
+    }
     if (props._running) {
         auto current_time = static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now().time_since_epoch()).count());
-        return (current_time - stopwatch_start_time) / tu;
+        return (current_time - stopwatch_start_time) / divisor;
     }
     if (!props._reset)
-        return (stopwatch_stop_time - stopwatch_start_time) / tu;
+        return (stopwatch_stop_time - stopwatch_start_time) / divisor;
     return 0;
 }
 
