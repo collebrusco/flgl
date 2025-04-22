@@ -27,7 +27,7 @@ public:
     const GLuint& programID() const;
     
     void bind() const;
-    void unbind() const;
+    static void unbind();
     void destroy() override final;
 
     void uVec4(const char* varName, const glm::vec4& vec) const;
