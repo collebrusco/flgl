@@ -146,7 +146,7 @@ PerspectiveCamera::PerspectiveCamera(){
     look = glm::vec3(0.f, 0.f, -1.f);
     up = glm::vec3(0.f, 1.f, 0.f);
     near = 0.0001f;
-    far = 10000.0f;
+    far = 1000.0f;
     fov = glm::radians(90.f);
 }
 
