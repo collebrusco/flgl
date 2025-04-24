@@ -44,6 +44,13 @@ glm::mat4 genModelMat3d(glm::vec3 pos, glm::vec3 rotation, glm::vec3 scale){
     return m;
 }
 
+glm::mat4 genModelMat3d(glm::vec3 pos) {
+    glm::mat4 m;
+    m = glm::mat4(1.0);
+    m = glm::translate(m, pos);
+    return m;
+}
+
 glm::vec2 angleToVector(float degrees){
     /* TODO make this be angle from (0, 1) */
     return glm::vec2(-glm::sin(glm::radians(degrees)), glm::cos(glm::radians(degrees)));
