@@ -13,13 +13,6 @@ Driver::Driver() :  _close(false),
                     delta_timer(Stopwatch::SECONDS)
 {}
 
-vec2 Driver::world_mouse(vec2 mp, Camera& cam) const {
-    mp /= vec2((float)window.frame.x, (float)window.frame.y);
-    vec4 p = vec4((mp.x * 2.) - 1.,  -((mp.y * 2) - 1), 0., 1.);
-    vec4 w = cam.iview() * (cam.iproj() * (p));
-    return w.xy();
-}
-
 void Driver::exit() {
     user_destroy();
 }

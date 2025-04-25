@@ -27,8 +27,6 @@ public:
     inline float dt() const {return _dt;};
     inline Stopwatch const& launch_timer() {return _launch_timer;}
 
-    glm::vec2 world_mouse(glm::vec2 mp, Camera& cam) const;
-
 private:
 	bool _close;
 	float _dt;

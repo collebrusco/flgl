@@ -19,6 +19,7 @@
 #ifndef Camera_h
 #define Camera_h
 #include <flgl/glm.h>
+#include <flgl/geometry.h>
 
 class Camera {
 private:
@@ -41,6 +42,9 @@ protected:
 public:
     Camera();
     virtual ~Camera() = default;
+
+    glm::vec2 world_mouse(glm::vec2 mp) const;
+    Ray mouse_ray(glm::vec2 mp) const;
     
     void setShouldUpdate();
     bool shouldUpdate() const;

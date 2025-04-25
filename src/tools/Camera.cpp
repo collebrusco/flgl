@@ -9,11 +9,35 @@
 #include "Camera.h"
 #include "../inc/flgl.h"
 #include <flgl/logger.h>
+using namespace glm;
 LOG_MODULE(glcam);
 
 Camera::Camera() {
     should_update = true;
     needs_inverses.val = 0x11;
+}
+
+vec2 Camera::world_mouse(vec2 mp) const {
+    mp /= vec2((float)window.frame.x, (float)window.frame.y);
+    vec4 p = vec4((mp.x * 2.) - 1.,  -((mp.y * 2) - 1), 0., 1.);
+    vec4 w = this->iview() * (this->iproj() * (p));
+    return w.xy();
+}
+
+Ray Camera::mouse_ray(vec2 mp) const {
+    float nx = (2.0f * (mp.x / static_cast<float>(window.frame.x))) - 1.0f;
+    float ny = -((2.0f * (mp.y / static_cast<float>(window.frame.y))) - 1.0f);
+
+    vec4 camspace = this->iproj() * vec4(nx, ny, -1.0f, 1.0f);
+    camspace /= camspace.w;
+
+    mat4 inv_view = this->iview();
+    vec4 wspace = inv_view * camspace;
+
+    vec3 origin = this->readPos();
+    vec3 direction = normalize(vec3(wspace) - origin);
+
+    return Ray(origin, direction);
 }
 
 void Camera::update(){

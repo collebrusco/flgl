@@ -12,5 +12,6 @@
 #include "../../lib/glm/glm/gtc/matrix_transform.hpp"
 #include "../../lib/glm/glm/ext/matrix_clip_space.hpp"
 #include "../../lib/glm/glm/gtx/quaternion.hpp"
+#include "../../lib/glm/glm/gtx/component_wise.hpp"
 #endif
 
