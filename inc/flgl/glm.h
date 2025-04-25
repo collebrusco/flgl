@@ -11,5 +11,6 @@
 #include "../../lib/glm/glm/ext/matrix_transform.hpp" // glm::translate, glm::rotate, glm::scal
 #include "../../lib/glm/glm/gtc/matrix_transform.hpp"
 #include "../../lib/glm/glm/ext/matrix_clip_space.hpp"
+#include "../../lib/glm/glm/gtx/quaternion.hpp"
 #endif
 
