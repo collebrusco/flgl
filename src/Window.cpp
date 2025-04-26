@@ -209,10 +209,7 @@ Button &      Mouse::operator[](size_t index) {return buttons[index];}
 Button const& Mouse::operator[](size_t index) const {return buttons[index];}
 
 Mouse::Mouse() : pos(0.f), delta(0.f), 
-    delta_last(0.f), scroll(0.f), scroll_last(0.f),
-    left(buttons[GLFW_MOUSE_BUTTON_LEFT]),
-    right(buttons[GLFW_MOUSE_BUTTON_RIGHT]),
-    middle(buttons[GLFW_MOUSE_BUTTON_MIDDLE])
+    delta_last(0.f), scroll(0.f), scroll_last(0.f)
 {}
 
 void Window::set_mouse_grab(bool g) {

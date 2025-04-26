@@ -24,7 +24,9 @@ struct Mouse {
     Mouse();
     glm::vec2 pos, delta, delta_last, scroll, scroll_last;
     Button buttons[GLFW_MOUSE_BUTTON_LAST];
-    Button const& left, right, middle;
+    inline Button const& left() const {return buttons[GLFW_MOUSE_BUTTON_LEFT];}
+    inline Button const& right() const {return buttons[GLFW_MOUSE_BUTTON_RIGHT];}
+    inline Button const& middle() const {return buttons[GLFW_MOUSE_BUTTON_MIDDLE];}
     Button & operator[](size_t index);
     Button const& operator[](size_t index) const;
     void update_data();
