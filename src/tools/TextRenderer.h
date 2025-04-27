@@ -24,12 +24,13 @@ public:
 
 	template <typename...Args>
 	void set_text(std::string const& fmt, Args... args) {
-		size_t n = fmt.size() + (sizeof...(Args) * 16);
-		char buff[n];
+		const size_t n = fmt.size() + (sizeof...(Args) * 16);
+		char*const buff = (char*)malloc(n);
 		snprintf(buff, n, fmt.c_str(), args...);
 		_set_text(buff);
+		free(buff);
 	}
-
+	
 	void set_color(glm::vec3 const& color);
 	void render(int x, int y, int scale) const;
 	void destroy();
