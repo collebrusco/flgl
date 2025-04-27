@@ -83,6 +83,7 @@ void TextRenderer::render(int x, int y, int scale) const {
 	glCullFace(GL_BACK);
 	glEnable(GL_CULL_FACE);
 	gl.wireframe(false);
+	glDisable(GL_DEPTH_TEST);
 
 	vec2 p = {((((float)x) / window.frame.x)*2.)-1., ((1.-(((float)y) / window.frame.y))*2.)-1.};
 
