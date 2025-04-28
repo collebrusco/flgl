@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <cstring>
-#include "util/misc.h"
+#include "misc.h"
 
 #include <stdio.h>
 template <typename Base, size_t size>

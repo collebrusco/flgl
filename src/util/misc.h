@@ -21,4 +21,7 @@
     class_type& operator=(class_type && other) = delete;
 
 
+#define IS_POW2(num) ( !((num) & ((num)-1)) )
+
+
 #endif /* MISC_H */
