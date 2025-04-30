@@ -267,6 +267,65 @@ bool Shader::operator==(const Shader & o) const {
     return o.programID() == this->programID();
 }
 
+void Shader::uVec2Arr(const char* varName, int size, const glm::vec2* arr) const {
+    bind();
+    GLint loc = glGetUniformLocation(programId, varName);
+    glUniform2fv(loc, size, glm::value_ptr(arr[0]));
+}
+
+void Shader::uVec3Arr(const char* varName, int size, const glm::vec3* arr) const {
+    bind();
+    GLint loc = glGetUniformLocation(programId, varName);
+    glUniform3fv(loc, size, glm::value_ptr(arr[0]));
+}
+
+void Shader::uVec4Arr(const char* varName, int size, const glm::vec4* arr) const {
+    bind();
+    GLint loc = glGetUniformLocation(programId, varName);
+    glUniform4fv(loc, size, glm::value_ptr(arr[0]));
+}
+
+void Shader::uIVec2Arr(const char* varName, int size, const glm::ivec2* arr) const {
+    bind();
+    GLint loc = glGetUniformLocation(programId, varName);
+    glUniform2iv(loc, size, glm::value_ptr(arr[0]));
+}
+
+void Shader::uIVec3Arr(const char* varName, int size, const glm::ivec3* arr) const {
+    bind();
+    GLint loc = glGetUniformLocation(programId, varName);
+    glUniform3iv(loc, size, glm::value_ptr(arr[0]));
+}
+
+void Shader::uIVec4Arr(const char* varName, int size, const glm::ivec4* arr) const {
+    bind();
+    GLint loc = glGetUniformLocation(programId, varName);
+    glUniform4iv(loc, size, glm::value_ptr(arr[0]));
+}
+
+void Shader::uIntArr(const char* varName, int size, const int* arr) const {
+    bind();
+    GLint loc = glGetUniformLocation(programId, varName);
+    glUniform1iv(loc, size, arr);
+}
+
+void Shader::uFloatArr(const char* varName, int size, const float* arr) const {
+    bind();
+    GLint loc = glGetUniformLocation(programId, varName);
+    glUniform1fv(loc, size, arr);
+}
+
+void Shader::uMat3Arr(const char* varName, int size, const glm::mat3* arr) const {
+    bind();
+    GLint loc = glGetUniformLocation(programId, varName);
+    glUniformMatrix3fv(loc, size, GL_FALSE, glm::value_ptr(arr[0]));
+}
+
+void Shader::uMat4Arr(const char* varName, int size, const glm::mat4* arr) const {
+    bind();
+    GLint loc = glGetUniformLocation(programId, varName);
+    glUniformMatrix4fv(loc, size, GL_FALSE, glm::value_ptr(arr[0]));
+}
 
 
 
