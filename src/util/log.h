@@ -76,6 +76,52 @@ public:
 	    #define LOG_ERR(...) ((void)0)
 	#endif
 
+
+
+	#if _LOG_LEVEL >= LOG_DEBUG 
+	    #define SLOW_LOG_DBG _logger.slow_log_dbg
+		template<typename...Args>
+		void slow_log_dbg(size_t m, std::string fmt, Args... args) {
+			static size_t i = 0; if (!(i++)%m) return;
+			_log_out("DEBUG", modname, fmt, args...);
+		}
+	#else 
+	    #define SLOW_LOG_DBG(...) ((void)0)
+	#endif 
+
+	#if _LOG_LEVEL >= LOG_INFO 
+	    #define SLOW_LOG_INF _logger.slow_log_inf
+		template<typename...Args>
+		void slow_log_inf(size_t m, std::string fmt, Args... args) {
+			static size_t i = 0; if ((i++)%m) return;
+			_log_out("INFO ", modname, fmt, args...);
+		}
+	#else 
+	    #define SLOW_LOG_INF(...) ((void)0)
+	#endif 
+
+	#if _LOG_LEVEL >= LOG_WARN 
+	    #define SLOW_LOG_WRN _logger.slow_log_wrn
+		template<typename...Args>
+		void slow_log_wrn(size_t m, std::string fmt, Args... args) {
+			static size_t i = 0; if (!(i++)%m) return;
+			_log_out("WARN ", modname, fmt, args...);
+		}
+	#else 
+	    #define SLOW_LOG_WRN(...) ((void)0)
+	#endif 
+
+	#if _LOG_LEVEL >= LOG_ERROR 
+	    #define SLOW_LOG_ERR _logger.slow_log_err
+		template<typename...Args>
+		void slow_log_err(size_t m, std::string fmt, Args... args) {
+			static size_t i = 0; if (!(i++)%m) return;
+			_log_out("ERROR", modname, fmt, args...);
+		}
+	#else 
+	    #define SLOW_LOG_ERR(...) ((void)0)
+	#endif
+
 };
 
 
