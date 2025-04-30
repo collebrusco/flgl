@@ -48,7 +48,6 @@ public:
     void uIVec3Arr(const char* varName, int size, const glm::ivec3* arr) const;
     void uIVec4Arr(const char* varName, int size, const glm::ivec4* arr) const;
     void uFloatArr(const char* varName, int size, const float* arr) const;
-    void uIntArr(const char* varName, int size, const int* arr) const;
     void uMat3Arr(const char* varName, int size, const glm::mat3* arr) const;
     void uMat4Arr(const char* varName, int size, const glm::mat4* arr) const;
 

@@ -303,12 +303,6 @@ void Shader::uIVec4Arr(const char* varName, int size, const glm::ivec4* arr) con
     glUniform4iv(loc, size, glm::value_ptr(arr[0]));
 }
 
-void Shader::uIntArr(const char* varName, int size, const int* arr) const {
-    bind();
-    GLint loc = glGetUniformLocation(programId, varName);
-    glUniform1iv(loc, size, arr);
-}
-
 void Shader::uFloatArr(const char* varName, int size, const float* arr) const {
     bind();
     GLint loc = glGetUniformLocation(programId, varName);
