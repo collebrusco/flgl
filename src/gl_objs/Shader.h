@@ -38,9 +38,19 @@ public:
     void uIVec2(const char* varName, const glm::ivec2& vec) const;
     void uFloat(const char* varName, const float val) const;
     void uInt(const char* varName, const int val) const;
-    void uIntArr(const char* varName, int size, const int* arr) const;
     void uIntU(const char* varName, uint32_t val) const;
     void uBool(const char* varName, bool val) const;
+    void uIntArr(const char* varName, int size, const int* arr) const;
+    void uVec2Arr(const char* varName, int size, const glm::vec2* arr) const;
+    void uVec3Arr(const char* varName, int size, const glm::vec3* arr) const;
+    void uVec4Arr(const char* varName, int size, const glm::vec4* arr) const;
+    void uIVec2Arr(const char* varName, int size, const glm::ivec2* arr) const;
+    void uIVec3Arr(const char* varName, int size, const glm::ivec3* arr) const;
+    void uIVec4Arr(const char* varName, int size, const glm::ivec4* arr) const;
+    void uFloatArr(const char* varName, int size, const float* arr) const;
+    void uMat3Arr(const char* varName, int size, const glm::mat3* arr) const;
+    void uMat4Arr(const char* varName, int size, const glm::mat4* arr) const;
+
     
     void uMat4(const char* varName, const glm::mat4& mat4) const;
     void uMat3(const char* varName, const glm::mat3& mat4) const;

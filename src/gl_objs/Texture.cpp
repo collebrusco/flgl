@@ -42,6 +42,11 @@ Texture::Texture(std::string const& file, bool pix) : Texture(GL_TEXTURE_2D) {
     //GET PIXELS
     uint8_t* pixels = stbi_load(path.c_str(), &w, &h, &c, 0);
 
+    if (!pixels) {
+        LOG_ERR("failed to load texture at %s", path.c_str());
+        LOG_ERR("stbi says \'%s\'", stbi_failure_reason());
+    }
+
     this->create();
     this->bind();
     this->paramI(GL_TEXTURE_WRAP_S, GL_REPEAT);
