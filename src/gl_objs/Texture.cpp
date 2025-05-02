@@ -86,16 +86,16 @@ Texture::Texture(std::string const& file, bool pix) : Texture(GL_TEXTURE_2D) {
     stbi_image_free(pixels);
 }
 
-Texture Texture::from_cubemap_files(const char *right,
-                                    const char *left,
-                                    const char *top,
-                                    const char *bottom,
-                                    const char *front,
-                                    const char *back){
+Texture Texture::from_cubemap_files(const char *posx,
+                                    const char *negx,
+                                    const char *posy,
+                                    const char *negy,
+                                    const char *posz,
+                                    const char *negz){
     Texture tex(GL_TEXTURE_CUBE_MAP);
     tex.create_bind();
 
-    const char *files[6] = {right, left, top, bottom, front, back};
+    const char *files[6] = {posx, negx, posy, negy, posz, negz};
 
     int w, h, c;
     for (int i = 0; i < 6; ++i)
@@ -136,6 +136,12 @@ Texture Texture::from_cubemap_files(const char *right,
                 break;
         }
 
+        /* GL_TEXTURE_CUBE_MAP_POSITIVE_X */
+        /* GL_TEXTURE_CUBE_MAP_NEGATIVE_X */
+        /* GL_TEXTURE_CUBE_MAP_POSITIVE_Y */
+        /* GL_TEXTURE_CUBE_MAP_NEGATIVE_Y */
+        /* GL_TEXTURE_CUBE_MAP_POSITIVE_Z */
+        /* GL_TEXTURE_CUBE_MAP_NEGATIVE_Z */
 
         tex.alloc(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, mipLevel, internalFormat,
             w, h, format, GL_UNSIGNED_BYTE, data);
