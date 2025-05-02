@@ -16,6 +16,7 @@ protected:
 public:
 	// presets
 	static Texture from_file(std::string const& file, bool pix=false);
+	static Texture from_cubemap_files(const char *right, const char *left, const char *top, const char *bottom, const char *front, const char *back);
 	void pixelate(bool pix=true);
 	void wrap(GLenum wrap);
 

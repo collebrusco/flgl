@@ -86,6 +86,72 @@ Texture::Texture(std::string const& file, bool pix) : Texture(GL_TEXTURE_2D) {
     stbi_image_free(pixels);
 }
 
+Texture Texture::from_cubemap_files(const char *right,
+                                    const char *left,
+                                    const char *top,
+                                    const char *bottom,
+                                    const char *front,
+                                    const char *back){
+    Texture tex(GL_TEXTURE_CUBE_MAP);
+    tex.create_bind();
+
+    const char *files[6] = {right, left, top, bottom, front, back};
+
+    int w, h, c;
+    for (int i = 0; i < 6; ++i)
+    {
+        std::string path = glconfig.asset_path() + files[i] + ".png";
+        uint8_t *data = stbi_load(path.c_str(), &w, &h, &c, 0);
+        if (!data)
+        {
+            LOG_ERR("Failed to load cubemap face: %s", path.c_str());
+            return Texture();
+        }
+
+        //UPLOAD
+        uint32_t mipLevel = 0;
+        uint32_t internalFormat;
+        uint32_t format;
+        // Use 8-bit-per-channel internal format, cube map doesn't like floats
+        switch (c) {
+            case 1:
+                internalFormat = GL_R8;
+                format = GL_RED;
+                break;
+            case 2:
+                internalFormat = GL_RG8;
+                format = GL_RG;
+                break;
+            case 3:
+                internalFormat = GL_RGB;
+                format = GL_RGB;
+                break;
+            case 4:
+                internalFormat = GL_RGBA;
+                format = GL_RGBA;
+                break;
+            default:
+                internalFormat = GL_RGBA;
+                format = GL_RGBA;
+                break;
+        }
+
+
+        tex.alloc(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, mipLevel, internalFormat,
+            w, h, format, GL_UNSIGNED_BYTE, data);
+
+        stbi_image_free(data);
+    }
+
+    tex.paramI(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    tex.paramI(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    tex.paramI(GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+    tex.paramI(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    tex.paramI(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    return tex;
+}
+
 Texture Texture::from_file(std::string const& file, bool pix) {
     return Texture(file, pix);
 }
