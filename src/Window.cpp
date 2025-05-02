@@ -181,6 +181,7 @@ void Window::swap_buffers() {
 
 void Window::update() {
     if (!active) return;
+    pframe = _frame;
     _keyboard.update_data();
     _mouse.update_data();
     int win_w,win_h; glfwGetWindowSize(handle,&win_w,&win_h);
@@ -200,6 +201,10 @@ void Window::close() {
 
 bool Window::should_close() const {
     return glfwWindowShouldClose(handle);
+}
+
+bool Window::new_size() const {
+    return _frame != pframe;
 }
 
 Button::Button(){down = pressed = released = last = 0;}

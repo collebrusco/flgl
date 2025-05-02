@@ -50,6 +50,7 @@ private:
     GLFWwindow* handle;
     bool active;
     glm::ivec2 _frame;
+    glm::ivec2 pframe;
     float _aspect;   // aspect := w / h
     Keyboard _keyboard;
     Mouse _mouse;
@@ -86,6 +87,7 @@ public:
     
     const char* get_title() const ;
     bool should_close() const;
+    bool new_size() const;
     void close();
 };
 
