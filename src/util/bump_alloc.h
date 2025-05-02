@@ -25,6 +25,14 @@ public:
         top += bytes;
         return block;
     }
+    /** WARNING: the bump alloc has no way to call destructors on the objects allocated here. you have to ptr->~T();, better yet, don't use this for complex types, use alop if you need destruction */
+    template <typename T, typename ...Args>
+    T* alloc_new(Args... args) {
+        constexpr size_t bytes = sizeof(T);
+        T* res = (T*)(this->alloc(bytes));
+        if (!res) return res;
+        new(res) T(args...);
+    }
 private:
     char data[bufsize];
     uint32_t top;
@@ -49,6 +57,14 @@ public:
         void* block = (void*)(data + top);
         top += bytes;
         return block;
+    }
+    /** WARNING: the bump alloc has no way to call destructors on the objects allocated here. you have to ptr->~T();, better yet, don't use this for complex types, use alop if you need destruction */
+    template <typename T, typename ...Args>
+    T* alloc_new(Args... args) {
+        constexpr size_t bytes = sizeof(T);
+        T* res = (T*)(this->alloc(bytes));
+        if (!res) return res;
+        new(res) T(args...);
     }
 private:
     char *data;

@@ -28,7 +28,7 @@ public:
     NO_COPY_OR_MOVE(abstract_linear_objpool);
 
     template <typename Sub, typename ...Args>
-    void push(Args... args) {
+    Sub* push(Args... args) {
         buf_entry_t* base = (buf_entry_t*)(buf + top);
         uint16_t jump = sizeof(Sub) + sizeof(base->next_size);
         top += jump;
@@ -37,6 +37,7 @@ public:
         }
         base->next_size = (uint16_t)jump;
         new (&base->entry) Sub(args...);
+        return (Sub*)&base->entry;
     }
 
     void clear() {
