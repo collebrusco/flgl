@@ -64,14 +64,20 @@ void InstanceBuffer<ivec4>::attach_to_vao(VertexArray& vao, size_t idx) const {
 template<>
 void InstanceBuffer<mat3>::attach_to_vao(VertexArray& vao, size_t idx) const {
     for (int i = 0; i < 3; i++) {
-        vao.attrib(vao.max_index() + 1, 3, GL_FLOAT, sizeof(glm::mat3), sizeof(float) * i * 3, 1);
+        vao.attrib(idx + i, 3, GL_FLOAT, sizeof(glm::mat3), sizeof(float) * i * 3, 1);
     }
 }
 template<>
 void InstanceBuffer<mat4>::attach_to_vao(VertexArray& vao, size_t idx) const {
     for (int i = 0; i < 4; i++) {
-        vao.attrib(vao.max_index() + 1, 4, GL_FLOAT, sizeof(glm::mat4), sizeof(float) * i * 4, 1);
+        vao.attrib(idx + i, 4, GL_FLOAT, sizeof(glm::mat4), sizeof(float) * i * 4, 1);
     }
+}
+
+template<>
+void InstanceBuffer<iAttr_2v4>::attach_to_vao(VertexArray& vao, size_t idx) const {
+    vao.attrib(idx + 0, 4, GL_FLOAT, sizeof(iAttr_2v4), offsetof(iAttr_2v4, a), 1);
+    vao.attrib(idx + 1, 4, GL_FLOAT, sizeof(iAttr_2v4), offsetof(iAttr_2v4, b), 1);
 }
 
 

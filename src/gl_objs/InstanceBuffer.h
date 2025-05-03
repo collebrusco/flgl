@@ -31,6 +31,10 @@ typedef glm::ivec4 InstancedAttribute_iv4, iAttr_iv4;
 typedef glm::mat3 InstancedAttribute_m3,   iAttr_m3;
 typedef glm::mat4 InstancedAttribute_m4,   iAttr_m4;
 
+typedef struct IntancedAttirbute_2v4 {
+	glm::vec4 a, b;
+} 										   iAttr_2v4;
+
 template<typename Attrib>
 class InstanceBuffer : public Buffer {
 public:
