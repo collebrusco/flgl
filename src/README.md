@@ -6,6 +6,7 @@ I could make a board for this, but im soloing this now so simple todo list inste
 ## huge things
 - **audio** (long time coming) will really complete the transform from 'fl graphics lib' to 'fl game lib'
 - integrate a basic UI lib, this is already started, needs finish & test & integrate
+- test suite !! for not the graphics, lots of other stuff. regression test on the main branch would be fun and useful 
 ## small - med things
 - include skybox renderer
 - included basic renderer -- render basic screen space shapes, colored or textured.

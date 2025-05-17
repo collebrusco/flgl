@@ -1,4 +1,6 @@
 #ifndef FLGL_INC_DRIVER
 #define FLGL_INC_DRIVER
-#include "../../src/tools/Driver.h"
-#endif
+
+#include "../../src/engine/Driver.h"
+
+#endif /* FLGL_INC_DRIVER */

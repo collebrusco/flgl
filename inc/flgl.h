@@ -1,7 +1,7 @@
 #ifndef USER_FLGL_H
 #define USER_FLGL_H
 
-#include <stdint.h>
-#include "../src/flgl.h"
+#include "flgl/config.h"
+#include "flgl/core.h"
 
 #endif
