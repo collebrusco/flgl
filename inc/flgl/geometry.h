@@ -1,4 +1,6 @@
 #ifndef FLGL_INC_GEOMETRY
 #define FLGL_INC_GEOMETRY
-#include "../../src/tools/geometry.h"
-#endif
+
+#include "../../src/math/geometry.h"
+
+#endif /* FLGL_INC_GEOMETRY */

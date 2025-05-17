@@ -40,7 +40,7 @@ zoom += window.mouse.scroll;
 ### Shaders
 Tell flgl the path to your shader folder and write them there. Compile and use them with the provided object.
 ```c++
-glconfig.set_shader_path("src/shaders"); 
+flgl_config.set_shader_path("src/shaders"); 
 Shader sh = Shader::from_source("vert_name", "frag_name");
 sh.bind();
 sh.uMat4("uModel", modelMatrix);

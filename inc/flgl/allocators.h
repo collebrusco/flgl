@@ -1,14 +1,9 @@
-/** 
- * allocators.h 
- * flgl
- * created 04/27/25 by frank collebrusco
- */
-#ifndef ALLOCATORS_H
-#define ALLOCATORS_H
+#ifndef FLGL_INC_ALLOCATORS
+#define FLGL_INC_ALLOCATORS
 
-#include "../../src/tools/ecs/inc/c_abstract.h"
-#include "../../src/util/abstract_freelist_objpool.h"
-#include "../../src/util/abstract_linear_objpool.h"
-#include "../../src/util/bump_alloc.h"
+#include "../../src/allocators/abstract_freelist_objpool.h"
+#include "../../src/allocators/abstract_linear_objpool.h"
+#include "../../src/allocators/bump_alloc.h"
+#include "../../src/allocators/c_abstract.h"
 
-#endif /* ALLOCATORS_H */
+#endif /* FLGL_INC_ALLOCATORS */
