@@ -2,16 +2,16 @@
 #define FLGL_BUFFER_H
 
 #include "../gfx.h"
-#include "GL_Object.h"
+#include "../../device_object.h"
 #include <vector>
 
-class Buffer : public GL_Object {
+class GL_Buffer : public DeviceObject {
 protected:
 	uint32_t handle;
 	uint32_t num_elem;
 	GLenum type;
 public:
-	Buffer(GLenum);
+	GL_Buffer(GLenum);
 	void create();
 	void bind() const;
 	void create_bind();
@@ -20,7 +20,7 @@ public:
 	static void unbind_vbo();
 	static void unbind_ibo();
 	bool active() const;
-	void destroy() override;
+	void destroy();
 
 	template<typename Dat>
 	void buffer(std::vector<Dat> const& dat, GLenum usage=GL_STATIC_DRAW) {
@@ -35,7 +35,7 @@ public:
 	}
 };
 
-class ElementBuffer : public Buffer {
+class ElementBuffer : public GL_Buffer {
 public:
 	ElementBuffer();
 };

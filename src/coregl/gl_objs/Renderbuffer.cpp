@@ -10,7 +10,7 @@ Renderbuffer::Renderbuffer() {
 void Renderbuffer::create() {
 	glGenRenderbuffers(1, &handle);
 	LOG_DBG("created %d", handle);
-	this->enlist(new Renderbuffer(*this));
+	this->enlist(RENDERBUFFER, handle);;
 }
 
 
@@ -43,7 +43,7 @@ void Renderbuffer::alloc(GLenum target, GLsizei width, GLsizei height) {
 
 
 void Renderbuffer::destroy() {
-	this->delist();
+	this->delist(handle);
 	LOG_DBG("destroyed %d", handle);
 	glDeleteRenderbuffers(1, &handle);
 }

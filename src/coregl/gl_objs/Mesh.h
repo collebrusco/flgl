@@ -96,8 +96,8 @@ struct Mesh {
 
 	static void unbind() {
 		VertexArray::unbind();
-		Buffer::unbind_vbo();
-		Buffer::unbind_ibo();
+		GL_Buffer::unbind_vbo();
+		GL_Buffer::unbind_ibo();
 	}
 
 	void destroy() {

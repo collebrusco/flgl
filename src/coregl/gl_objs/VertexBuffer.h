@@ -4,7 +4,7 @@
 #include <vector>
 #include <flgl/glm.h>
 #include "../gfx.h"
-#include "Buffer.h"
+#include "GL_Buffer.h"
 #include "VertexArray.h"
 
 #ifndef _WIN32
@@ -55,10 +55,10 @@ typedef Vertex_2fpos_2fnorm Vt_2p2n;
 
 
 template<typename Vert>
-class VertexBuffer : public Buffer {
+class VertexBuffer : public GL_Buffer {
 public:
 
-	VertexBuffer() : Buffer(GL_ARRAY_BUFFER) {}
+	VertexBuffer() : GL_Buffer(GL_ARRAY_BUFFER) {}
 
 	size_t vsize() const {
 		return sizeof(Vert);

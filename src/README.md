@@ -8,6 +8,7 @@ I could make a board for this, but im soloing this now so simple todo list inste
 - integrate a basic UI lib, this is already started, needs finish & test & integrate
 - test suite !! for not the graphics, lots of other stuff. regression test on the main branch would be fun and useful 
 ## small - med things
+- fix the resource tracking system -- it works, but sucks
 - include skybox renderer
 - included basic renderer -- render basic screen space shapes, colored or textured.
 - faster text renderer -- instance it

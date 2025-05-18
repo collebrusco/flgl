@@ -2,12 +2,12 @@
 #define TEXTURE_H
 
 #include "../gfx.h"
-#include "GL_Object.h"
+#include "../../device_object.h"
 #include <string>
 
 typedef uint32_t texture_unit_t;
 
-class Texture : public GL_Object {
+class Texture : public DeviceObject {
 protected:
 	uint32_t handle;
 	GLenum target;
@@ -63,7 +63,7 @@ public:
 		 	GLsizei height,
 		 	const void * data=nullptr);
 
-	void destroy() override final;
+	void destroy();
 };
 
 #endif /* TEXTURE_H */
