@@ -2,7 +2,7 @@
 #define VERTEX_ARRAY_H
 
 #include "../gfx.h"
-#include "GL_Object.h"
+#include "../../device_object.h"
 
 template<typename T>
 class VertexBuffer;
@@ -10,7 +10,7 @@ class VertexBuffer;
 template<typename T>
 class InstanceBuffer;
 
-class VertexArray : public GL_Object {
+class VertexArray : public DeviceObject {
 	uint32_t handle;
 	uint32_t maxi;
 public:
@@ -22,7 +22,7 @@ public:
 	uint32_t id() const;
 	uint32_t max_index() const;
 	bool active() const;
-	void destroy() override final;
+	void destroy();
 
 	void attrib(GLuint index,
 				GLint dimension,

@@ -23,7 +23,7 @@ void Framebuffer::create() {
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	LOG_DBG("created %d", framebuffer);
-	this->enlist(new Framebuffer(*this));
+	this->enlist(FRAMEBUFFER, this->framebuffer);
 }
 
 void Framebuffer::clear(GLbitfield mask) {
@@ -54,7 +54,7 @@ bool Framebuffer::complete() const {
 }
 
 void Framebuffer::destroy() {
-	this->delist();
+	this->delist(framebuffer);
 	LOG_DBG("destroyed %d", framebuffer);
 	glDeleteFramebuffers(1, &framebuffer);
 	framebuffer = 0xFFFFFFFF;

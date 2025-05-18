@@ -5,7 +5,7 @@
  */
 #ifndef INSTANCED_BUFFER_H
 #define INSTANCED_BUFFER_H
-#include "Buffer.h"
+#include "GL_Buffer.h"
 #include "VertexArray.h"
 #include <flgl/glm.h>
 
@@ -36,10 +36,10 @@ typedef struct IntancedAttirbute_2v4 {
 } 										   iAttr_2v4;
 
 template<typename Attrib>
-class InstanceBuffer : public Buffer {
+class InstanceBuffer : public GL_Buffer {
 public:
 
-	InstanceBuffer() : Buffer(GL_ARRAY_BUFFER) {}
+	InstanceBuffer() : GL_Buffer(GL_ARRAY_BUFFER) {}
 
 	size_t isize() const {
 		return sizeof(Attrib);

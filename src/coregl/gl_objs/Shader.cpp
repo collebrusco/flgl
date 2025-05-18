@@ -32,7 +32,7 @@ Shader::~Shader(){}
 
 void Shader::create(const char* vFileName, const char* fFileName){
     compileAndLink(vFileName, fFileName);
-    this->enlist(new Shader(*this));
+    this->enlist(SHADER, programId);
     LOG_DBG("created %d", programId);
 }
 
@@ -183,7 +183,7 @@ void Shader::unbind() {
 }
 
 void Shader::destroy(){
-    this->delist();
+    this->delist(programId);
     LOG_DBG("destroyed %d", programId);
     glDeleteProgram(programId);
 }

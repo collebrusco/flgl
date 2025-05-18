@@ -63,11 +63,11 @@ void Graphics::polygon_mode(GLenum mode, GLenum face) {
 
 void Graphics::destroy(){
     isinit = false;
-    if (GL_Object::nobjs()) {
-        LOG_WRN("destroying the gl with %lu gpu objects still allocated. ensure this is intended");
+    if (DeviceObject::nobjs()) {
+        LOG_WRN("destroying the gl with %lu gpu objects still allocated. ensure this is intended", DeviceObject::nobjs());
     }
-    LOG_INF("destroying %lu objects...", GL_Object::nobjs());
-    GL_Object::destroy_all();
+    LOG_INF("destroying %lu objects...", DeviceObject::nobjs());
+    DeviceObject::destroy_all();
     LOG_INF("destroying glfw...");
     glfwTerminate();
     LOG_INF("gfx destroyed");

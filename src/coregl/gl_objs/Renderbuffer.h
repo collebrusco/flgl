@@ -2,9 +2,9 @@
 #define RENDERBUFFER_H
 
 #include "../gfx.h"
-#include "GL_Object.h"
+#include "../../device_object.h"
 
-class Renderbuffer : public GL_Object {
+class Renderbuffer : public DeviceObject {
 private:
 	uint32_t handle;
 	uint32_t _w, _h;
@@ -21,7 +21,7 @@ public:
 
 	void alloc(GLenum target, GLsizei width, GLsizei height);
 
-	void destroy() override final;
+	void destroy();
 };
 
 #endif

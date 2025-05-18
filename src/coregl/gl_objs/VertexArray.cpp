@@ -10,7 +10,7 @@ VertexArray::VertexArray() {
 void VertexArray::create() {
 	glGenVertexArrays(1, &handle);
 	LOG_DBG("created %d", handle);
-	this->enlist(new VertexArray(*this));
+	this->enlist(VERTEXARRAY, handle);
 }
 
 void VertexArray::bind() const {
@@ -38,7 +38,7 @@ bool VertexArray::active() const {
 }
 
 void VertexArray::destroy() {
-	this->delist();
+	this->delist(handle);
 	LOG_DBG("destroyed %d", handle);
 	glDeleteBuffers(1, &handle);
 	handle = 0xFFFFFFFF;
