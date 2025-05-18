@@ -44,12 +44,6 @@ bool AL_Source::playing() const {
     return state == AL_PLAYING;
 }
 
-bool AL_Source::finished() const { /* TODO this could just be stopped to, no?... */
-    ALint state;
-    alGetSourcei(handle, AL_SOURCE_STATE, &state);
-    return state == AL_STOPPED;
-}
-
 void AL_Source::set_gain(float gain) {
     alSourcef(handle, AL_GAIN, gain);
 }

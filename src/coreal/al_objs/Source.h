@@ -26,7 +26,6 @@ struct AL_Source : public DeviceObject {
     void stop();
     void rewind();
     bool playing() const;
-    bool finished() const;
 
     void set_gain(float gain);
     float get_gain() const;
