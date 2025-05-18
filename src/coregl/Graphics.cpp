@@ -67,7 +67,7 @@ void Graphics::destroy(){
         LOG_WRN("destroying the gl with %lu gpu objects still allocated. ensure this is intended", DeviceObject::nobjs());
     }
     LOG_INF("destroying %lu objects...", DeviceObject::nobjs());
-    DeviceObject::destroy_all();
+    DeviceObject::destroy_gl();
     LOG_INF("destroying glfw...");
     glfwTerminate();
     LOG_INF("gfx destroyed");

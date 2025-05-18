@@ -6,9 +6,13 @@
 #define AL_BUFFER_H
 #include <stdint.h>
 #include "../al.h"
+#include "../../device_object.h"
 
-struct AL_Buffer {
+struct AL_Buffer : public DeviceObject {
     uint32_t handle;
+    AL_Buffer();
+    void create();
+    void destroy();
 };
 
 #endif /* AL_BUFFER_H */

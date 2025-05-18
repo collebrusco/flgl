@@ -1,5 +1,6 @@
 #include "Audio.h"
 #include <flgl/logger.h>
+#include "../device_object.h"
 LOG_MODULE(audio);
 
 ALCdevice* Audio::dev = 0;
@@ -24,6 +25,7 @@ void Audio::init(const char* device) {
 }
 
 void Audio::destroy() {
+    DeviceObject::destroy_al();
     context_current(false);
     alcDestroyContext(ctx);
     alcCloseDevice(dev);

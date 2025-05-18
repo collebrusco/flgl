@@ -10,7 +10,7 @@ void Texture::active_unit(texture_unit_t unit) {
 }
 
 
-Texture::Texture(GLenum target) {
+Texture::Texture(GLenum target) : DeviceObject(TEXTURE) {
 	handle = _w = _h = 0xFFFFFFFF;
 	this->target = target;
 }
@@ -165,7 +165,7 @@ Texture Texture::from_file(std::string const& file, bool pix) {
 void Texture::create() {
 	glGenTextures(1, &handle);
     LOG_DBG("created %d", handle);
-    this->enlist(TEXTURE, handle);
+    this->enlist(handle);
 }
 
 uint32_t Texture::id() const {
