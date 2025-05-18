@@ -3,7 +3,7 @@
 LOG_MODULE(Framebuffer);
 
 
-Framebuffer::Framebuffer() {
+Framebuffer::Framebuffer() : DeviceObject(FRAMEBUFFER) {
 	framebuffer = 0xFFFFFFFF;
 }
 // #include <iostream> 
@@ -23,7 +23,7 @@ void Framebuffer::create() {
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	LOG_DBG("created %d", framebuffer);
-	this->enlist(FRAMEBUFFER, this->framebuffer);
+	this->enlist(this->framebuffer);
 }
 
 void Framebuffer::clear(GLbitfield mask) {

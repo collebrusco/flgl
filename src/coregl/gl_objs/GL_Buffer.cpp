@@ -2,14 +2,14 @@
 #include <flgl/logger.h>
 LOG_MODULE(GL_Buffer);
 
-GL_Buffer::GL_Buffer(GLenum t) {
+GL_Buffer::GL_Buffer(GLenum t) : DeviceObject(GLBUFFER) {
 	type = t;
 	handle = 0xFFFFFFFF;
 }
 
 void GL_Buffer::create() {
 	glGenBuffers(1, &handle);
-	this->enlist(BUFFER, handle);
+	this->enlist(handle);
 	LOG_DBG("created %d", handle);
 }
 

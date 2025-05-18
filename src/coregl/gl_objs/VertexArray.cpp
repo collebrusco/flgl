@@ -2,7 +2,7 @@
 #include <flgl/logger.h>
 LOG_MODULE(VertexArray);
 
-VertexArray::VertexArray() {
+VertexArray::VertexArray() : DeviceObject(VERTEXARRAY) {
 	maxi = 0;
 	handle = 0xFFFFFFFF;
 }
@@ -10,7 +10,7 @@ VertexArray::VertexArray() {
 void VertexArray::create() {
 	glGenVertexArrays(1, &handle);
 	LOG_DBG("created %d", handle);
-	this->enlist(VERTEXARRAY, handle);
+	this->enlist(handle);
 }
 
 void VertexArray::bind() const {

@@ -3,14 +3,14 @@
 LOG_MODULE(Renderbuffer);
 
 
-Renderbuffer::Renderbuffer() {
+Renderbuffer::Renderbuffer() : DeviceObject(RENDERBUFFER) {
 	handle = _w = _h = 0xFFFFFFFF;
 }
 
 void Renderbuffer::create() {
 	glGenRenderbuffers(1, &handle);
 	LOG_DBG("created %d", handle);
-	this->enlist(RENDERBUFFER, handle);;
+	this->enlist(handle);;
 }
 
 

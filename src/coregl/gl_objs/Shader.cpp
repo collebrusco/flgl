@@ -22,9 +22,9 @@ static uint32_t numShaders = 0;
 
 using namespace std;
 
-Shader::Shader(){}
+Shader::Shader() : DeviceObject(SHADER) {}
 
-Shader::Shader(uint32_t p) {
+Shader::Shader(uint32_t p) : Shader() {
     programId = p;
 }
 
@@ -32,7 +32,7 @@ Shader::~Shader(){}
 
 void Shader::create(const char* vFileName, const char* fFileName){
     compileAndLink(vFileName, fFileName);
-    this->enlist(SHADER, programId);
+    this->enlist(programId);
     LOG_DBG("created %d", programId);
 }
 
