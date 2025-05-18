@@ -16,6 +16,9 @@ void Audio::init(const char* device) {
     }
 	dev_name = alcGetString(dev, ALC_DEVICE_SPECIFIER);
 	LOG_INF("initialized openal %s", dev_name.c_str());
+    if (!alIsExtensionPresent("ALC_EXT_EFX")) {
+        LOG_WRN("EFX unsupported!");
+    }
 	ctx = alcCreateContext(dev, 0);
 	if (!ctx || !alcMakeContextCurrent(ctx)) {
         LOG_ERR("audio context could not be opened");
@@ -25,7 +28,7 @@ void Audio::init(const char* device) {
 }
 
 void Audio::destroy() {
-    DeviceObject::destroy_al();
+    LOG_INF("al destroyed");
     context_current(false);
     alcDestroyContext(ctx);
     alcCloseDevice(dev);
