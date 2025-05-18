@@ -6,6 +6,8 @@
 #ifndef AUDIO_H
 #define AUDIO_H
 #include "al.h"
+#include "al_objs/AL_Buffer.h"
+#include "al_objs/Source.h"
 #include <string>
 
 struct Audio {

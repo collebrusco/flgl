@@ -9,10 +9,24 @@
 #include "../../device_object.h"
 
 struct AL_Buffer : public DeviceObject {
-    uint32_t handle;
     AL_Buffer();
+    AL_Buffer(uint32_t h);
     void create();
     void destroy();
+
+    inline uint32_t id() const {return handle;}
+
+    void buffer_mono(const int8_t*const dat, size_t size, size_t freq);
+    void buffer_mono(const int16_t*const dat, size_t size, size_t freq);
+    void buffer_stereo(const int8_t*const dat, size_t size, size_t freq);
+    void buffer_stereo(const int16_t*const dat, size_t size, size_t freq);
+
+    void buffer_mono(std::vector<int8_t> const& v, size_t freq);
+    void buffer_mono(std::vector<int16_t> const& v, size_t freq);
+    void buffer_stereo(std::vector<int8_t> const& v, size_t freq);
+    void buffer_stereo(std::vector<int16_t> const& v, size_t freq);
+private:
+    uint32_t handle;
 };
 
 #endif /* AL_BUFFER_H */
