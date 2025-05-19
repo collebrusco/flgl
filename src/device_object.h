@@ -5,7 +5,7 @@
  */
 #ifndef DEVICE_OBJECT_H
 #define DEVICE_OBJECT_H
-
+#include <stdint.h>
 #include <vector>
 #include <unordered_map>
 
