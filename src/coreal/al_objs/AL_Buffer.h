@@ -5,6 +5,8 @@
 #ifndef AL_BUFFER_H
 #define AL_BUFFER_H
 #include <stdint.h>
+#include <string>
+#include <cstring>
 #include "../al.h"
 #include "../../device_object.h"
 
