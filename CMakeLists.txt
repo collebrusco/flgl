@@ -5,7 +5,31 @@ set(CMAKE_CXX_STANDARD 20)
 
 find_package(OpenGL REQUIRED)
 
-find_package(OpenAL REQUIRED)
+if (WIN32)
+    message(STATUS "Checking for OpenAL at C:/Program Files (x86)/OpenAL 1.1 SDK")
+
+    find_path(OPENAL_INCLUDE_DIR al.h
+        PATHS "C:/Program Files (x86)/OpenAL 1.1 SDK/include"
+    )
+
+    find_library(OPENAL_LIBRARY OpenAL32
+        PATHS "C:/Program Files (x86)/OpenAL 1.1 SDK/libs/Win64"
+            "C:/Program Files (x86)/OpenAL 1.1 SDK/libs/Win32"
+    )
+
+
+    message(STATUS "Resolved OPENAL_INCLUDE_DIR to: ${OPENAL_INCLUDE_DIR}")
+    message(STATUS "Resolved OPENAL_LIBRARY to: ${OPENAL_LIBRARY}")
+
+    if(NOT OPENAL_INCLUDE_DIR OR NOT OPENAL_LIBRARY)
+        message(FATAL_ERROR
+            "Could not find OpenAL in 'C:/Program Files (x86)/OpenAL 1.1 SDK'.\n"
+            "Please install the OpenAL SDK there (default) and try again."
+        )
+    endif()
+else()
+    find_package(OpenAL REQUIRED)
+endif()
 
 add_subdirectory(lib/glfw)
 

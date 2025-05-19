@@ -1,5 +1,5 @@
 /** 
- * al.h 
+ * openal.h 
  * flgl
  * created 05/15/25 by frank collebrusco
  */
@@ -10,8 +10,8 @@
 	#include <OpenAL/al.h>
 	#include <OpenAL/alc.h>
 #else
-	#include <AL/al.h>
-	#include <AL/alc.h>
+	#include <al.h>
+	#include <alc.h>
 #endif
 
 
