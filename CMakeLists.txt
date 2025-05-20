@@ -1,10 +1,12 @@
 cmake_minimum_required(VERSION 3.10)
 project(FLGL)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 20) # i don't think this needs to be 20
 
+# opengl
 find_package(OpenGL REQUIRED)
 
+# openal
 if (WIN32)
     message(STATUS "Checking for OpenAL at C:/Program Files (x86)/OpenAL 1.1 SDK")
 
@@ -31,15 +33,20 @@ else()
     find_package(OpenAL REQUIRED)
 endif()
 
+# glfw
 add_subdirectory(lib/glfw)
 
+# glad
 add_library(GLAD lib/glad/src/glad.c)
 target_include_directories(GLAD PUBLIC lib/glad/include)
 
+# glfw & glad includes
 include_directories(inc lib/glfw/include lib/glad/include ${OPENGL_INCLUDE_DIR})
 
+# flgl source
 file(GLOB_RECURSE FLGL_SOURCES "src/*.cpp")
 
+# extra warnings
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wextra -Wpedantic")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wunused-variable -Werror=unused-variable")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wcast-qual")
@@ -48,13 +55,17 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wc99-extensions -Werror=c99-extensions -Wvla-extension -Werror=vla-extension")
 endif()
 
+# flgl library
 add_library(${PROJECT_NAME} ${FLGL_SOURCES})
 
+# link opengl, public glfw include
 target_link_libraries(${PROJECT_NAME} PRIVATE ${OPENGL_gl_LIBRARY})
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/include)
 
+# link, include openal
 target_include_directories(${PROJECT_NAME} PUBLIC ${OPENAL_INCLUDE_DIR})
 target_link_libraries(${PROJECT_NAME} PUBLIC ${OPENAL_LIBRARY})
 
+# link, include glfw & glad
 target_link_libraries(${PROJECT_NAME} PUBLIC GLAD glfw ${OPENGL_LIBRARIES})
 target_include_directories(${PROJECT_NAME} PUBLIC ${OPENGL_INCLUDE_DIR})

@@ -15,14 +15,44 @@ struct Audio {
     static void destroy();
     static bool is_init();
 
-    static ALCdevice* device();
-    static std::string const& device_name();
-    static ALCcontext* context();
-    static void context_current(bool cur = true);
+
+    struct Context {
+        Context(ALCcontext* c = 0);
+        void destroy();
+        ALCcontext* handle() const;
+
+        bool set_current(bool c = true);
+        bool is_current() const;
+
+    private:
+        ALCcontext* ctx;
+    };
+    
+    struct Device {
+        Device();
+        bool create(const char* name);
+        void destroy();
+        std::string const& name() const;
+        ALCdevice* handle() const;
+        inline bool open() const {return handle();}
+
+        Context create_context();
+
+        int get_frequency() const;
+        int get_refresh_rate() const;
+        int get_mono_source_count() const;
+        int get_stereo_source_count() const;
+
+    private:
+        ALCdevice* dev;
+        std::string _name;
+    };
+
+    static Device& device();
+    static Context& context();
 private:
-    static ALCdevice* dev;
-    static std::string dev_name;
-    static ALCcontext* ctx;
+    static Device dev;
+    static Context ctx;
 };
 
 #endif /* AUDIO_H */
