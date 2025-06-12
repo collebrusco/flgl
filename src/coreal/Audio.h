@@ -5,7 +5,7 @@
  */
 #ifndef AUDIO_H
 #define AUDIO_H
-#include "openal.h"
+#include "oal.h"
 #include "al_objs/AL_Buffer.h"
 #include "al_objs/Source.h"
 #include "al_objs/AL_Context.h"

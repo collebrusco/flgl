@@ -5,7 +5,7 @@
  */
 #ifndef AL_CONTEXT_H
 #define AL_CONTEXT_H
-#include "openal.h"
+#include "../oal.h"
 #include <flgl/glm.h>
 
 struct AL_Context {
