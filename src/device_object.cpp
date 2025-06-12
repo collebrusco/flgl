@@ -1,7 +1,7 @@
 #include "device_object.h"
 
 #include "coregl/gfx.h"
-#include "coreal/openal.h"
+#include "coreal/oal.h"
 #include <flgl/logger.h>
 LOG_MODULE(globj);
 using namespace std;

@@ -7,7 +7,7 @@
 #include <stdint.h>
 #include <string>
 #include <cstring>
-#include "../openal.h"
+#include "../oal.h"
 #include "../../device_object.h"
 
 struct AL_Buffer : public DeviceObject {

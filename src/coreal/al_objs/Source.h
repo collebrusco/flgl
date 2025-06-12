@@ -5,7 +5,7 @@
 #ifndef SOURCE_H
 #define SOURCE_H
 #include <flgl/glm.h>
-#include "../openal.h"
+#include "../oal.h"
 #include "../../device_object.h"
 #include "AL_Buffer.h"
 
