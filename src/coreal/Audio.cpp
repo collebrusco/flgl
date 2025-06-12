@@ -33,8 +33,8 @@ std::string const& Audio::Device::name() const {return _name;}
 
 ALCdevice* Audio::Device::handle() const {return dev;}
 
-Audio::Context Audio::Device::create_context() {
-    Audio::Context c(alcCreateContext(handle(), 0));
+AL_Context Audio::Device::create_context() {
+    AL_Context c(alcCreateContext(handle(), 0));
     if (!c.handle()) {
         LOG_ERR("could not create ctx on device \"%s\"", name().c_str());
         return c;
@@ -70,51 +70,15 @@ int Audio::Device::get_stereo_source_count() const {
 
 
 
-Audio::Context::Context(ALCcontext* c) {
-    ctx = c;
-}
-
-void Audio::Context::destroy() {
-    alcDestroyContext(ctx);
-    LOG_INF("context %p destroyed", ctx);
-    ctx = 0;
-}
-
-ALCcontext* Audio::Context::handle() const {
-    return ctx;
-}
-
-bool Audio::Context::set_current(bool c) {
-    if (!handle()) {
-        LOG_ERR("can't make null ctx current");
-        return false;
-    }
-    if (alcMakeContextCurrent(c ? handle() : 0) != ALC_TRUE) {
-        LOG_ERR("can't make context %p current", handle());
-        return false;
-    }
-    return true;
-}
-
-bool Audio::Context::is_current() const {
-    return alcGetCurrentContext() == ctx;
-}
-
-
-
-
-
-
-
-
-
 
 
 
 Audio::Device Audio::dev;
-Audio::Context Audio::ctx;
 
 void Audio::init(const char* device) {
+    /** TODO right now this sets up one default device, which Audio owns.
+     * may want to better suit for user owning dev creation
+     * TODO test & fix for (bc it prob won't work) dropping the device mid-program */
 	dev.create(0);
     if (!dev.open()) {
         LOG_ERR("no audio device available");
@@ -124,19 +88,12 @@ void Audio::init(const char* device) {
     if (!alIsExtensionPresent("ALC_EXT_EFX")) {
         LOG_WRN("EFX unsupported!");
     }
-	ctx = dev.create_context();
-	if (!ctx.handle() || !ctx.set_current()) {
-        LOG_ERR("audio context could not be opened");
-        ctx.destroy();
-        dev.destroy();
-	}
 }
 
 void Audio::destroy() {
-    LOG_INF("al destroyed");
-    ctx.set_current(false);
-    ctx.destroy();
+    DeviceObject::destroy_al();
     dev.destroy();
+    LOG_INF("al destroyed");
 }
 
 bool Audio::is_init() {
@@ -145,9 +102,5 @@ bool Audio::is_init() {
 
 Audio::Device& Audio::device() {
     return dev;
-}
-
-Audio::Context& Audio::context() {
-    return ctx;
 }
 

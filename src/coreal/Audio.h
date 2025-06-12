@@ -8,6 +8,7 @@
 #include "openal.h"
 #include "al_objs/AL_Buffer.h"
 #include "al_objs/Source.h"
+#include "al_objs/AL_Context.h"
 #include <string>
 
 struct Audio {
@@ -15,19 +16,6 @@ struct Audio {
     static void destroy();
     static bool is_init();
 
-
-    struct Context {
-        Context(ALCcontext* c = 0);
-        void destroy();
-        ALCcontext* handle() const;
-
-        bool set_current(bool c = true);
-        bool is_current() const;
-
-    private:
-        ALCcontext* ctx;
-    };
-    
     struct Device {
         Device();
         bool create(const char* name);
@@ -36,7 +24,7 @@ struct Audio {
         ALCdevice* handle() const;
         inline bool open() const {return handle();}
 
-        Context create_context();
+        AL_Context create_context();
 
         int get_frequency() const;
         int get_refresh_rate() const;
@@ -49,10 +37,8 @@ struct Audio {
     };
 
     static Device& device();
-    static Context& context();
 private:
     static Device dev;
-    static Context ctx;
 };
 
 #endif /* AUDIO_H */
