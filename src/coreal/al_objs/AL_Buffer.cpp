@@ -23,38 +23,43 @@ void AL_Buffer::destroy() {
     alDeleteBuffers(1, &handle);
 }
 
-void AL_Buffer::buffer_mono(const int8_t *const dat, size_t size, size_t freq)
-{
+/** size in number of samples */
+void AL_Buffer::buffer_mono(const int8_t *const dat, size_t size, size_t freq) {
     alBufferData(handle, AL_FORMAT_MONO8, dat, size * sizeof(int8_t), freq);
 }
 
+/** size in number of samples */
 void AL_Buffer::buffer_mono(const int16_t*const dat, size_t size, size_t freq) {
     alBufferData(handle, AL_FORMAT_MONO16, dat, size * sizeof(int16_t), freq);
 }
 
+/** size in number of samples counting L & R separately. stereo data is in left-first, interleaved format */
 void AL_Buffer::buffer_stereo(const int8_t*const dat, size_t size, size_t freq) {
     alBufferData(handle, AL_FORMAT_STEREO8, dat, size * sizeof(int8_t), freq);
 }
 
+/** size in number of samples counting L & R separately. stereo data is in left-first, interleaved format */
 void AL_Buffer::buffer_stereo(const int16_t*const dat, size_t size, size_t freq) {
     alBufferData(handle, AL_FORMAT_STEREO16, dat, size * sizeof(int16_t), freq);
 }
 
 
 void AL_Buffer::buffer_mono(std::vector<int8_t> const& v, size_t freq) {
-    this->buffer_mono(v.data(), v.size(), freq);
+    this->buffer_mono(v.data(), v.size() * sizeof(int8_t), freq);
 }
 
 void AL_Buffer::buffer_mono(std::vector<int16_t> const& v, size_t freq) {
-    this->buffer_mono(v.data(), v.size(), freq);
+    this->buffer_mono(v.data(), v.size() * sizeof(int16_t), freq);
 }
 
+/* stereo data is in left-first, interleaved format */
 void AL_Buffer::buffer_stereo(std::vector<int8_t> const& v, size_t freq) {
-    this->buffer_stereo(v.data(), v.size(), freq);
+    this->buffer_stereo(v.data(), v.size() * sizeof(int8_t), freq);
 }
 
+/* stereo data is in left-first, interleaved format */
 void AL_Buffer::buffer_stereo(std::vector<int16_t> const& v, size_t freq) {
-    this->buffer_stereo(v.data(), v.size(), freq);
+    this->buffer_stereo(v.data(), v.size() * sizeof(int16_t), freq);
 }
 
 
