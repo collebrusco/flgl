@@ -3,5 +3,6 @@
 
 #include "../../src/render/DefaultMeshes.h"
 #include "text_renderer.h"
+#include "camera.h"
 
 #endif /* FLGL_INC_RENDER */
