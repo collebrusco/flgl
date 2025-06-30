@@ -42,6 +42,7 @@ Ray Camera::mouse_ray(vec2 mp) const {
 }
 
 void Camera::update(){
+    this->sub_update();
     if (this->update_condition()){
         this->updateProj();
         this->updateView();
@@ -130,6 +131,9 @@ float Camera::readFar() const {
     return far;
 }
 
+glm::vec3 Camera::getRight() const {
+    return glm::cross(this->readLook(), this->readUp());
+}
 
 //********************************ORTHO********************************
 OrthoCamera::OrthoCamera(){
@@ -225,7 +229,7 @@ MousePerspectiveCamera::MousePerspectiveCamera(glm::vec3 p, glm::vec3 l, glm::ve
 {
 }
 
-void MousePerspectiveCamera::update()
+void MousePerspectiveCamera::sub_update()
 {
     if (mult != 0. && (window.mouse.delta.x != 0 || window.mouse.delta.y != 0)) {
         setShouldUpdate();
@@ -236,6 +240,64 @@ void MousePerspectiveCamera::update()
                     glm::cos(phi),
                     -1 * glm::sin(phi) * glm::cos(theta));
         up = cross(look, anchor);
+    }
+    this->Camera::update();
+}
+
+MouseMovePerspectiveCamera::MouseMovePerspectiveCamera(float move, float fly, float boost)
+ : move(move), fly(fly), boost(boost) {
+}
+
+void MouseMovePerspectiveCamera::set_move(float m) {
+    move = m;
+}
+
+float MouseMovePerspectiveCamera::get_move() const {
+    return move;
+}
+
+void MouseMovePerspectiveCamera::set_fly(float m) {
+    fly = m;
+}
+
+float MouseMovePerspectiveCamera::get_fly() const {
+    return fly;
+}
+
+void MouseMovePerspectiveCamera::set_boost(float m) {
+    boost = m;
+}
+
+float MouseMovePerspectiveCamera::get_boost() const {
+    return boost;
+}
+
+void MouseMovePerspectiveCamera::sub_update() {
+}
+
+void MouseMovePerspectiveCamera::update(float dt) {
+    this->MousePerspectiveCamera::sub_update();
+
+    if (window.keyboard[GLFW_KEY_TAB].down) {
+        dt *= boost;
+    }
+    if (window.keyboard[GLFW_KEY_W].down) {
+        this->getPos() += dt * move * this->readLook();
+    }
+    if (window.keyboard[GLFW_KEY_A].down) {
+        this->getPos() -= dt * move * this->getRight();
+    }
+    if (window.keyboard[GLFW_KEY_S].down) {
+        this->getPos() -= dt * move * this->readLook();
+    }
+    if (window.keyboard[GLFW_KEY_D].down) {
+        this->getPos() += dt * move * this->getRight();
+    }
+    if (window.keyboard[GLFW_KEY_SPACE].down) {
+        this->getPos() += dt * fly * this->readUp();
+    }
+    if (window.keyboard[GLFW_KEY_LEFT_SHIFT].down) {
+        this->getPos() -= dt * fly * this->readUp();
     }
     this->Camera::update();
 }

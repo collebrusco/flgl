@@ -39,6 +39,7 @@ protected:
     mutable glm::mat4 _iview;
     mutable glm::mat4 _iproj;
     float near, far;
+    inline virtual void sub_update() {};
 public:
     Camera();
     virtual ~Camera() = default;
@@ -59,8 +60,10 @@ public:
     glm::vec3 const& readUp() const;
     float readNear() const;
     float readFar() const;
+
+    glm::vec3 getRight() const;
     
-    virtual void update(); // if you override this, call this->Camera::update() from it
+    void update();
     glm::mat4 const& updateView();
     virtual glm::mat4 const& updateProj() = 0;
     glm::mat4 const& view() const;
@@ -106,7 +109,25 @@ public:
     glm::vec2 sens;
     MousePerspectiveCamera();
     MousePerspectiveCamera(glm::vec3 p, glm::vec3 l, glm::vec3 u, float n, float f, float fv);
-    virtual void update() override final;
+    virtual void sub_update() override;
+};
+
+/* this thing is ok for quickly getting a moving camera
+   but neither this nor the perspective cam should be used for real */
+class MouseMovePerspectiveCamera : public MousePerspectiveCamera {
+    float move, fly, boost;
+public:
+    MouseMovePerspectiveCamera(float move = 1.f, float fly = 1.f, float boost = 8.f);
+    void set_move(float m);
+    float get_move() const;
+    void set_fly(float m);
+    float get_fly() const;
+    void set_boost(float m);
+    float get_boost() const;
+
+    virtual void sub_update() override;
+
+    void update(float dt);
 };
 
 #endif /* Camera_h */
