@@ -2,6 +2,26 @@
 #include <iostream>
 #include <cassert>
 
+
+const glm::vec3 DIRECTIONS[] = {
+    (glm::vec3{ 0.f, 1.f, 0.f}),
+    (glm::vec3{ 0.f,-1.f, 0.f}),
+    (glm::vec3{ 0.f, 0.f, 1.f}),
+    (glm::vec3{ 0.f, 0.f,-1.f}),
+    (glm::vec3{ 1.f, 0.f, 0.f}),
+    (glm::vec3{-1.f, 0.f, 0.f})
+};
+
+const glm::ivec3 IDIRECTIONS[] = {
+    (glm::ivec3{ 0, 1, 0}),
+    (glm::ivec3{ 0,-1, 0}),
+    (glm::ivec3{ 0, 0, 1}),
+    (glm::ivec3{ 0, 0,-1}),
+    (glm::ivec3{ 1, 0, 0}),
+    (glm::ivec3{-1, 0, 0})
+};
+
+
 // LineIntersect
 LineIntersect::LineIntersect(Ray const& ray, float t_val, bool did_hit)
     : incoming(&ray), t(t_val), hit(did_hit) {}

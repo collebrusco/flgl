@@ -9,6 +9,46 @@
 #include <cmath>
 #include <flgl/glm.h>
 
+
+
+typedef enum {
+    TOP     = 0,
+    BOT     = 1,
+    NORTH   = 2,
+    SOUTH   = 3,
+    EAST    = 4,
+    WEST    = 5,
+    ORIENTATION_LAST,
+} orientation_e;
+
+extern const glm::vec3 DIRECTIONS[6];
+extern const glm::ivec3 IDIRECTIONS[6];
+
+#define V3_UP      (DIRECTIONS[TOP])
+#define V3_DOWN    (DIRECTIONS[BOT])
+#define V3_NORTH   (DIRECTIONS[NORTH])
+#define V3_SOUTH   (DIRECTIONS[SOUTH])
+#define V3_EAST    (DIRECTIONS[EAST])
+#define V3_WEST    (DIRECTIONS[WEST])
+
+#define V3_POSY    (DIRECTIONS[TOP])
+#define V3_NEGY    (DIRECTIONS[BOT])
+#define V3_POSZ    (DIRECTIONS[NORTH])
+#define V3_NEGZ    (DIRECTIONS[SOUTH])
+#define V3_POSX    (DIRECTIONS[EAST])
+#define V3_NEGX    (DIRECTIONS[WEST])
+
+#define V2_NORTH   (glm::vec2{ 0.f,  1.f})
+#define V2_SOUTH   (glm::vec2{ 0.f, -1.f})
+#define V2_EAST    (glm::vec2{ 1.f,  0.f})
+#define V2_WEST    (glm::vec2{-1.f,  0.f})
+#define IV2_NORTH  (glm::ivec2{ 0,  1})
+#define IV2_SOUTH  (glm::ivec2{ 0, -1})
+#define IV2_EAST   (glm::ivec2{ 1,  0})
+#define IV2_WEST   (glm::ivec2{-1,  0})
+
+
+
 /**
  * CAUTION: this is not extensively tested atm TODO test
  */

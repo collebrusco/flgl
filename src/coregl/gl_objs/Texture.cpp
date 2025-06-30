@@ -40,6 +40,7 @@ Texture::Texture(std::string const& file, bool pix) : Texture(GL_TEXTURE_2D) {
         fin.close();
     }
     //GET PIXELS
+    stbi_set_flip_vertically_on_load(false);
     uint8_t* pixels = stbi_load(path.c_str(), &w, &h, &c, 0);
 
     if (!pixels) {
@@ -95,12 +96,24 @@ Texture Texture::from_cubemap_files(const char *posx,
     Texture tex(GL_TEXTURE_CUBE_MAP);
     tex.create_bind();
 
-    const char *files[6] = {posx, negx, posy, negy, posz, negz};
+    const char *files[6] = {posx, negx, posy, negy, negz, posz};
 
     int w, h, c;
     for (int i = 0; i < 6; ++i)
     {
         std::string path = flglPathConfig::asset_path() + files[i] + ".png";
+        { // verify filepath
+            std::ifstream fin;
+            fin.open(path);
+            if (!fin){
+                path = flglPathConfig::flgl_path() + "res/default_textures/" + files[i] + ".png";
+                fin.open(path);
+                if (!fin) LOG_ERR("file %s not found!", path.c_str());
+                assert(fin);
+            }
+            fin.close();
+        }
+        stbi_set_flip_vertically_on_load(false);
         uint8_t *data = stbi_load(path.c_str(), &w, &h, &c, 0);
         if (!data)
         {

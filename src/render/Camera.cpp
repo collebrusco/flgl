@@ -282,16 +282,20 @@ void MouseMovePerspectiveCamera::update(float dt) {
         dt *= boost;
     }
     if (window.keyboard[GLFW_KEY_W].down) {
-        this->getPos() += dt * move * this->readLook();
+        glm::vec3 dir = this->readLook(); dir.y = 0; dir = glm::normalize(dir);
+        this->getPos() += dt * move * dir;
     }
     if (window.keyboard[GLFW_KEY_A].down) {
-        this->getPos() -= dt * move * this->getRight();
+        glm::vec3 dir = this->getRight(); dir.y = 0; dir = glm::normalize(dir);
+        this->getPos() -= dt * move * dir;
     }
     if (window.keyboard[GLFW_KEY_S].down) {
-        this->getPos() -= dt * move * this->readLook();
+        glm::vec3 dir = this->readLook(); dir.y = 0; dir = glm::normalize(dir);
+        this->getPos() -= dt * move * dir;
     }
     if (window.keyboard[GLFW_KEY_D].down) {
-        this->getPos() += dt * move * this->getRight();
+        glm::vec3 dir = this->getRight(); dir.y = 0; dir = glm::normalize(dir);
+        this->getPos() += dt * move * dir;
     }
     if (window.keyboard[GLFW_KEY_SPACE].down) {
         this->getPos() += dt * fly * this->readUp();
