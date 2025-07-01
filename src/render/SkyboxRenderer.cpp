@@ -66,7 +66,7 @@ void SkyboxRenderer::sync(Camera& cam) {
 
 void SkyboxRenderer::render() {
     glDisable(GL_DEPTH_TEST);
-    glDisable(GL_CULL_FACE);
+    glDisable(GL_CULL_FACE); /* TODO enabling this will reveal the messed up cube winding */
     glCullFace(GL_FRONT);
     glFrontFace(GL_CW);
     shader.bind();
