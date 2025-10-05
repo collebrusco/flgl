@@ -1,8 +1,17 @@
+
+CMFLAGS=$(shell if [ "$$OS" = "Windows_NT" ]; then "-G \"MinGW Makefiles\"" else "" fi)
+
 .PHONY: default
 default:
 	mkdir -p build
 	cd build && \
-	cmake .. && \
+	cmake $(CMFLAGS) .. && \
+	make
+
+db:
+	mkdir -p build
+	cd build && \
+	cmake $(CMFLAGS) -DCMAKE_BUILD_TYPE=Debug .. && \
 	make
 
 .PHONY: c
