@@ -1,5 +1,5 @@
 
-CMFLAGS=$(shell if [ "$$OS" = "Windows_NT" ]; then "-G \"MinGW Makefiles\"" else "" fi)
+CMFLAGS=$(shell [ "$$OS" = "Windows_NT" ] && echo '-G "MinGW Makefiles"' || echo '')
 
 .PHONY: default
 default:
