@@ -1,6 +1,10 @@
 **/.DS_Store
 *.DS_Store
 
-*.o
-build
-ign
+# cmake
+CMakeFiles/
+cmake_install.cmake
+Makefile
+CMakeCache.txt
+build/
+
