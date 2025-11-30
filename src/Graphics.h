@@ -34,6 +34,9 @@ public:
     static void enable_depth_test(bool en=true);
     static void wireframe(bool en=true);
     static void viewport(GLsizei width, GLsizei height, GLint x=0, GLint y=0);
+
+    static void enable_blending();
+    static void disable_blending();
     
     static void draw_arrays(GLenum mode, GLint first, GLsizei count); 
     static void draw_elements(GLenum mode, GLsizei count, GLenum type=GL_UNSIGNED_INT);

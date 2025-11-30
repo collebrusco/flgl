@@ -31,6 +31,16 @@ void Graphics::init(){
 
 }
 
+void Graphics::enable_blending() {
+    /** TODO more opts? */
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
+void Graphics::disable_blending() {
+    glDisable(GL_BLEND);
+}
+
 void Graphics::clear(){
     glClear(clearer);
 }
@@ -64,7 +74,7 @@ void Graphics::polygon_mode(GLenum mode, GLenum face) {
 void Graphics::destroy(){
     isinit = false;
     if (GL_Object::nobjs()) {
-        LOG_WRN("destroying the gl with %lu gpu objects still allocated. ensure this is intended");
+        LOG_WRN("destroying the gl with %lu gpu objects still allocated. ensure this is intended", GL_Object::nobjs());
     }
     LOG_INF("destroying %lu objects...", GL_Object::nobjs());
     GL_Object::destroy_all();

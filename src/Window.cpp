@@ -6,6 +6,7 @@ LOG_MODULE(Window);
 void WindowingCallbacks::size_callback(GLFWwindow *handle, int width, int height){
     glViewport(0, 0, width, height);
     Window& win = *reinterpret_cast<Window*>(glfwGetWindowUserPointer(handle));
+    win._pframe = win._frame;
     win._frame = glm::ivec2(width, height);
     win._aspect = (float)width / (float)height;
 }
@@ -106,6 +107,7 @@ void Window::create(const char* t, size_t x, size_t y){
     }
     LOG_DBG("Window created");
     glfwGetFramebufferSize(handle, &_frame.x, &_frame.y);
+    _pframe = _frame;
     int win_w,win_h; glfwGetWindowSize(handle,&win_w,&win_h);
     fr2win = (float)_frame.x / (float)win_w;
     _aspect = (float)frame.x / (float)frame.y;
@@ -185,6 +187,7 @@ void Window::update() {
     _mouse.update_data();
     int win_w,win_h; glfwGetWindowSize(handle,&win_w,&win_h);
     fr2win = (float)_frame.x / (float)win_w;
+    _pframe = _frame;
     poll_events();
     swap_buffers();
 }
@@ -192,6 +195,10 @@ void Window::destroy() {
     if (!active) return
     glfwDestroyWindow(handle);
     active = false;
+}
+
+bool Window::did_resize() const {
+    return _pframe != _frame;
 }
 
 void Window::close() {
