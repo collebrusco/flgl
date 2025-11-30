@@ -80,4 +80,11 @@ void InstanceBuffer<iAttr_2v4>::attach_to_vao(VertexArray& vao, size_t idx) cons
     vao.attrib(idx + 1, 4, GL_FLOAT, sizeof(iAttr_2v4), offsetof(iAttr_2v4, b), 1);
 }
 
+template<>
+void InstanceBuffer<iAttr_3v4>::attach_to_vao(VertexArray& vao, size_t idx) const {
+    vao.attrib(idx + 0, 4, GL_FLOAT, sizeof(iAttr_3v4), offsetof(iAttr_3v4, a), 1);
+    vao.attrib(idx + 1, 4, GL_FLOAT, sizeof(iAttr_3v4), offsetof(iAttr_3v4, b), 1);
+    vao.attrib(idx + 2, 4, GL_FLOAT, sizeof(iAttr_3v4), offsetof(iAttr_3v4, c), 1);
+}
+
 

@@ -44,12 +44,15 @@ void TextRenderer::_set_text(char* text) {
 	vec2 charpos;
 	size_t i = 0;
 
+	box = {0,1};
+
 	while (*text) {
 		char ch = *text; text++;
 		if (ch != '\n' && (ch < 32 || ch > 127)) ch = '*';
 		switch (ch) {
 		case '\n':
 			cursor.x = 0; cursor.y -= 9;
+			box.y++;
 			break;
 		case ' ':
 			cursor.x += 7;
@@ -70,6 +73,7 @@ void TextRenderer::_set_text(char* text) {
 			i += 4;
 			cursor.x += 7;
 		}
+		box.x = max(box.x, cursor.x / 7);
 	}
 
 	string_mesh.update(verts, elems);
@@ -104,6 +108,7 @@ void TextRenderer::render(int x, int y, int scale) const {
 }
 
 void TextRenderer::destroy() {
+	box = {-1,-1};
 	string_mesh.destroy();
 }
 
