@@ -22,9 +22,9 @@ EOF
 
 case "${1:-}" in
 	-h|--help) usage; exit 0 ;;
-	"")        echo "run.sh: missing <branch>" >&2; echo >&2; usage >&2; exit 2 ;;
+	"")        branch="$(git branch --show-current)" ;;
+	*)         branch="$1" ;;
 esac
-branch="$1"
 
 FLGL_URL="https://github.com/collebrusco/flgl.git"
 work="$(mktemp -d "${TMPDIR:-/tmp}/flgl-userflow.XXXXXX")"
