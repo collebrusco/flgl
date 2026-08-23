@@ -43,10 +43,13 @@ run_config() {
 	mkdir -p "$dir"
 	cd "$dir"
 
+	echo "--> git init + submodule add flgl@$branch (clones glfw/glm/miniaudio, ~slow)"
 	git init -q
-	git submodule add -q -b "$branch" "$FLGL_URL" lib/flgl
-	git submodule update -q --init --recursive
+	git submodule add -b "$branch" "$FLGL_URL" lib/flgl
+	git submodule update --init --recursive
+	echo "--> ./lib/flgl/user/setup.sh"
 	./lib/flgl/user/setup.sh
+	echo "--> make DISABLE='$disable'"
 	make DISABLE="$disable"
 
 	# MinGW appends .exe; accept either name.
