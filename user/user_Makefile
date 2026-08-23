@@ -1,36 +1,55 @@
+# =============================================================================
+#  your project's Makefile  —  builds your app against flgl (vendored at lib/flgl)
+#  installed by lib/flgl/user/setup.sh. all cross-platform knowledge lives in
+#  lib/flgl/flgl.mk; keep this file tiny.
+#
+#    make                    build with all flgl modules
+#    make DISABLE=coreal     build without audio
+#    make run | make clean
+# =============================================================================
 
-CMFLAGS=$(shell [ "$$OS" = "Windows_NT" ] && echo '-G "MinGW Makefiles"' || echo '')
+# to permanently drop a module, set it here (before the include) instead of on
+# the command line, e.g.:  FLGL_DISABLE := coreal
+include lib/flgl/flgl.mk
 
-.PHONY: default
-default:
-	mkdir -p build
-	cd build && \
-	cmake $(CMFLAGS) .. && \
-	make
+APP    := build/untitled
+SRC    := $(wildcard src/*.cpp)
 
-db:
-	mkdir -p build
-	cd build && \
-	cmake $(CMFLAGS) -DCMAKE_BUILD_TYPE=Debug .. && \
-	make
+CXX    ?= g++
+CXXSTD := -std=c++20
+OPT    ?= -O2 -g
+WARN   := -Wall -Wextra -Wpedantic -Werror=return-type
 
-.PHONY: c
-c: cm
-	rm -rf ./build/CMakeFiles/untitled.dir/src/
+.PHONY: all
+all: $(APP)
 
-.PHONY: cm
-cm:
-	rm -f ./build/CMakeCache.txt
-	rm -f ./build/cmake_install.cmake
-	rm -f ./build/cmake_install.local.cmake
-	rm -f ./build/packaging.json
-	rm -f ./build/compile_commands.json
+$(APP): $(SRC) $(FLGL_LIB)
+	@mkdir -p $(dir $@)
+	$(CXX) $(CXXSTD) $(OPT) $(WARN) $(FLGL_CPPFLAGS) $(SRC) $(FLGL_LIB) $(FLGL_LDLIBS) -o $@
 
+# always delegate the library build to flgl's own make (it's correctly
+# incremental, and this keeps the module set / DISABLE in sync).
+$(FLGL_LIB): FORCE
+	$(MAKE) -C lib/flgl DISABLE="$(FLGL_DISABLE)"
+FORCE:
 
-.PHONY: ca
-ca:
-	rm -rf ./build/
-	
-.PHONY: r
-r: default
-	./build/untitled
+# and let the user call it
+.PHONY flgl
+flgl: $(FLGL_LIB)
+
+.PHONY: run clean build c b r cb br cbr
+
+build: all
+
+c: clean
+b: build
+r: run
+cb: c b
+br: b r
+cbr: c b r
+
+run: all
+	./$(APP)
+
+clean:
+	rm -rf build

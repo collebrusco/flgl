@@ -1,20 +1,54 @@
-# Building FLGL Based GFX Projects
-flgl uses [CMake](https://cmake.org/) as its included build system. Typical flgl projects will then use CMake as well.      
-This file will walk you through the process of building a typical project that uses flgl for graphics. 
-The process is pretty much the same as for any CMake project but I'll still briefly go through it here.
-      
-[Install CMake](https://cmake.org/download/) and make sure the `cmake` command is on your path.     
-CMake works by reading generalized cross platform build instructions in `CMakeLists.txt` and generating a platform specific build system for the project.      
+# Building an flgl project
 
-## MacOS / Linux
-Run `cmake .` in the project repo directory to get CMake to generate your Makefile, then run `make` to build your executable. Run with ./<exec_name>     
+flgl is **vendored and built with plain `make`** — no cmake, and nothing to
+install system-wide beyond a C/C++ compiler and `make` (the OS windowing/audio
+frameworks flgl needs are always present). You add flgl as a git submodule, run
+the setup script once, and build.
 
-## Windows
-On windows, you must tell CMake what build system to use.        
-Because I like using a bash command line, my personally prefered method is to install [Git Bash](https://gitforwindows.org/), the [winlibs MinGW clang compiler](https://winlibs.com/), and [Make for Windows](https://gnuwin32.sourceforge.net/packages/make.htm).         
-Add the minGW and make executables to your path and then with Git Bash, run 
-`cmake -G "MinGW Makefiles" .` followed by `make` and build your exe. Don't move the exe; create a shortcut if you'd like.       
-      
-CMake is also capable of working with Visual Studio and other Windows build systems. Google that but if you're into Visual studio you can have CMake generate a solution for you that you can just double click and get into VS's IDE with. That'll work with these projects as well
+## Quick start
 
-      
+From an empty project directory:
+
+```sh
+git init
+git submodule add https://github.com/collebrusco/flgl.git lib/flgl
+git submodule update --init --recursive
+./lib/flgl/user/setup.sh
+make
+```
+
+`setup.sh` drops three things into your project:
+
+- `Makefile`     — a tiny build file that includes `lib/flgl/flgl.mk`
+- `.gitignore`   — ignores `build/`
+- `src/main.cpp` — an flgl hello-world to start from
+
+Then:
+
+```sh
+make                  # build with all flgl modules
+make DISABLE=coreal   # build without the audio module
+make run              # build and run (./build/untitled)
+make clean
+```
+
+## How the build works
+
+All the cross-platform knowledge — platform detection, which modules exist,
+compiler/linker flags — lives in `lib/flgl/flgl.mk`. Your `Makefile` just
+includes it and uses the handles it exports (`FLGL_CPPFLAGS`, `FLGL_LDLIBS`,
+`FLGL_LIB`). Building your app also (re)builds `lib/flgl/build/libflgl.a` with
+the matching module set.
+
+To permanently disable a module, set it above the include in your `Makefile`:
+
+```make
+FLGL_DISABLE := coreal
+include lib/flgl/flgl.mk
+```
+
+## Platforms
+
+- **macOS / Linux**: system compiler + `make`. Nothing else.
+- **Windows**: build under MSYS2 with MinGW `gcc` + `make` (no cmake, no MSVC).
+  Same commands from the MSYS2 shell.
