@@ -13,6 +13,6 @@
 #include "../../lib/glm/glm/ext/matrix_clip_space.hpp"
 #include "../../lib/glm/glm/gtx/quaternion.hpp"
 #include "../../lib/glm/glm/gtx/component_wise.hpp"
-#include "../../src/math/flgl_math.h"
+#include "../../src/foundation/math/flgl_math.h"
 #endif
 
