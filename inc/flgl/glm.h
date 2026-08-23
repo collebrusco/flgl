@@ -1,6 +1,7 @@
 #ifndef FLGL_INC_LIB_GLM_H
 #define FLGL_INC_LIB_GLM_H
 #define GLM_FORCE_SWIZZLE
+#define GLM_ENABLE_EXPERIMENTAL   // we use gtx/ extensions (quaternion, component_wise)
 #include <stdint.h>
 #include "../../lib/glm/glm/glm.hpp"
 #include "../../lib/glm/glm/gtc/type_ptr.hpp"

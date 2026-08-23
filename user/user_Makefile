@@ -34,7 +34,7 @@ $(FLGL_LIB): FORCE
 FORCE:
 
 # and let the user call it
-.PHONY flgl
+.PHONY: flgl
 flgl: $(FLGL_LIB)
 
 .PHONY: run clean build c b r cb br cbr
