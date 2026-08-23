@@ -7,7 +7,7 @@
 //
 
 #include "Camera.h"
-#include "../inc/flgl.h"
+#include <flgl.h>
 #include <flgl/logger.h>
 
 using namespace glm;

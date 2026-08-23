@@ -1,7 +1,8 @@
 #include "device_object.h"
 
-#include "coregl/gfx.h"
-#include "coreal/oal.h"
+#ifdef FLGL_MODULE_COREGL
+#include "foundation/coregl/gfx.h"
+#endif
 #include <flgl/logger.h>
 LOG_MODULE(globj);
 using namespace std;
@@ -56,6 +57,7 @@ void DeviceObject::delist(handle_t handle) {
 }
 
 void DeviceObject::destroy_gl() {
+#ifdef FLGL_MODULE_COREGL
 	LOG_INF("destroying gl: %lu buffers, %lu shaders, "
 			"%lu textures, %lu rendbufs, %lu framebufs, %lu vaos",
 			lookups[GLBUFFER].size(),
@@ -78,16 +80,12 @@ void DeviceObject::destroy_gl() {
 	lookups[FRAMEBUFFER].clear();
 	glDeleteVertexArrays(lookups[VERTEXARRAY].size(), lookups[VERTEXARRAY].data());
 	lookups[VERTEXARRAY].clear();
+#endif /* FLGL_MODULE_COREGL */
 }
 
 void DeviceObject::destroy_al() {
-	LOG_INF("destroying al: %lu albufs, %lu sources",
-			lookups[ALBUFFER].size(),
-			lookups[SOURCE].size());
-	alDeleteBuffers(lookups[ALBUFFER].size(), lookups[ALBUFFER].data());
-	lookups[ALBUFFER].clear();
-	alDeleteSources(lookups[SOURCE].size(), lookups[SOURCE].data());
-	lookups[SOURCE].clear();
+	/* miniaudio manages its own object lifetimes — nothing to sweep here.
+	 * kept for API symmetry with destroy_gl and future flgl audio tracking. */
 }
 
 void DeviceObject::lookup_vector::push(handle_t h) {

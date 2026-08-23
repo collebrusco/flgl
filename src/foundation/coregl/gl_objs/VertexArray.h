@@ -2,7 +2,7 @@
 #define VERTEX_ARRAY_H
 
 #include "../gfx.h"
-#include "../../device_object.h"
+#include "../../../device_object.h"
 
 template<typename T>
 class VertexBuffer;

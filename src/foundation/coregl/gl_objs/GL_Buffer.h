@@ -2,7 +2,7 @@
 #define FLGL_BUFFER_H
 
 #include "../gfx.h"
-#include "../../device_object.h"
+#include "../../../device_object.h"
 #include <vector>
 
 class GL_Buffer : public DeviceObject {

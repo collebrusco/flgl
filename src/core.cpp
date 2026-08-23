@@ -1,6 +1,6 @@
 #include "core.h"
 
+#ifdef FLGL_MODULE_COREGL
 Graphics gl;
-Audio al;
 Window window;
-
+#endif

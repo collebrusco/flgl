@@ -1,0 +1,19 @@
+# module.mk — OPTIONAL per-module build extras.
+# copy this into any src/foundation/<mod>/ or src/framework/<mod>/ dir that
+# needs more than "compile my .cpp files". delete the lines you don't use.
+#
+# a module WITHOUT a module.mk still works: all its *.cpp are compiled and it
+# gets -DFLGL_MODULE_<NAME> automatically. this file is only for extra deps.
+#
+# available platform vars (set by the top Makefile): WINDOW_LIBS, AUDIO_LIBS,
+# GLFW_DEF, PLATFORM.
+
+# extra system/vendored libs to link:
+# MODULE_LDLIBS   += -lsomething
+
+# extra C or ObjC sources to compile into the lib (e.g. a vendored dep):
+# MODULE_CSRC     += lib/foo/foo.c
+# MODULE_MSRC     += lib/foo/foo.m
+
+# extra preprocessor flags for the whole build when this module is on:
+# MODULE_CPPFLAGS += -DFLGL_HAS_SOMETHING
