@@ -15,7 +15,6 @@
 #define _LOG_USE_FILE 0
 
 #if _LOG_USE_FILE == 1
-	#include <flgl.h>
-	// file name
-	#define _LOG_FILE (flgl::config.flgl_path() + "logs/log.txt").c_str()
+	// file name (FLGL_PATH is a build-time -D define)
+	#define _LOG_FILE (FLGL_PATH "logs/log.txt")
 #endif

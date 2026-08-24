@@ -3,7 +3,7 @@
 LOG_MODULE(Framebuffer);
 
 
-Framebuffer::Framebuffer() : DeviceObject(FRAMEBUFFER) {
+Framebuffer::Framebuffer() /* TODO: rewrite resource tracking : DeviceObject(FRAMEBUFFER) */ {
 	framebuffer = 0xFFFFFFFF;
 }
 // #include <iostream> 
@@ -23,7 +23,7 @@ void Framebuffer::create() {
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	LOG_DBG("created %d", framebuffer);
-	this->enlist(this->framebuffer);
+	/* TODO: rewrite resource tracking */ /* this->enlist(this->framebuffer); */
 }
 
 void Framebuffer::clear(GLbitfield mask) {
@@ -54,7 +54,7 @@ bool Framebuffer::complete() const {
 }
 
 void Framebuffer::destroy() {
-	this->delist(framebuffer);
+	/* TODO: rewrite resource tracking */ /* this->delist(framebuffer); */
 	LOG_DBG("destroyed %d", framebuffer);
 	glDeleteFramebuffers(1, &framebuffer);
 	framebuffer = 0xFFFFFFFF;

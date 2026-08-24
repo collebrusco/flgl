@@ -5,11 +5,11 @@
 #include <fstream>
 #include <string>
 #include "../gfx.h"
-#include "../../../device_object.h"
+/* TODO: rewrite resource tracking */ /* #include "../../../core/device_object.h" */
 #include <flgl/glm.h>
 #include <vector>
 
-class Shader : public DeviceObject {
+class Shader /* TODO: rewrite resource tracking : public DeviceObject */ {
 private:
     GLuint programId;
     bool compileFragShader(GLuint& fShader, const char* vFileName);

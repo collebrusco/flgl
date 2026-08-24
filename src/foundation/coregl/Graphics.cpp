@@ -73,12 +73,14 @@ void Graphics::polygon_mode(GLenum mode, GLenum face) {
 
 void Graphics::destroy(){
     isinit = false;
+    /* TODO: rewrite resource tracking
     size_t nobs = DeviceObject::nobjs(DeviceObject::TYPE_GLS);
     if (nobs) {
         LOG_WRN("destroying the gl with %lu gpu objects still allocated. ensure this is intended", nobs);
     }
     LOG_INF("destroying %lu objects...", nobs);
     DeviceObject::destroy_gl();
+    */
     LOG_INF("destroying glfw...");
     glfwTerminate();
     LOG_INF("gfx destroyed");

@@ -2,11 +2,11 @@
 #define FRAMEBUFFER_H
 
 #include "../gfx.h"
-#include "../../../device_object.h"
+/* TODO: rewrite resource tracking */ /* #include "../../../core/device_object.h" */
 #include "Texture.h"
 #include "Renderbuffer.h"
 
-class Framebuffer : public DeviceObject {
+class Framebuffer /* TODO: rewrite resource tracking : public DeviceObject */ {
 	GLuint framebuffer;
 public:
 	Framebuffer();

@@ -2,14 +2,14 @@
 #include <flgl/logger.h>
 LOG_MODULE(GL_Buffer);
 
-GL_Buffer::GL_Buffer(GLenum t) : DeviceObject(GLBUFFER) {
+GL_Buffer::GL_Buffer(GLenum t) /* TODO: rewrite resource tracking : DeviceObject(GLBUFFER) */ {
 	type = t;
 	handle = 0xFFFFFFFF;
 }
 
 void GL_Buffer::create() {
 	glGenBuffers(1, &handle);
-	this->enlist(handle);
+	/* TODO: rewrite resource tracking */ /* this->enlist(handle); */
 	LOG_DBG("created %d", handle);
 }
 
@@ -42,7 +42,7 @@ bool GL_Buffer::active() const {
 }
 
 void GL_Buffer::destroy() {
-	this->delist(handle);
+	/* TODO: rewrite resource tracking */ /* this->delist(handle); */
 	LOG_DBG("destroyed %d", handle);
 	glDeleteBuffers(1, &handle);
 	handle = 0xFFFFFFFF;

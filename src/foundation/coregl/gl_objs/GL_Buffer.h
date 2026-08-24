@@ -2,10 +2,10 @@
 #define FLGL_BUFFER_H
 
 #include "../gfx.h"
-#include "../../../device_object.h"
+/* TODO: rewrite resource tracking */ /* #include "../../../core/device_object.h" */
 #include <vector>
 
-class GL_Buffer : public DeviceObject {
+class GL_Buffer /* TODO: rewrite resource tracking : public DeviceObject */ {
 protected:
 	uint32_t handle;
 	uint32_t num_elem;

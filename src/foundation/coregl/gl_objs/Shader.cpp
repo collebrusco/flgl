@@ -22,7 +22,7 @@ static uint32_t numShaders = 0;
 
 using namespace std;
 
-Shader::Shader() : DeviceObject(SHADER) {}
+Shader::Shader() /* TODO: rewrite resource tracking : DeviceObject(SHADER) */ {}
 
 Shader::Shader(uint32_t p) : Shader() {
     programId = p;
@@ -32,7 +32,7 @@ Shader::~Shader(){}
 
 void Shader::create(const char* vFileName, const char* fFileName){
     compileAndLink(vFileName, fFileName);
-    this->enlist(programId);
+    /* TODO: rewrite resource tracking */ /* this->enlist(programId); */
     LOG_DBG("created %d", programId);
 }
 
@@ -47,11 +47,11 @@ static std::string cpath(std::string p){
 
 const char* Shader::getShaderSource(string shad, string type){
     ifstream fin;
-    string path = flglPathConfig::shader_path() + shad + ".glsl";
+    string path = FLGL_SHADER_PATH + shad + ".glsl";
     LOG_DBG("looking for shader %s at %s", shad.c_str(), path.c_str());
     fin.open(path);
     if (!fin){
-        path = flglPathConfig::flgl_path() + "res/default_shaders/" + shad + ".glsl";
+        path = FLGL_PATH "res/default_shaders/" + shad + ".glsl";
         LOG_DBG("not found, now looking for %s at %s", shad.c_str(), path.c_str());
         fin.open(path);
         if (!fin){
@@ -183,7 +183,7 @@ void Shader::unbind() {
 }
 
 void Shader::destroy(){
-    this->delist(programId);
+    /* TODO: rewrite resource tracking */ /* this->delist(programId); */
     LOG_DBG("destroyed %d", programId);
     glDeleteProgram(programId);
 }

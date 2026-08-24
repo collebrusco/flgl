@@ -26,8 +26,7 @@ make
 Then:
 
 ```sh
-make                  # build with all flgl modules
-make DISABLE=coreal   # build without the audio module
+make                  # build against the modules listed in your Makefile
 make run              # build and run (./build/untitled)
 make clean
 ```
@@ -40,11 +39,24 @@ includes it and uses the handles it exports (`FLGL_CPPFLAGS`, `FLGL_LDLIBS`,
 `FLGL_LIB`). Building your app also (re)builds `lib/flgl/build/libflgl.a` with
 the matching module set.
 
-To permanently disable a module, set it above the include in your `Makefile`:
+Which flgl modules you build against is a **whitelist** near the top of your
+`Makefile` — one `MODULES += <name>` line per module. Delete a line to drop that
+module: its code isn't compiled or linked, and its headers go invisible (you get
+a clean compile error if you use it, never a mystery link error).
 
 ```make
-FLGL_DISABLE := coreal
+MODULES += coregl      # OpenGL + window
+MODULES += render      # renderer
+# ...delete the lines you don't need
 include lib/flgl/flgl.mk
+```
+
+You can also override the set from the command line for a one-off build, either
+as a whitelist or a blacklist (the two are mutually exclusive):
+
+```sh
+make MODULES="coregl render"   # build ONLY these
+make DISABLE=coreal            # build everything except this
 ```
 
 ## Platforms

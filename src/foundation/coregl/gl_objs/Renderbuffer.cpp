@@ -3,14 +3,14 @@
 LOG_MODULE(Renderbuffer);
 
 
-Renderbuffer::Renderbuffer() : DeviceObject(RENDERBUFFER) {
+Renderbuffer::Renderbuffer() /* TODO: rewrite resource tracking : DeviceObject(RENDERBUFFER) */ {
 	handle = _w = _h = 0xFFFFFFFF;
 }
 
 void Renderbuffer::create() {
 	glGenRenderbuffers(1, &handle);
 	LOG_DBG("created %d", handle);
-	this->enlist(handle);;
+	/* TODO: rewrite resource tracking */ /* this->enlist(handle); */;
 }
 
 
@@ -43,7 +43,7 @@ void Renderbuffer::alloc(GLenum target, GLsizei width, GLsizei height) {
 
 
 void Renderbuffer::destroy() {
-	this->delist(handle);
+	/* TODO: rewrite resource tracking */ /* this->delist(handle); */
 	LOG_DBG("destroyed %d", handle);
 	glDeleteRenderbuffers(1, &handle);
 }

@@ -87,7 +87,7 @@ void TextRenderer::render(int x, int y, int scale) const {
 	glFrontFace(GL_CW);
 	glCullFace(GL_BACK);
 	glEnable(GL_CULL_FACE);
-	gl.wireframe(false);
+	Graphics::wireframe(false);
 	glDisable(GL_DEPTH_TEST);
 
 	vec2 p = {((((float)x) / window.frame.x)*2.)-1., ((1.-(((float)y) / window.frame.y))*2.)-1.};
@@ -101,7 +101,7 @@ void TextRenderer::render(int x, int y, int scale) const {
 	text_shader.uVec2("uScale", s);
 	text_shader.uVec3("uColor", text_color);
 
-	gl.draw_mesh(string_mesh);
+	Graphics::draw_mesh(string_mesh);
 
 	string_mesh.unbind();
 	text_shader.unbind();

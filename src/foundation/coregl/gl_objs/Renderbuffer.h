@@ -2,9 +2,9 @@
 #define RENDERBUFFER_H
 
 #include "../gfx.h"
-#include "../../../device_object.h"
+/* TODO: rewrite resource tracking */ /* #include "../../../core/device_object.h" */
 
-class Renderbuffer : public DeviceObject {
+class Renderbuffer /* TODO: rewrite resource tracking : public DeviceObject */ {
 private:
 	uint32_t handle;
 	uint32_t _w, _h;
