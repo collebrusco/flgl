@@ -2,7 +2,7 @@
 #include <flgl/logger.h>
 LOG_MODULE(VertexArray);
 
-VertexArray::VertexArray() : DeviceObject(VERTEXARRAY) {
+VertexArray::VertexArray() /* TODO: rewrite resource tracking : DeviceObject(VERTEXARRAY) */ {
 	maxi = 0;
 	handle = 0xFFFFFFFF;
 }
@@ -10,7 +10,7 @@ VertexArray::VertexArray() : DeviceObject(VERTEXARRAY) {
 void VertexArray::create() {
 	glGenVertexArrays(1, &handle);
 	LOG_DBG("created %d", handle);
-	this->enlist(handle);
+	/* TODO: rewrite resource tracking */ /* this->enlist(handle); */
 }
 
 void VertexArray::bind() const {
@@ -38,7 +38,7 @@ bool VertexArray::active() const {
 }
 
 void VertexArray::destroy() {
-	this->delist(handle);
+	/* TODO: rewrite resource tracking */ /* this->delist(handle); */
 	LOG_DBG("destroyed %d", handle);
 	glDeleteBuffers(1, &handle);
 	handle = 0xFFFFFFFF;

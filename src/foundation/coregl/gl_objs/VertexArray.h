@@ -2,7 +2,7 @@
 #define VERTEX_ARRAY_H
 
 #include "../gfx.h"
-#include "../../../device_object.h"
+/* TODO: rewrite resource tracking */ /* #include "../../../core/device_object.h" */
 
 template<typename T>
 class VertexBuffer;
@@ -10,7 +10,7 @@ class VertexBuffer;
 template<typename T>
 class InstanceBuffer;
 
-class VertexArray : public DeviceObject {
+class VertexArray /* TODO: rewrite resource tracking : public DeviceObject */ {
 	uint32_t handle;
 	uint32_t maxi;
 public:

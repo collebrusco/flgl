@@ -2,8 +2,7 @@
 #define FLGL_INC_ALL
 
 #include "allocators.h"
-#include "core.h"
-#include "config.h"
+#include "coregl.h"
 #include "driver.h"
 #include "ecs.h"
 #include "glm.h"

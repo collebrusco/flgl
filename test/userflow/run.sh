@@ -7,7 +7,6 @@ usage() {
 	cat <<'EOF'
 usage: ./run.sh <branch>
 
-end-to-end test of the flgl user flow on this OS. for the given branch it:
   clones flgl from GitHub, runs user/setup.sh in a fresh throwaway project, and
   builds the hello-world twice — with all modules, and with audio off
   (DISABLE=coreal). scratch is left under $TMPDIR for inspection.

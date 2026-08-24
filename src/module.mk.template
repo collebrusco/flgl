@@ -1,19 +1,25 @@
-# module.mk — OPTIONAL per-module build extras.
-# copy this into any src/foundation/<mod>/ or src/framework/<mod>/ dir that
-# needs more than "compile my .cpp files". delete the lines you don't use.
-#
-# a module WITHOUT a module.mk still works: all its *.cpp are compiled and it
-# gets -DFLGL_MODULE_<NAME> automatically. this file is only for extra deps.
-#
-# available platform vars (set by the top Makefile): WINDOW_LIBS, AUDIO_LIBS,
-# GLFW_DEF, PLATFORM.
+# module.mk: optional per-module build extras
+# copy this into any src/foundation/**/ or src/framework/**/ dir that needs anything here.
 
-# extra system/vendored libs to link:
-# MODULE_LDLIBS   += -lsomething
+# a module WITHOUT a module.mk still works: all its *.cpp are compiled and it gets -DFLGL_MODULE_<NAME> automatically.
+# by default the logger is always a dependency of any module
 
-# extra C or ObjC sources to compile into the lib (e.g. a vendored dep):
-# MODULE_CSRC     += lib/foo/foo.c
-# MODULE_MSRC     += lib/foo/foo.m
+# EVERY var below is prefixed with THIS module's directory name
+# !! replace `mod` placeholder below w module name !!
 
-# extra preprocessor flags for the whole build when this module is on:
-# MODULE_CPPFLAGS += -DFLGL_HAS_SOMETHING
+# platform vars flgl exposes
+# FLGL_PLATFORM, FLGL_WINDOW_LIBS, FLGL_AUDIO_LIBS, FLGL_GLFW_CSRC/_MSRC, FLGL_DIR.
+
+# !! dependencies !!
+# you must list any modules you use here. by default, only the logger is a dependency.
+# mod_DEPS     := coregl logger
+
+# extra linker args
+# mod_LDLIBS   := -lsomething
+
+# extra C or ObjC sources
+# mod_CSRC     := lib/foo/foo.c
+# mod_MSRC     := lib/foo/foo.m
+
+# extra preprocessor flags
+# mod_CPPFLAGS := -DFLGL_HAS_SOMETHING

@@ -10,7 +10,7 @@ void Texture::active_unit(texture_unit_t unit) {
 }
 
 
-Texture::Texture(GLenum target) : DeviceObject(TEXTURE) {
+Texture::Texture(GLenum target) /* TODO: rewrite resource tracking : DeviceObject(TEXTURE) */ {
 	handle = _w = _h = 0xFFFFFFFF;
 	this->target = target;
 }
@@ -27,12 +27,12 @@ void Texture::wrap(GLenum wrap) {
 
 Texture::Texture(std::string const& file, bool pix) : Texture(GL_TEXTURE_2D) {
 	int w, h, c;
-    std::string path = flglPathConfig::asset_path() + file + ".png";
+    std::string path = FLGL_ASSET_PATH + file + ".png";
     { // verify filepath
         std::ifstream fin;
         fin.open(path);
         if (!fin){
-            path = flglPathConfig::flgl_path() + "res/default_textures/" + file + ".png";
+            path = FLGL_PATH "res/default_textures/" + file + ".png";
             fin.open(path);
             if (!fin) LOG_ERR("file %s not found!", path.c_str());
             assert(fin);
@@ -100,7 +100,7 @@ Texture Texture::from_cubemap_files(const char *posx,
     int w, h, c;
     for (int i = 0; i < 6; ++i)
     {
-        std::string path = flglPathConfig::asset_path() + files[i] + ".png";
+        std::string path = std::string(FLGL_ASSET_PATH) + files[i] + ".png";
         uint8_t *data = stbi_load(path.c_str(), &w, &h, &c, 0);
         if (!data)
         {
@@ -165,7 +165,7 @@ Texture Texture::from_file(std::string const& file, bool pix) {
 void Texture::create() {
 	glGenTextures(1, &handle);
     LOG_DBG("created %d", handle);
-    this->enlist(handle);
+    /* TODO: rewrite resource tracking */ /* this->enlist(handle); */
 }
 
 uint32_t Texture::id() const {
@@ -243,7 +243,7 @@ void Texture::alloc_rgb(GLsizei width, GLsizei height, const void * data) {
 }
 
 void Texture::destroy() {
-    this->delist(handle);
+    /* TODO: rewrite resource tracking */ /* this->delist(handle); */
     LOG_DBG("destroyed %d", handle);
 	glDeleteTextures(1, &handle);
 }

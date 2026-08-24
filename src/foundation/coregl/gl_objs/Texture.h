@@ -2,12 +2,12 @@
 #define TEXTURE_H
 
 #include "../gfx.h"
-#include "../../../device_object.h"
+/* TODO: rewrite resource tracking */ /* #include "../../../core/device_object.h" */
 #include <string>
 
 typedef uint32_t texture_unit_t;
 
-class Texture : public DeviceObject {
+class Texture /* TODO: rewrite resource tracking : public DeviceObject */ {
 protected:
 	uint32_t handle;
 	GLenum target;

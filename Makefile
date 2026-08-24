@@ -1,19 +1,17 @@
-# =============================================================================
-#  flgl  —  builds build/libflgl.a  (pure make, everything vendored)
-#  all the knowledge lives in flgl.mk; this file is just rules.
+#  flgl  —  builds build/libflgl.a
+#  wraps flgl.mk
 #
-#    make                 build with all modules
-#    make DISABLE=coreal  build with the audio module off
+#    make                          build with all modules
+#    make DISABLE=coreal           build with the audio module off (blacklist)
+#    make MODULES="coregl render"  build ONLY these (whitelist)
 #    make info | clean
-# =============================================================================
 include flgl.mk
 
-CXX    ?= g++
-CC     ?= gcc
+CXX    ?= clang++
+CC     ?= clang
 BUILD  ?= build
-# apple's linker only reads BSD-format archives; a homebrew GNU `ar` on PATH
-# produces GNU-format ones it rejects. pin the native archiver on macOS,
-# overriding make's built-in default but honoring an explicit user AR=.
+# macos workaround: if you've installed a compiler w homebrew you may have GNU ar in your path
+# whereas the linker will expect BSD format archs. so, on mac, make sure its /usr/bin/ar
 AR     ?= ar
 ifeq ($(FLGL_PLATFORM),macos)
 ifeq ($(origin AR),default)
@@ -55,5 +53,6 @@ clean:
 info:
 	@echo "platform : $(FLGL_PLATFORM)"
 	@echo "modules  : $(FLGL_MODULES)"
-	@echo "disabled : $(FLGL_DISABLE)"
+	@echo "pulled   : $(FLGL_PULLED)"
+	@echo "disabled : $(filter-out $(FLGL_MODULES),$(FLGL_ALL))"
 	@echo "link     : $(FLGL_LDLIBS)"

@@ -3,6 +3,8 @@
 #include <flgl/logger.h>
 LOG_MODULE(Window);
 
+Window window;
+
 void WindowingCallbacks::size_callback(GLFWwindow *handle, int width, int height){
     glViewport(0, 0, width, height);
     Window& win = *reinterpret_cast<Window*>(glfwGetWindowUserPointer(handle));
