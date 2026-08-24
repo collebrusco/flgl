@@ -51,12 +51,13 @@ MODULES += render      # renderer
 include lib/flgl/flgl.mk
 ```
 
-You can also override the set from the command line for a one-off build, either
-as a whitelist or a blacklist (the two are mutually exclusive):
+You can also adjust the set from the command line for a one-off build. `MODULES`
+and `DISABLE` compose — `DISABLE` removes from whatever `MODULES` (or the default
+of all) selects, so it works even with the whitelist above:
 
 ```sh
 make MODULES="coregl render"   # build ONLY these
-make DISABLE=coreal            # build everything except this
+make DISABLE=coreal            # build the Makefile's set minus audio
 ```
 
 ## Platforms

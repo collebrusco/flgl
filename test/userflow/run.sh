@@ -49,7 +49,7 @@ run_config() {
 	echo "--> ./lib/flgl/user/setup.sh"
 	./lib/flgl/user/setup.sh
 	echo "--> make DISABLE='$disable'"
-	make DISABLE="$disable"
+	make -j DISABLE="$disable"
 
 	# MinGW appends .exe; accept either name.
 	if [ -x build/untitled ] || [ -x build/untitled.exe ]; then

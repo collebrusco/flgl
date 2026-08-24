@@ -6,9 +6,9 @@
 #  flgl's own Makefile wraps this to build libflgl.a
 #  a project's Makefile includes this as well to compile and link against flgl (include paths, etc..)
 
-#  - inputs (optional, mutually exclusive)
-#      MODULES = "coregl render ..."  whitelist
-#      DISABLE = "coreal ecs ..."     blacklist
+#  - inputs (optional; they compose: enabled = (MODULES or all) minus DISABLE)
+#      MODULES = "coregl render ..."  whitelist — only these (+ their deps)
+#      DISABLE = "coreal ecs ..."     remove these from the selection
 #      none = all modules
 
 #  - outputs
@@ -111,33 +111,32 @@ ifneq ($(strip $(FLGL_BADVARS)),)
   $(error flgl: unrecognized module.mk var(s): $(FLGL_BADVARS) — vars must be prefixed with the module's own directory name, e.g. coregl_DEPS in src/foundation/coregl/module.mk)
 endif
 
-# resolve requested modules and their deps
-# add deps of deps until all are added or none left
+# resolve enabled modules: (MODULES if set, else all) minus DISABLE — they compose.
+# FLGL_STEP adds one level of deps; FLGL_CLOSE recurses to a fixpoint.
 FLGL_STEP  = $(sort $(1) $(foreach m,$(1),$($(m)_DEPS)))
 FLGL_CLOSE = $(if $(filter-out $(1),$(call FLGL_STEP,$(1))),$(call FLGL_CLOSE,$(call FLGL_STEP,$(1))),$(1))
 
+# base selection: the whitelist (dep-closed) if MODULES is given, else everything
 ifneq ($(strip $(MODULES)),)
-  # whitelist
-  ifneq ($(strip $(DISABLE)),)
-    $(error flgl: MODULES (whitelist) and DISABLE (blacklist) are mutually exclusive — set one, not both)
-  endif
-  # bad module
   FLGL_UNKNOWN := $(filter-out $(FLGL_ALL),$(MODULES))
   ifneq ($(FLGL_UNKNOWN),)
     $(error flgl: unknown module(s) in MODULES: $(FLGL_UNKNOWN)  (available: $(FLGL_ALL)))
   endif
-  # in whitelist case, explore dep tree
   FLGL_REQUESTED := $(filter $(FLGL_ALL),$(MODULES))
-  FLGL_MODULES   := $(filter $(FLGL_ALL),$(call FLGL_CLOSE,$(FLGL_REQUESTED)))
-  FLGL_PULLED    := $(filter-out $(FLGL_REQUESTED),$(FLGL_MODULES))
+  FLGL_SELECTED  := $(filter $(FLGL_ALL),$(call FLGL_CLOSE,$(FLGL_REQUESTED)))
 else
-  # blacklist
-  # in this case, validate that we aren't disabling a dependency of something left on
-  FLGL_MODULES := $(filter-out $(DISABLE),$(FLGL_ALL))
-  FLGL_BROKEN  := $(sort $(foreach m,$(FLGL_MODULES),$(filter $(DISABLE),$($(m)_DEPS))))
-  ifneq ($(strip $(FLGL_BROKEN)),)
-    $(error flgl: DISABLE drops $(FLGL_BROKEN), still needed by enabled modules — also disable what depends on it, or use a MODULES whitelist)
-  endif
+  FLGL_REQUESTED := $(FLGL_ALL)
+  FLGL_SELECTED  := $(FLGL_ALL)
+endif
+
+# DISABLE removes from the selection (so `make DISABLE=x` works on a whitelist too)
+FLGL_MODULES := $(filter-out $(DISABLE),$(FLGL_SELECTED))
+FLGL_PULLED  := $(filter-out $(FLGL_REQUESTED),$(FLGL_MODULES))
+
+# fail if DISABLE drops a module a kept one still needs
+FLGL_BROKEN  := $(sort $(foreach m,$(FLGL_MODULES),$(filter $(DISABLE),$($(m)_DEPS))))
+ifneq ($(strip $(FLGL_BROKEN)),)
+  $(error flgl: DISABLE drops $(FLGL_BROKEN), still needed by enabled modules — also disable what depends on it)
 endif
 
 # collect build inputs for enabled modules

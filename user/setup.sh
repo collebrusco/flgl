@@ -53,6 +53,6 @@ copy() {   # copy <from> <to> — skip if <to> exists, unless -f
 mkdir -p src
 copy "$src/user_Makefile"   Makefile
 copy "$src/gitignore"       .gitignore
-copy "$src/hellowindow.cpp" src/main.cpp
+copy "$src/helloflgl.cpp"   src/main.cpp
 
 echo "flgl: done — 'make' to build, 'make run' to run."

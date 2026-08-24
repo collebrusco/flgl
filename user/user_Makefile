@@ -21,7 +21,7 @@ MODULES += render		# (framework)
 include lib/flgl/flgl.mk
 
 APP    := build/untitled
-SRC    := $(wildcard src/**/*.cpp)
+SRC    := $(shell find src -name '*.cpp')
 
 CXX    ?= g++
 CXXSTD := -std=c++20
