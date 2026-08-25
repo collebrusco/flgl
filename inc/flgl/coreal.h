@@ -2,7 +2,7 @@
 #define FLGL_INC_CORE_AUDIO
 
 #ifndef FLGL_MODULE_COREAL
-#  error "flgl: the coreal (audio) module is disabled for this build"
+    #error "flgl: coreal is disabled for this build"
 #endif
 
 /* for now coreal is a thin passthrough to vendored miniaudio.

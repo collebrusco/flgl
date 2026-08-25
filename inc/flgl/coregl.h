@@ -2,7 +2,7 @@
 #define FLGL_INC_CORE_GRAPHICS
 
 #ifndef FLGL_MODULE_COREGL
-#  error "flgl: the coregl (graphics/windowing) module is disabled for this build"
+    #error "flgl: coregl is disabled for this build"
 #endif
 
 #include "../../src/foundation/coregl/Graphics.h"

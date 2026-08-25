@@ -4,7 +4,7 @@
 namespace fs = std::filesystem;
 
 void flgl_logger::up() {
-	std::string fp = FLGL_PATH "logs";
+	std::string fp = _FLGL_PATH "logs";
 	if (!fs::exists(fp))
 		fs::create_directory(fp);
 }

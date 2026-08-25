@@ -154,8 +154,8 @@ FLGL_SHADER_PATH ?= shaders/
 # export vars
 FLGL_CORE_CPP := $(shell find $(FLGL_DIR)src/core -name '*.cpp')
 FLGL_CPPFLAGS := $(FLGL_INC) $(FLGL_DEFS) \
-                 -DFLGL_PATH='"$(FLGL_PATH)"' \
-                 -DFLGL_ASSET_PATH='"$(FLGL_ASSET_PATH)"' \
-                 -DFLGL_SHADER_PATH='"$(FLGL_SHADER_PATH)"'
+                 -D_FLGL_PATH='"$(FLGL_PATH)"' \
+                 -D_FLGL_ASSET_PATH='"$(FLGL_ASSET_PATH)"' \
+                 -D_FLGL_SHADER_PATH='"$(FLGL_SHADER_PATH)"'
 FLGL_LIB      := $(FLGL_DIR)build/libflgl.a
 FLGL_SRC      := $(FLGL_CORE_CPP) $(FLGL_MOD_CPP)   # flgl's own cpp (source-agg escape hatch)

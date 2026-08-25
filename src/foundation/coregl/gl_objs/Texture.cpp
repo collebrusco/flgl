@@ -27,12 +27,12 @@ void Texture::wrap(GLenum wrap) {
 
 Texture::Texture(std::string const& file, bool pix) : Texture(GL_TEXTURE_2D) {
 	int w, h, c;
-    std::string path = FLGL_ASSET_PATH + file + ".png";
+    std::string path = _FLGL_ASSET_PATH + file + ".png";
     { // verify filepath
         std::ifstream fin;
         fin.open(path);
         if (!fin){
-            path = FLGL_PATH "res/default_textures/" + file + ".png";
+            path = _FLGL_PATH "res/default_textures/" + file + ".png";
             fin.open(path);
             if (!fin) LOG_ERR("file %s not found!", path.c_str());
             assert(fin);
@@ -100,7 +100,7 @@ Texture Texture::from_cubemap_files(const char *posx,
     int w, h, c;
     for (int i = 0; i < 6; ++i)
     {
-        std::string path = std::string(FLGL_ASSET_PATH) + files[i] + ".png";
+        std::string path = std::string(_FLGL_ASSET_PATH) + files[i] + ".png";
         uint8_t *data = stbi_load(path.c_str(), &w, &h, &c, 0);
         if (!data)
         {
