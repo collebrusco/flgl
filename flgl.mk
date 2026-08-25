@@ -1,44 +1,43 @@
-#  flgl.mk — shared config, no build rules.
+# flgl.mk
+# given a module selection, the OS, and the modules on disk, 
+# resolve all the flags, paths, source lists and system libs needed to build flgl or build against it. 
+# flgl's own Makefile wraps this to build libflgl.a
+# a project's Makefile includes this as well to compile and link against flgl (include paths, etc..)
 
-#  given a module selection, the OS, and the modules on disk, resolve all the
-#  flags, paths, source lists and system libs needed to build flgl or build
-#  against it. 
-#  flgl's own Makefile wraps this to build libflgl.a
-#  a project's Makefile includes this as well to compile and link against flgl (include paths, etc..)
+# - inputs
+#     MODULES = "coregl render ..."  add these, includes deps implicitly
+#     DISABLE = "coreal ecs ..."     drop these, errors if one is depended on
+#     none = all modules
 
-#  - inputs (optional; they compose: enabled = (MODULES or all) minus DISABLE)
-#      MODULES = "coregl render ..."  whitelist — only these (+ their deps)
-#      DISABLE = "coreal ecs ..."     remove these from the selection
-#      none = all modules
+# - outputs
+#     FLGL_CPPFLAGS   include paths and required preproc defines to define the modules and platform
+#     FLGL_LDLIBS     OS frameworks/libs to link into the exe
+#     FLGL_LIB        path to libflgl.a
+#     FLGL_DIR        flgl's location
+#     FLGL_PLATFORM   macos | linux | windows.
+#     FLGL_MODULES    modules enabled after dep resolution (FLGL_ALL/FLGL_PULLED: info).
+#     FLGL_SRC        flgl's own .cpp (escape hatch; normally just link the .a).
+# flgl's Makefile also uses the raw lists: FLGL_BUILD_C/_M, FLGL_GLFW_DEF.
 
-#  - outputs
-#      FLGL_CPPFLAGS   include paths and required preproc defines to define the modules and platform
-#      FLGL_LDLIBS     OS frameworks/libs to link into the exe
-#      FLGL_LIB        path to libflgl.a
-#      FLGL_DIR        flgl's location
-#      FLGL_PLATFORM   macos | linux | windows.
-#      FLGL_MODULES    modules enabled after dep resolution (FLGL_ALL/FLGL_PULLED: info).
-#      FLGL_SRC        flgl's own .cpp (escape hatch; normally just link the .a).
-#  flgl's own Makefile also uses the raw lists: FLGL_BUILD_C/_M, FLGL_GLFW_DEF.
+# FLGL_* = everything flgl gives you. <name>_* = everything a module declares.
 
-#  naming: FLGL_* = everything flgl gives you. <name>_* = everything a module declares.
+# a module may add a module.mk
+# they can declare any of these extras, all optional
+# each MUST BE prefixed with its own dir name
+# - <name>_DEPS
+# - <name>_LDLIBS
+# - <name>_CSRC
+# - <name>_MSRC
+# - <name>_CPPFLAGS
+# it may also read any FLGL_* var it needs, e.g. FLGL_PLATFORM, FLGL_WINDOW_LIBS, FLGL_AUDIO_LIBS, FLGL_GLFW_CSRC/_MSRC.
 
-#  a module may add a module.mk declaring extras, all optional, each prefixed with
-#  its own dir name: 
-#  - <name>_DEPS
-#  - <name>_LDLIBS
-#  - <name>_CSRC
-#  - <name>_MSRC
-#  - <name>_CPPFLAGS
-#  it may also read any FLGL_* fact it needs, e.g. FLGL_PLATFORM, FLGL_WINDOW_LIBS,
-#  FLGL_AUDIO_LIBS, FLGL_GLFW_CSRC/_MSRC.
-
-#  - Example user Makefile
-#      MODULES := coregl render         # before the include
-#      include lib/flgl/flgl.mk
-#      app: $(SRC) $(FLGL_LIB)
-#          $(CXX) $(FLGL_CPPFLAGS) $(SRC) $(FLGL_LIB) $(FLGL_LDLIBS) -o $@
-#      $(FLGL_LIB): ; $(MAKE) -C lib/flgl MODULES="$(MODULES)"
+# - complete example user Makefile:
+#     MODULES := coregl render
+#     include lib/flgl/flgl.mk
+#     app: $(SRC) $(FLGL_LIB)
+#         $(CXX) $(FLGL_CPPFLAGS) $(SRC) $(FLGL_LIB) $(FLGL_LDLIBS) -o $@
+#     $(FLGL_LIB): 
+#         $(MAKE) -C lib/flgl MODULES="$(MODULES)"
 
 
 # find flgl
@@ -57,7 +56,7 @@ else
 endif
 
 # set up glfw
-# we need these modules per OS, the _GLFW_* define, and to link to the OS libs
+# we need some modules, the _GLFW_* define, and to link to the OS libs
 FLGL_GLFW_COMMON := context init input monitor platform vulkan window \
                     egl_context osmesa_context \
                     null_init null_joystick null_monitor null_window
@@ -83,7 +82,7 @@ else
     FLGL_AUDIO_LIBS  := -ldl -lpthread -lm
 endif
 
-# full paths to this platform's glfw sources (for coregl topull in via module.mk)
+# full paths to this platform's glfw sources (coregl will read in module.mk)
 FLGL_GLFW_CSRC := $(addprefix $(FLGL_DIR)lib/glfw/src/,$(addsuffix .c,$(FLGL_GLFW_C)))
 FLGL_GLFW_MSRC := $(addprefix $(FLGL_DIR)lib/glfw/src/,$(addsuffix .m,$(FLGL_GLFW_M)))
 
@@ -111,12 +110,12 @@ ifneq ($(strip $(FLGL_BADVARS)),)
   $(error flgl: unrecognized module.mk var(s): $(FLGL_BADVARS) — vars must be prefixed with the module's own directory name, e.g. coregl_DEPS in src/foundation/coregl/module.mk)
 endif
 
-# resolve enabled modules: (MODULES if set, else all) minus DISABLE — they compose.
-# FLGL_STEP adds one level of deps; FLGL_CLOSE recurses to a fixpoint.
+# resolve enabled modules. MODULES if set, else all, minus DISABLE
+# FLGL_STEP adds one level of deps; FLGL_CLOSE recurses
 FLGL_STEP  = $(sort $(1) $(foreach m,$(1),$($(m)_DEPS)))
 FLGL_CLOSE = $(if $(filter-out $(1),$(call FLGL_STEP,$(1))),$(call FLGL_CLOSE,$(call FLGL_STEP,$(1))),$(1))
 
-# base selection: the whitelist (dep-closed) if MODULES is given, else everything
+# base selection: the whitelist + deps if MODULES is given, else everything
 ifneq ($(strip $(MODULES)),)
   FLGL_UNKNOWN := $(filter-out $(FLGL_ALL),$(MODULES))
   ifneq ($(FLGL_UNKNOWN),)
@@ -129,7 +128,7 @@ else
   FLGL_SELECTED  := $(FLGL_ALL)
 endif
 
-# DISABLE removes from the selection (so `make DISABLE=x` works on a whitelist too)
+# remove DISABLEs from the selection
 FLGL_MODULES := $(filter-out $(DISABLE),$(FLGL_SELECTED))
 FLGL_PULLED  := $(filter-out $(FLGL_REQUESTED),$(FLGL_MODULES))
 
@@ -146,7 +145,7 @@ FLGL_BUILD_M := $(foreach m,$(FLGL_MODULES),$($(m)_MSRC))
 FLGL_MOD_CPP := $(foreach m,$(FLGL_MODULES),$(shell find $(call FLGL_MODDIR,$(m)) -name '*.cpp'))
 FLGL_DEFS    := $(foreach m,$(FLGL_MODULES),-DFLGL_MODULE_$(shell echo '$(m)' | tr '[:lower:]' '[:upper:]') $($(m)_CPPFLAGS))
 
-# compile-time path defines — override any before the include (defaults suit most projects)
+# default paths for user project setup, overridable
 FLGL_PATH        ?= lib/flgl/
 FLGL_ASSET_PATH  ?= assets/tex/
 FLGL_SHADER_PATH ?= shaders/
@@ -158,4 +157,4 @@ FLGL_CPPFLAGS := $(FLGL_INC) $(FLGL_DEFS) \
                  -D_FLGL_ASSET_PATH='"$(FLGL_ASSET_PATH)"' \
                  -D_FLGL_SHADER_PATH='"$(FLGL_SHADER_PATH)"'
 FLGL_LIB      := $(FLGL_DIR)build/libflgl.a
-FLGL_SRC      := $(FLGL_CORE_CPP) $(FLGL_MOD_CPP)   # flgl's own cpp (source-agg escape hatch)
+FLGL_SRC      := $(FLGL_CORE_CPP) $(FLGL_MOD_CPP)

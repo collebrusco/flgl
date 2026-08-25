@@ -1,10 +1,9 @@
-#  flgl  —  builds build/libflgl.a
-#  wraps flgl.mk
+#  builds libflgl.a
 #
 #    make                          build with all modules
 #    make DISABLE=coreal           build with the audio module off (blacklist)
 #    make MODULES="coregl render"  build ONLY these (whitelist)
-#    make info | clean
+#    make info, clean
 include flgl.mk
 
 CXX    ?= clang++

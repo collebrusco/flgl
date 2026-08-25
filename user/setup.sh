@@ -1,6 +1,5 @@
 #!/bin/sh
-# flgl user setup — run from your project root, with flgl added as a submodule
-# at ./lib/flgl:
+# run from your project root like so:
 #     git submodule add <flgl-url> lib/flgl
 #     ./lib/flgl/user/setup.sh
 set -eu
@@ -9,11 +8,8 @@ usage() {
 	cat <<'EOF'
 usage: ./lib/flgl/user/setup.sh [-f]
 
-bootstrap the current project (a git repo with flgl at ./lib/flgl) to build
-against flgl. copies into the project root:
-    Makefile      builds your app against flgl (via lib/flgl/flgl.mk)
-    .gitignore    ignores build/
-    src/main.cpp  an flgl hello-world to start from
+bootstrap the current project (a repo with flgl at ./lib/flgl) to build against flgl. 
+brings in a Makefile, .gitignore, and main.cpp that will build a small demo.
 
 options:
     -f    overwrite files that already exist (default: skip them)
@@ -42,7 +38,8 @@ if [ ! -f "$src/user_Makefile" ]; then
 	exit 1
 fi
 
-copy() {   # copy <from> <to> — skip if <to> exists, unless -f
+# copy <from> <to> — skip if <to> exists, unless -f
+copy() {
 	if [ -e "$2" ] && [ "$force" != "-f" ]; then
 		echo "  skip  $2 (exists)"
 	else

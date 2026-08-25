@@ -1,7 +1,7 @@
 #ifndef FLGL_INC_LIB_GLM_H
 #define FLGL_INC_LIB_GLM_H
 #define GLM_FORCE_SWIZZLE
-#define GLM_ENABLE_EXPERIMENTAL   // we use gtx/ extensions (quaternion, component_wise)
+#define GLM_ENABLE_EXPERIMENTAL   // gtx/ extensions (quaternion, component_wise)
 #include <stdint.h>
 #include "../../lib/glm/glm/glm.hpp"
 #include "../../lib/glm/glm/gtc/type_ptr.hpp"
@@ -14,6 +14,5 @@
 #include "../../lib/glm/glm/ext/matrix_clip_space.hpp"
 #include "../../lib/glm/glm/gtx/quaternion.hpp"
 #include "../../lib/glm/glm/gtx/component_wise.hpp"
-#include "../../src/foundation/math/flgl_math.h"
 #endif
 

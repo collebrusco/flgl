@@ -1,22 +1,19 @@
-# =============================================================================
-#  your project's Makefile  —  builds your app against flgl (vendored at lib/flgl)
-#  installed by lib/flgl/user/setup.sh. all cross-platform knowledge lives in
-#  lib/flgl/flgl.mk; keep this file tiny.
-#
-#    make                    build against the modules listed below
-#    make run | make clean
-# =============================================================================
+# template Makefile
+# designed to be Makefile for a project that has flgl at ./lib/flgl
 
-# flgl modules
-MODULES += coregl		# (foundation)
-MODULES += coreal		# (foundation)
-MODULES += math			# (foundation)
-MODULES += geometry		# (foundation)
-MODULES += allocators	# (foundation)
-MODULES += ecs			# (foundation)
-MODULES += misc			# (foundation)
-MODULES += driver		# (framework)
-MODULES += render		# (framework)
+# choose which modules are included
+# core gfx & audio
+MODULES += coregl
+MODULES += coreal
+# leaf utility modules
+MODULES += math
+MODULES += geometry
+MODULES += allocators
+MODULES += ecs
+MODULES += misc
+# frameworks
+MODULES += driver
+MODULES += render
 
 include lib/flgl/flgl.mk
 
@@ -35,16 +32,13 @@ $(APP): $(SRC) $(FLGL_LIB)
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXSTD) $(OPT) $(WARN) $(FLGL_CPPFLAGS) $(SRC) $(FLGL_LIB) $(FLGL_LDLIBS) -o $@
 
-# always delegate the library build to flgl's make
 $(FLGL_LIB): FORCE
 	$(MAKE) -C lib/flgl MODULES="$(MODULES)"
 FORCE:
 
-# and fwd flgl's make to the user
 .PHONY: flgl
 flgl: $(FLGL_LIB)
 
-# other targets
 run: all
 	./$(APP)
 
