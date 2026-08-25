@@ -1,0 +1,25 @@
+# module.mk: optional per-module build extras
+# copy this into any src/foundation/**/ or src/framework/**/ dir that needs anything here.
+
+# a module WITHOUT a module.mk still works: all its *.cpp are compiled and it gets -DFLGL_MODULE_<NAME> automatically.
+# by default the logger is always a dependency of any module
+
+# EVERY var below is prefixed with THIS module's directory name
+# !! replace `mod` placeholder below w module name !!
+
+# platform vars flgl exposes
+# FLGL_PLATFORM, FLGL_WINDOW_LIBS, FLGL_AUDIO_LIBS, FLGL_GLFW_CSRC/_MSRC, FLGL_DIR.
+
+# !! dependencies !!
+# you must list any modules you use here. by default, only the logger is a dependency.
+# mod_DEPS     := coregl logger
+
+# extra linker args
+# mod_LDLIBS   := -lsomething
+
+# extra C or ObjC sources
+# mod_CSRC     := lib/foo/foo.c
+# mod_MSRC     := lib/foo/foo.m
+
+# extra preprocessor flags
+# mod_CPPFLAGS := -DFLGL_HAS_SOMETHING

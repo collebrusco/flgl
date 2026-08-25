@@ -1,36 +1,58 @@
+# template Makefile
+# designed to be Makefile for a project that has flgl at ./lib/flgl
 
-CMFLAGS=$(shell [ "$$OS" = "Windows_NT" ] && echo '-G "MinGW Makefiles"' || echo '')
+# choose which modules are included
+# core gfx & audio
+MODULES += coregl
+MODULES += coreal
+# leaf utility modules
+MODULES += math
+MODULES += geometry
+MODULES += allocators
+MODULES += ecs
+MODULES += misc
+# frameworks
+MODULES += driver
+MODULES += render
 
-.PHONY: default
-default:
-	mkdir -p build
-	cd build && \
-	cmake $(CMFLAGS) .. && \
-	make
+include lib/flgl/flgl.mk
 
-db:
-	mkdir -p build
-	cd build && \
-	cmake $(CMFLAGS) -DCMAKE_BUILD_TYPE=Debug .. && \
-	make
+APP    := build/untitled
+SRC    := $(shell find src -name '*.cpp')
 
-.PHONY: c
-c: cm
-	rm -rf ./build/CMakeFiles/untitled.dir/src/
+CXX    ?= g++
+CXXSTD := -std=c++20
+# OPT    ?=
+WARN   := -Wall -Wextra -Wpedantic -Werror=return-type
 
-.PHONY: cm
-cm:
-	rm -f ./build/CMakeCache.txt
-	rm -f ./build/cmake_install.cmake
-	rm -f ./build/cmake_install.local.cmake
-	rm -f ./build/packaging.json
-	rm -f ./build/compile_commands.json
+.PHONY: all
+all: $(APP)
 
+$(APP): $(SRC) $(FLGL_LIB)
+	@mkdir -p $(dir $@)
+	$(CXX) $(CXXSTD) $(OPT) $(WARN) $(FLGL_CPPFLAGS) $(SRC) $(FLGL_LIB) $(FLGL_LDLIBS) -o $@
 
-.PHONY: ca
-ca:
-	rm -rf ./build/
-	
-.PHONY: r
-r: default
-	./build/untitled
+$(FLGL_LIB): FORCE
+	$(MAKE) -C lib/flgl MODULES="$(MODULES)"
+FORCE:
+
+.PHONY: flgl
+flgl: $(FLGL_LIB)
+
+run: all
+	./$(APP)
+
+clean:
+	rm -rf build
+
+# shorthands
+.PHONY: run clean build c b r cb br cbr
+
+build: all
+
+c: clean
+b: build
+r: run
+cb: c b
+br: b r
+cbr: c b r
