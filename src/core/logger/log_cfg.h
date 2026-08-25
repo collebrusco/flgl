@@ -15,6 +15,6 @@
 #define _LOG_USE_FILE 0
 
 #if _LOG_USE_FILE == 1
-	// file name (FLGL_PATH is a build-time -D define)
-	#define _LOG_FILE (FLGL_PATH "logs/log.txt")
+	/* file name (_FLGL_PATH is a build-time define) */
+	#define _LOG_FILE (_FLGL_PATH "logs/log.txt")
 #endif
