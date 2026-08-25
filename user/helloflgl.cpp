@@ -1,25 +1,23 @@
 /**
- * helloflgl — the flgl hello-world (dropped into your project as src/main.cpp
- * by lib/flgl/user/setup.sh).
+ * helloflgl
  *
- * draws an evolving perlin-noise field and plays a 1 kHz sine while SPACE is
- * held — a tiny tour of flgl's video (coregl + render) and audio (coreal) sides.
- * ESC quits. delete what you don't need and build from here.
+ * draws an evolving perlin noise field
+ * plays a bleep when space is down
+ * escape to close
  */
-#include <flgl.h>          // Graphics + the `window` singleton (coregl)
-#include <flgl/render.h>   // DefaultMeshes
-#include <flgl/misc.h>     // Stopwatch
+#include <flgl.h> 
+#include <flgl/render.h>
+#include <flgl/misc.h>
 #include <flgl/logger.h>
 using namespace glm;
 LOG_MODULE(helloflgl);
 
 #ifdef FLGL_HAS_AUDIO
-#include <flgl/coreal.h>   // raw miniaudio (coreal is a thin passthrough)
+#include <flgl/coreal.h>
 #include <atomic>
 #include <cstring>
 
-// a 1 kHz sine that sounds only while `on` is set. miniaudio pulls audio on a
-// background thread, so the on/off flag is atomic.
+/* data for audio cb: waveform and flag */
 namespace {
 struct SineTone {
     ma_waveform wave;
@@ -44,7 +42,7 @@ int main() {
     window.create("helloflgl", 1280, 720);
 
 #ifdef FLGL_HAS_AUDIO
-    // 1 kHz sine generator + a playback device that reads it in audio_cb.
+    // 1 kHz sine + a playback device that reads it in audio_cb.
     SineTone tone;
     ma_waveform_config wcfg = ma_waveform_config_init(
         ma_format_f32, 2, 48000, ma_waveform_type_sine, /*amplitude*/ 0.2, /*hz*/ 1000.0);
@@ -66,7 +64,7 @@ int main() {
     Mesh<Vt_classic> quad = DefaultMeshes::tile<Vt_classic>();
     Shader shader = Shader::from_source("passthrough_vert", "perlin_frag_shader");
 
-    constexpr float EVOLVE_SPEED = 4.f;   // scales time into the shader — turn it up
+    constexpr float EVOLVE_SPEED = 4.f;
     Stopwatch timer; timer.reset_start();
 
     while (!window.should_close()) {

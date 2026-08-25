@@ -1,7 +1,4 @@
-# flgl user-flow testbench — convenience wrapper around run.sh.
-#   make test BRANCH=rework3    run the full user-flow test, teeing to run.log
-#   make clean                  remove run.log
-# (run.sh clones flgl from GitHub, so push the branch first.)
+# this is barely necessary unless i add more tests but keeping it for now
 
 .PHONY: test clean
 test:

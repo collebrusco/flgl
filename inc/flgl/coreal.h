@@ -5,8 +5,8 @@
     #error "flgl: coreal is disabled for this build"
 #endif
 
-/* for now coreal is a thin passthrough to vendored miniaudio.
- * (a future flgl audio wrapper — Source/Buffer/etc — would live here too) */
-#include "miniaudio.h"
+/* right now the coreal module is just miniaudio
+  TODO add my own abstractions and systems here if/when they're created */
+#include "../../lib/miniaudio/miniaudio.h"
 
 #endif /* FLGL_INC_CORE_AUDIO */

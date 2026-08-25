@@ -94,7 +94,8 @@ public:
     void close();
 };
 
-/* the ambient window singleton — coregl owns it (defined in Window.cpp) */
+/* single window app is assumed,
+so a window singleton available by default */
 extern Window window;
 
 #endif /* Window_h */
