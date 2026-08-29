@@ -1,0 +1,27 @@
+# =============================================================================
+#  your project's CMake build — an alternative to the Makefile flow.
+#  copy to your project root as CMakeLists.txt (setup.sh installs the Makefile by
+#  default; use this instead if you prefer cmake). flgl at ./lib/flgl.
+#
+#      cmake -S . -B build && cmake --build build && ./build/untitled
+#
+#  flgl is built from lib/flgl and linked in — it brings its own include paths,
+#  module defines, and OS frameworks. toggle audio with -DFLGL_AUDIO=OFF.
+# =============================================================================
+cmake_minimum_required(VERSION 3.16)
+project(untitled CXX)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+add_subdirectory(lib/flgl)
+
+file(GLOB_RECURSE APP_SOURCES CONFIGURE_DEPENDS src/*.cpp)
+add_executable(${PROJECT_NAME} ${APP_SOURCES})
+
+# flgl propagates its include paths, FLGL_MODULE_* defines and OS frameworks
+target_link_libraries(${PROJECT_NAME} PRIVATE flgl)
+
+if(NOT MSVC)
+    target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic -Werror=return-type)
+endif()

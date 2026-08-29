@@ -1,71 +1,102 @@
-cmake_minimum_required(VERSION 3.10)
-project(FLGL)
+# =============================================================================
+#  flgl — CMake build (an alternative to the primary `make` / flgl.mk flow).
+#
+#  builds a static `flgl` target from the same vendored, self-contained tree.
+#  flgl.mk is the reference build; this mirrors it closely enough to be a drop-in
+#  for projects that prefer cmake. glfw builds from its own bundled cmake.
+#
+#    standalone:  cmake -S . -B build && cmake --build build
+#    as consumer: add_subdirectory(lib/flgl) ; target_link_libraries(app flgl)
+#
+#  options: -DFLGL_AUDIO=OFF                 drop the coreal (miniaudio) module
+#           -DFLGL_PATH=... (+ _ASSET_/_SHADER_)  override the baked-in paths
+# =============================================================================
+cmake_minimum_required(VERSION 3.16)
+project(flgl CXX C)
 
-set(CMAKE_CXX_STANDARD 20) # i don't think this needs to be 20
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(FLGL_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
 
-# opengl
-find_package(OpenGL REQUIRED)
+option(FLGL_AUDIO "build the coreal audio module (miniaudio)" ON)
 
-# openal
-if (WIN32)
-    message(STATUS "Checking for OpenAL at C:/Program Files (x86)/OpenAL 1.1 SDK")
+# runtime paths, baked in as -D defines (same defaults as flgl.mk; override freely)
+set(FLGL_PATH        "lib/flgl/"   CACHE STRING "path from run cwd to flgl (default assets)")
+set(FLGL_ASSET_PATH  "assets/tex/" CACHE STRING "texture asset path")
+set(FLGL_SHADER_PATH "shaders/"    CACHE STRING "shader path")
 
-    find_path(OPENAL_INCLUDE_DIR al.h
-        PATHS "C:/Program Files (x86)/OpenAL 1.1 SDK/include"
-    )
+# ---- vendored deps ----------------------------------------------------------
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS    OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_DOCS     OFF CACHE BOOL "" FORCE)
+add_subdirectory(${FLGL_ROOT}/lib/glfw)
 
-    find_library(OPENAL_LIBRARY OpenAL32
-        PATHS "C:/Program Files (x86)/OpenAL 1.1 SDK/libs/Win64"
-            "C:/Program Files (x86)/OpenAL 1.1 SDK/libs/Win32"
-    )
+add_library(flgl_glad STATIC ${FLGL_ROOT}/lib/glad/src/glad.c)
+target_include_directories(flgl_glad PUBLIC ${FLGL_ROOT}/lib/glad/include)
 
+# ---- discover sources (mirrors flgl.mk: src/core is always built; every dir
+#      under foundation/ and framework/ is a toggleable module) ----------------
+file(GLOB_RECURSE FLGL_SRC CONFIGURE_DEPENDS ${FLGL_ROOT}/src/core/*.cpp)
+file(GLOB FLGL_MODULE_DIRS LIST_DIRECTORIES true
+     ${FLGL_ROOT}/src/foundation/* ${FLGL_ROOT}/src/framework/*)
 
-    message(STATUS "Resolved OPENAL_INCLUDE_DIR to: ${OPENAL_INCLUDE_DIR}")
-    message(STATUS "Resolved OPENAL_LIBRARY to: ${OPENAL_LIBRARY}")
+set(FLGL_MODULE_DEFS "")
+foreach(dir ${FLGL_MODULE_DIRS})
+    if(NOT IS_DIRECTORY ${dir})
+        continue()
+    endif()
+    get_filename_component(mod ${dir} NAME)
+    if(mod STREQUAL "coreal" AND NOT FLGL_AUDIO)
+        continue()                       # audio off: skip the module entirely
+    endif()
+    file(GLOB_RECURSE mod_src CONFIGURE_DEPENDS ${dir}/*.cpp)
+    list(APPEND FLGL_SRC ${mod_src})
+    string(TOUPPER ${mod} mod_up)
+    list(APPEND FLGL_MODULE_DEFS FLGL_MODULE_${mod_up})
+endforeach()
 
-    if(NOT OPENAL_INCLUDE_DIR OR NOT OPENAL_LIBRARY)
-        message(FATAL_ERROR
-            "Could not find OpenAL in 'C:/Program Files (x86)/OpenAL 1.1 SDK'.\n"
-            "Please install the OpenAL SDK there (default) and try again."
-        )
+# ---- the library ------------------------------------------------------------
+add_library(flgl STATIC ${FLGL_SRC})
+
+target_include_directories(flgl PUBLIC
+    ${FLGL_ROOT}/inc
+    ${FLGL_ROOT}/lib/glm
+    ${FLGL_ROOT}/lib/stb/include
+    ${FLGL_ROOT}/lib/miniaudio)
+
+target_link_libraries(flgl PUBLIC flgl_glad glfw)
+
+# defines are PUBLIC: a consumer compiling flgl headers needs the same
+# FLGL_MODULE_* (public headers #error without them) and FLGL_HAS_AUDIO.
+target_compile_definitions(flgl PUBLIC
+    ${FLGL_MODULE_DEFS}
+    _FLGL_PATH=\"${FLGL_PATH}\"
+    _FLGL_ASSET_PATH=\"${FLGL_ASSET_PATH}\"
+    _FLGL_SHADER_PATH=\"${FLGL_SHADER_PATH}\")
+if(FLGL_AUDIO)
+    target_compile_definitions(flgl PUBLIC FLGL_HAS_AUDIO)
+endif()
+
+if(NOT MSVC)
+    target_compile_options(flgl PRIVATE -Wall -Wextra -Wpedantic -Werror=return-type)
+endif()
+
+# ---- platform link libs (mirror flgl.mk WINDOW_LIBS / AUDIO_LIBS) ------------
+if(APPLE)
+    target_link_libraries(flgl PUBLIC
+        "-framework Cocoa" "-framework IOKit" "-framework CoreFoundation" "-framework OpenGL")
+    if(FLGL_AUDIO)
+        target_link_libraries(flgl PUBLIC "-framework CoreAudio" "-framework AudioToolbox")
+    endif()
+elseif(WIN32)
+    target_link_libraries(flgl PUBLIC gdi32 opengl32)
+    if(FLGL_AUDIO)
+        target_link_libraries(flgl PUBLIC ole32)
     endif()
 else()
-    find_package(OpenAL REQUIRED)
+    find_package(OpenGL REQUIRED)
+    target_link_libraries(flgl PUBLIC X11 OpenGL::GL)
+    if(FLGL_AUDIO)
+        target_link_libraries(flgl PUBLIC dl pthread m)
+    endif()
 endif()
-
-# glfw
-add_subdirectory(lib/glfw)
-
-# glad
-add_library(GLAD lib/glad/src/glad.c)
-target_include_directories(GLAD PUBLIC lib/glad/include)
-
-# glfw & glad includes
-include_directories(inc lib/glfw/include lib/glad/include ${OPENGL_INCLUDE_DIR})
-
-# flgl source
-file(GLOB_RECURSE FLGL_SOURCES "src/*.cpp")
-
-# extra warnings
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wextra -Wpedantic")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wunused-variable -Werror=unused-variable")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wcast-qual")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=return-type")
-if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wc99-extensions -Werror=c99-extensions -Wvla-extension -Werror=vla-extension")
-endif()
-
-# flgl library
-add_library(${PROJECT_NAME} ${FLGL_SOURCES})
-
-# link opengl, public glfw include
-target_link_libraries(${PROJECT_NAME} PRIVATE ${OPENGL_gl_LIBRARY})
-target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/include)
-
-# link, include openal
-target_include_directories(${PROJECT_NAME} PUBLIC ${OPENAL_INCLUDE_DIR})
-target_link_libraries(${PROJECT_NAME} PUBLIC ${OPENAL_LIBRARY})
-
-# link, include glfw & glad
-target_link_libraries(${PROJECT_NAME} PUBLIC GLAD glfw ${OPENGL_LIBRARIES})
-target_include_directories(${PROJECT_NAME} PUBLIC ${OPENGL_INCLUDE_DIR})
