@@ -33,8 +33,13 @@ void TextRenderer::destroy_text_rendering() {
 	font.destroy(); text_shader.destroy();
 }
 
-void TextRenderer::set_color(glm::vec3 const& color) {
-	text_color = color;
+glm::ivec2 TextRenderer::box_size() const {
+	return box;
+}
+
+void TextRenderer::set_color(glm::vec3 const &color)
+{
+    text_color = color;
 }
 
 void TextRenderer::_set_text(char* text) {

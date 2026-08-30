@@ -25,11 +25,11 @@ public:
 	void init();
 
 	template <typename...Args>
-	void set_text(std::string const& fmt, Args... args) {
-		const size_t n = snprintf(nullptr, 0, fmt.c_str(), args...);
+	void set_text(const char*const fmt, Args... args) {
+		const size_t n = snprintf(nullptr, 0, fmt, args...);
 		/* TODO get rid of this malloc/free here */
 		char*const buff = (char*)malloc(n + 1);
-		snprintf(buff, n + 1, fmt.c_str(), args...);
+		snprintf(buff, n + 1, fmt, args...);
 		_set_text(buff);
 		free(buff);
 	}
