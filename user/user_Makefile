@@ -44,14 +44,27 @@ run: all
 clean:
 	rm -rf build
 
+clean-flgl:
+	rm -rf lib/flgl/build
+
+clean-all: clean-flgl clean
+
 # shorthands
-.PHONY: run clean build c b r cb br cbr
+.PHONY: run clean build c b r cb ca cf cab cfb cabr cfbr br cbr 
 
 build: all
 
 c: clean
 b: build
 r: run
+
+ca: clean-all
+cf: clean-flgl
+
 cb: c b
+cab: ca b
+cfb: cf b
+cabr: ca b r
+cfbr: cf b r
 br: b r
 cbr: c b r
