@@ -458,7 +458,7 @@ void RootUIelement::on_update(float dt, UImouse const &mouse) {
 
 
 void UIRenderer::init() {
-    shader = Shader::from_source("ui_vert", "ui_frag_notex");
+    shader = Shader::from_source("fui/ui_vert", "fui/ui_frag_notex");
     tex.create();
     vao.create_bind();
     vbo.create_bind();

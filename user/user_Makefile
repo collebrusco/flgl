@@ -13,6 +13,7 @@ MODULES += misc
 # frameworks
 MODULES += driver
 MODULES += render
+MODULES += fui
 
 include lib/flgl/flgl.mk
 
