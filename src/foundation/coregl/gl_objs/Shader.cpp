@@ -96,6 +96,7 @@ bool Shader::check_status(const char* name, GLuint shader) {
 
 bool Shader::compileVertShader(GLuint& vShader, const char* vFileName){
     const char* vSource = getShaderSource(vFileName, "vert");
+    if (!vSource) return false;
     vShader = glCreateShader(GL_VERTEX_SHADER);
 
     glShaderSource(vShader, 1, &vSource, NULL);
@@ -105,6 +106,7 @@ bool Shader::compileVertShader(GLuint& vShader, const char* vFileName){
 
 bool Shader::compileFragShader(GLuint& fShader, const char* fFileName){
     const char* fSource = getShaderSource(fFileName, "frag");
+    if (!fSource) return false;
 
     fShader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fShader, 1, &fSource, NULL);

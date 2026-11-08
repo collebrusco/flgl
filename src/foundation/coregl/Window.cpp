@@ -194,7 +194,7 @@ void Window::update() {
     swap_buffers();
 }
 void Window::destroy() {
-    if (!active) return
+    if (!active) return;
     glfwDestroyWindow(handle);
     active = false;
 }

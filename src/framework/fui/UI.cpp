@@ -5,7 +5,8 @@ LOG_MODULE(ui);
 using namespace glm;
 static Graphics gl;
 
-UIbbox::UIbbox() : _min(std::numeric_limits<float>::min()), _max(std::numeric_limits<float>::max()) {}
+/** default box is identity for merge which is degenerate */
+UIbbox::UIbbox() : _min(std::numeric_limits<float>::max()), _max(std::numeric_limits<float>::lowest()) {}
 UIbbox::UIbbox(glm::vec2 m, glm::vec2 M) : _min(m), _max(M) {}
 
 bool UIbbox::inside(glm::vec2 mpos) const {
@@ -24,12 +25,12 @@ void UIbbox::merge(UIbbox const& other) {
     }
 }
 
-bool UIbbox::isect(UIbbox const& other) {
+bool UIbbox::isect(UIbbox const& other) const {
     return !(other._max.x < _min.x || other._min.x > _max.x ||
              other._max.y < _min.y || other._min.y > _max.y);
 }
 
-bool UIbbox::contains(UIbbox const& other) {
+bool UIbbox::contains(UIbbox const& other) const {
     return _min.x <= other._min.x && _max.x >= other._max.x &&
            _min.y <= other._min.y && _max.y >= other._max.y;
 }
@@ -228,7 +229,7 @@ void UIelement::submit_render_int(UIRenderCache& cache) {
 
         desc.input_uispace_box(bbox, window.frame);
 
-        desc.uv_box = UIbbox::null();
+        desc.disable_uv_box();
 
         glm::vec4 color = {0.3f, 0.3f, 0.3f, 0.9f};
 
@@ -321,6 +322,7 @@ void UIelement::remove_child(UIelement *child) {
         children[i] = children[i + 1];
     }
     children[--nkids] = nullptr;
+    child->parent = nullptr;
 }
 
 
@@ -367,6 +369,7 @@ void UIelement::behave_self(float dt, UImouse const& mouse) {
 }
 
 void UIelement::layout_self() {
+    on_layout();
     current_ofs = ofs_from_parent();
     if (parent) {
         current_ofs += parent->total_ofs();
@@ -379,25 +382,31 @@ void UIelement::on_update(float dt, UImouse const& mouse) {
     /** noop */
 }
 
+void UIelement::on_layout() {
+    /** noop */
+}
+
 #define ITERATE_KIDS(root, c) (size_t c = (root)->num_children()-1; c < (root)->num_children(); c--)
 
-/** hittest -> behave -> layout -> render */
-bool UIelement::hittest_tree(UIelement* root, UImouse const& mouse) {
+/** layout -> hittest -> behave -> render
+ * kids are walked front-to-back and obstruct both their later siblings and
+ * their own parent. we never stop early: an obstructed element still has to
+ * run hittest_self to clear a hover it was holding from a previous frame. */
+bool UIelement::hittest_tree(UIelement* root, UImouse const& mouse, bool obstructed) {
     assert(root);
-    bool found = false;
+    bool found = obstructed;
     if (root->subtree_enabled()) {
         for ITERATE_KIDS(root, c) {
-            found = UIelement::hittest_tree(root->get_child(c), mouse);
-            if (found) break;
+            found = UIelement::hittest_tree(root->get_child(c), mouse, found);
         }
     }
     if (root->enabled()) {
-        found = root->hittest_self(root->localize_mouse(mouse), found);
+        found = root->hittest_self(root->localize_mouse(mouse), found) || found;
     }
     return found;
 }
 
-/** hittest -> behave -> layout -> render */
+/** layout -> hittest -> behave -> render */
 void UIelement::behave_tree(UIelement *root, float dt, UImouse const &mouse) {
     assert(root);
     if (root->subtree_enabled()) {
@@ -410,11 +419,13 @@ void UIelement::behave_tree(UIelement *root, float dt, UImouse const &mouse) {
     }
 }
 
-/** hittest -> behave -> layout -> render */
+/** layout -> hittest -> behave -> render */
 void UIelement::layout_tree(UIelement* root) {
     assert(root);
     if (root->enabled()) {
         root->layout_self();
+    } else {
+        root->subtree_bbox = UIbbox::null();
     }
     if (root->subtree_enabled()) {
         for ITERATE_KIDS(root, c) {
@@ -424,7 +435,7 @@ void UIelement::layout_tree(UIelement* root) {
     }
 }
 
-/** hittest -> behave -> layout -> render */
+/** layout -> hittest -> behave -> render */
 void UIelement::submit_renders_tree(UIelement *root, UIRenderCache &cache) {
     assert(root);
     if (root->render_enabled()) {
@@ -450,7 +461,7 @@ RootUIelement::RootUIelement() : UIelement() {
     center();
 }
 
-void RootUIelement::on_update(float dt, UImouse const &mouse) {
+void RootUIelement::on_layout() {
     center();
 }
 
@@ -545,38 +556,41 @@ void UITextRenderer::init() {
 }
 
 void UITextRenderer::prepare(UIRenderCache& cache) {
-    if (!cache.dirty()) return;
-    /* rebuild changed TRs */
-    for (auto const& new_desc : cache.text_cache.data()) {
-        auto it = renderers.find(new_desc.owner);
-        if (it != renderers.end()) {
-            if (it->second.desc_copy.text != new_desc.desc.text.c_str()) {
-                it->second.renderer.set_text(new_desc.desc.text.c_str());
+    if (cache.text_cache.is_dirty()) {
+        /* rebuild changed TRs */
+        for (auto const& new_desc : cache.text_cache.data()) {
+            auto it = renderers.find(new_desc.owner);
+            if (it != renderers.end()) {
+                if (it->second.desc_copy.text != new_desc.desc.text.c_str()) {
+                    it->second.renderer.set_text(new_desc.desc.text.c_str());
+                }
+                // it->second.renderer.set_color(new_desc.desc.color); // TODO if add color
+                it->second.desc_copy = new_desc.desc;
+                it->second.touched = true;
+            } else {
+                InternalDescriptor new_idesc;
+                new_idesc.touched = true;
+                new_idesc.desc_copy = new_desc.desc;
+                new_idesc.renderer.init();
+                LOG_DBG("prep set text to \"%s\"", new_desc.desc.text.c_str());
+                new_idesc.renderer.set_text(new_desc.desc.text.c_str());
+                // new_idesc.renderer.set_color(...); // TODO if add color
+                renderers.insert({new_desc.owner, new_idesc});
             }
-            // it->second.renderer.set_color(new_desc.desc.color); // TODO if add color
-            it->second.desc_copy = new_desc.desc;
-            it->second.touched = true;
-        } else {
-            InternalDescriptor new_idesc;
-            new_idesc.touched = true;
-            new_idesc.desc_copy = new_desc.desc;
-            new_idesc.renderer.init();
-            LOG_INF("prep set text to \"%s\"", new_desc.desc.text.c_str());
-            new_idesc.renderer.set_text(new_desc.desc.text.c_str());
-            // new_idesc.renderer.set_color(...); // TODO if add color
-            renderers.insert({new_desc.owner, new_idesc});
+        }
+        /* clean up unused TRs */
+        for (auto it = renderers.begin(); it != renderers.end(); ) {
+            if (it->second.touched) {
+                it->second.touched = false;
+                ++it;
+            } else {
+                it->second.renderer.destroy();
+                it = renderers.erase(it);
+            }
         }
     }
-    /* clean up unused TRs */
-    for (auto it = renderers.begin(); it != renderers.end(); ) {
-        if (it->second.touched) {
-            it->second.touched = false;
-            ++it;
-        } else {
-            it->second.renderer.destroy();
-            it = renderers.erase(it);
-        }
-    }
+    cache.text_cache.set_clean();
+    cache.text_cache.reset();
 }
 
 void UITextRenderer::render() {

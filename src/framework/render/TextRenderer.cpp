@@ -42,7 +42,11 @@ void TextRenderer::set_color(glm::vec3 const &color)
     text_color = color;
 }
 
-void TextRenderer::_set_text(char* text) {
+void TextRenderer::set_text(const char* text) {
+	_set_text(text);
+}
+
+void TextRenderer::_set_text(const char* text) {
 	vector<Vt_2Dclassic> verts;
 	vector<uint32_t> elems;
 	ivec2 cursor{0,0};

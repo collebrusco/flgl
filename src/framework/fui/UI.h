@@ -14,8 +14,8 @@
 struct UIbbox {
     bool inside(glm::vec2 mpos) const;
     void merge(UIbbox const& other);
-    bool isect(UIbbox const& other);
-    bool contains(UIbbox const& other);
+    bool isect(UIbbox const& other) const;
+    bool contains(UIbbox const& other) const;
     bool degen() const;
     glm::vec2 size() const;
     glm::vec2 middle() const;
@@ -107,8 +107,8 @@ struct UIQuadRenderDescriptor {
 struct UITextRenderDescriptor {
     bool operator==(UITextRenderDescriptor const&) const = default;
     std::string text;
-    glm::vec2 blpos;
-    uint8_t scale;
+    glm::vec2 blpos{0.f};
+    uint8_t scale = 1;
 };
 
 class UIelement;
@@ -136,7 +136,7 @@ public:
         if (cursor == cache.size()) {
             dirty = true;
             cache.push_back({owner, desc});
-        } else if (!(cache.at(cursor).desc == desc)) {
+        } else if (!(cache.at(cursor) == Entry{owner, desc})) {
             dirty = true;
             cache.resize(cursor);
             cache.push_back({owner, desc});
@@ -153,7 +153,11 @@ public:
     }
 
     void reset() {
-        dirty = cursor != cache.size();
+        /* if entries are removed from end cut em off and raise flag */
+        if (cursor != cache.size()) {
+            cache.resize(cursor);
+            dirty = true;
+        }
         cursor = 0;
     }
 
@@ -226,16 +230,20 @@ class UIelement {
     bool hittest_self(UImouse const& lmouse, bool obstructed);
     void behave_self(float dt, UImouse const& lmouse);
     virtual void on_update(float dt, UImouse const& lsmouse);
+    /** called at the top of layout_self, before this element's box is computed.
+     * override to drive layout from external state (window size, content, ...) */
+    virtual void on_layout();
     void layout_self();
     
 public:
 
     UIlayout layout;
 
+    NO_COPY_OR_MOVE(UIelement);
     UIelement();
     virtual ~UIelement() = default;
     
-    static bool hittest_tree(UIelement* root, UImouse const& mouse);
+    static bool hittest_tree(UIelement* root, UImouse const& mouse, bool obstructed = false);
     static void behave_tree(UIelement* root, float dt, UImouse const& mouse);
     static void layout_tree(UIelement* root);
     static void submit_renders_tree(UIelement* root, UIRenderCache& cache);
@@ -272,9 +280,9 @@ public:
 
 class RootUIelement : public UIelement {
     void center();
+    virtual void on_layout() override;
 public:
     RootUIelement();
-    virtual void on_update(float dt, UImouse const& mouse) override;
 };
 
 

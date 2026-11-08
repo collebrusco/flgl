@@ -18,16 +18,18 @@ private:
 
 	glm::ivec2 box = {-1,-1};
 
-	void _set_text(char* text);
+	void _set_text(const char* text);
 
 public:
 	TextRenderer();
 	void init();
 
+	void set_text(const char* text);
+
 	template <typename...Args>
-	void set_text(const char*const fmt, Args... args) {
+	void set_textf(const char*const fmt, Args... args) {
 		const size_t n = snprintf(nullptr, 0, fmt, args...);
-		/* TODO get rid of this malloc/free here */
+		/* TODO get rid of this malloc/free here ew */
 		char*const buff = (char*)malloc(n + 1);
 		snprintf(buff, n + 1, fmt, args...);
 		_set_text(buff);
