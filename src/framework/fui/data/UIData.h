@@ -1,16 +1,16 @@
 /** 
- * UI.h 
- * created 04/05/25 by frank collebrusco
+ * UIData.h 
+ * created 11/08/26 by frank collebrusco
  */
-#ifndef UI_H
-#define UI_H
-#include <flgl.h>
-#include <flgl/glm.h>
-#include <flgl/allocators.h>
-#include <flgl/text_renderer.h>
+#ifndef UIDATA_H
+#define UIDATA_H
+
 #include <limits>
 #include <vector>
+#include <flgl/glm.h>
+#include <flgl/allocators.h>
 
+/** generic bbox object full of operations */
 struct UIbbox {
     bool inside(glm::vec2 mpos) const;
     void merge(UIbbox const& other);
@@ -34,7 +34,8 @@ private:
     UIbbox(glm::vec2 m, glm::vec2 M);
 };
 
-
+/* 1 byte data obj representing one of the 9 possible named pins, 
+ [top center bot] x [left center right] */
 struct __attribute__((packed)) UIpin {
     enum vpin_e : uint8_t {
         TOP     = 1,
@@ -72,6 +73,10 @@ struct __attribute__((packed)) UIpin {
 };
 static_assert(sizeof(UIpin) == 1);
 
+/* pivot, v2 offset [-0.5f, +0.5f] 
+ a UIPin is a smaller way of representing 9 common pivots
+ so a UIPivot is a larger more detailed representation that
+ can be constructed from a UIPin */
 struct UIpivot {
     glm::vec2 value;
     void set_pin(UIpin pin);
@@ -79,6 +84,7 @@ struct UIpivot {
     UIpivot(glm::vec2 const& p);
     UIpivot(UIpin pin);
 };
+
 
 struct UIlayout {
     UIpin pinning;
@@ -178,153 +184,12 @@ public:
 struct UIRenderCache {
     UIRenderDescriptorCache<UIQuadRenderDescriptor> quad_cache;
     UIRenderDescriptorCache<UITextRenderDescriptor> text_cache;
+    glm::ivec2 frame_copy;
     inline bool dirty() const {return quad_cache.is_dirty() || text_cache.is_dirty();}
-};
-
-
-/** the UImouse is like the flgl mouse but:
- * the origin is the center of the screen
- * the up direction is positive y */
-struct UImouse {
-    glm::vec2 pos, delta, scroll;
-    Button left, right, middle;
-    UImouse(Mouse const& src, glm::vec2 win_frame);
-    UImouse(UImouse const& other, glm::vec2 ofs);
-};
-
-#define UINODE_CHILD_MAX 16
-
-/** root class of the ui element nodes in the ui tree
- * To the generic renderer,
- *  an element provides a self-enclosing bbox, and a subtree-enclosing bbox.
- *  an element itself can be enabled/disabled, and separately, the subtree can be enabled/disabled
- *  if enabled, an element will submit its render descriptor thru the virtual function
- * To the generic UI,
- *  an element can control its render or use defaults from base classes (more likely)
- * 
- */
-class UIelement {
-    
-    UIelement* parent;
-    
-    /** calculated per tree update */
-    UIbbox bbox;
-    UIbbox subtree_bbox;
-    glm::vec2 current_ofs;
-    
-    UIelement* children[UINODE_CHILD_MAX];
-    uint8_t nkids;
-
-    struct {
-        bool enable         : 1;
-        bool render_enable  : 1;
-        bool subtree_enable : 1;
-        bool hovered        : 1;
-        bool hover_enter    : 1;
-        bool hover_exit     : 1;
-        bool                : 2;
-    } flags;
-
-    virtual void submit_render_int(UIRenderCache& cache);
-
-    bool hittest_self(UImouse const& lmouse, bool obstructed);
-    void behave_self(float dt, UImouse const& lmouse);
-    virtual void on_update(float dt, UImouse const& lsmouse);
-    /** called at the top of layout_self, before this element's box is computed.
-     * override to drive layout from external state (window size, content, ...) */
-    virtual void on_layout();
-    void layout_self();
-    
-public:
-
-    UIlayout layout;
-
-    NO_COPY_OR_MOVE(UIelement);
-    UIelement();
-    virtual ~UIelement() = default;
-    
-    static bool hittest_tree(UIelement* root, UImouse const& mouse, bool obstructed = false);
-    static void behave_tree(UIelement* root, float dt, UImouse const& mouse);
-    static void layout_tree(UIelement* root);
-    static void submit_renders_tree(UIelement* root, UIRenderCache& cache);
-
-    size_t num_children() const;
-    bool add_child(UIelement* child);
-    void remove_child(UIelement* child);
-    UIelement* get_child(size_t n);
-
-    bool hit_test(UImouse const& local_mouse);
-
-    void submit_render(UIRenderCache& cache);
-
-    glm::vec2 ofs_from_parent() const;
-    glm::vec2 total_ofs() const;
-    UImouse localize_mouse(UImouse const& parent);
-
-    bool enabled() const;
-    void set_enabled(bool val = true);
-    bool subtree_enabled() const;
-    void set_subtree_enabled(bool val = true);
-    bool render_enabled() const;
-    void set_render_enable(bool val);
-    
-    bool is_hovered()           const;
-    bool is_hover_entered()     const;
-    bool is_hover_exited()      const;
-
-
-    
+    void supply_window_frame(glm::ivec2 const& fr);
+    glm::ivec2 get_window_frame() const;
 };
 
 
 
-class RootUIelement : public UIelement {
-    void center();
-    virtual void on_layout() override;
-public:
-    RootUIelement();
-};
-
-
-// class QuadUIelement : public UIelement {
-//     UIbbox uvbbox;
-//     glm::vec4 bg_color;
-
-// };
-
-
-
-/** ==== RENDERING ==== */
-
-struct UIRenderer {
-    Shader shader;
-    VertexArray vao;
-    VertexBuffer<Vertex_2f> vbo;
-    ElementBuffer ebo;
-    InstanceBuffer<iAttr_3v4> ibo;
-    Texture tex;
-
-    void init();
-    void prepare(UIRenderCache& cache);
-    void render();
-    void destroy();
-};
-
-
-struct UITextRenderer {
-    
-    void init();
-    void prepare(UIRenderCache& cache);
-    void render();
-    void destroy();
-private:
-    struct InternalDescriptor {
-        bool touched = false;
-        UITextRenderDescriptor desc_copy;
-        TextRenderer renderer;
-    };
-    std::unordered_map<UIelement*, InternalDescriptor> renderers;
-};
-
-
-#endif /* UI_H */
+#endif /* UIDATA_H */

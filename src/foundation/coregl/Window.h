@@ -2,35 +2,7 @@
 #define Window_h
 #include "gfx.h" 
 #include <flgl/glm.h>
-
-struct Button {
-    Button();
-    bool down       : 1; 
-    bool pressed    : 1; 
-    bool released   : 1; 
-    bool last       : 1;
-};
-
-class Keyboard {
-    Button buttons[GLFW_KEY_LAST];
-public:
-    Keyboard() = default;
-    void update_data();
-    Button & operator[](size_t index);
-    Button const& operator[](size_t index) const;
-};
-
-struct Mouse {
-    Mouse();
-    glm::vec2 pos, delta, delta_last, scroll, scroll_last;
-    Button buttons[GLFW_MOUSE_BUTTON_LAST];
-    inline Button const& left() const {return buttons[GLFW_MOUSE_BUTTON_LEFT];}
-    inline Button const& right() const {return buttons[GLFW_MOUSE_BUTTON_RIGHT];}
-    inline Button const& middle() const {return buttons[GLFW_MOUSE_BUTTON_MIDDLE];}
-    Button & operator[](size_t index);
-    Button const& operator[](size_t index) const;
-    void update_data();
-};
+#include <flgl/windowdata.h>
 
 class WindowingCallbacks {
 public:
