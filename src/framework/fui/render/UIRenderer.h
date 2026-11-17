@@ -9,7 +9,7 @@
 #include <flgl/text_renderer.h>
 
 
-struct UIRenderer {
+struct UIQuadRenderer {
     Shader shader;
     VertexArray vao;
     VertexBuffer<Vertex_2f> vbo;

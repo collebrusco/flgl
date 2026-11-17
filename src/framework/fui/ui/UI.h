@@ -17,6 +17,26 @@ public:
     RootUIelement();
 };
 
+class FUI {
+public:
+    RootUIelement root;
+    UIRenderCache cache;
 
+
+    void init();
+    void tick(Window const& window, const float dt);
+private:
+};
+
+class FUIRenderer {
+public:
+    void init();
+    void prepare(FUI& fui);
+    void render();
+    void destroy();
+private:
+    UIQuadRenderer qrenderer;
+    UITextRenderer trenderer;
+};
 
 #endif /* UI_H */

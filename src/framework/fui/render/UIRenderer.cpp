@@ -3,7 +3,7 @@
 LOG_MODULE(uirend);
 static Graphics gl;
 
-void UIRenderer::init() {
+void UIQuadRenderer::init() {
     shader = Shader::from_source("fui/ui_vert", "fui/ui_frag_notex");
     tex.create();
     vao.create_bind();
@@ -31,7 +31,7 @@ void UIRenderer::init() {
     shader.unbind();
 }
 
-void UIRenderer::prepare(UIRenderCache &cache) {
+void UIQuadRenderer::prepare(UIRenderCache &cache) {
     if (window.did_resize() || cache.quad_cache.is_dirty()) {
         std::vector<iAttr_3v4> data;
         for (auto& qdesc : cache.quad_cache.data()) {
@@ -55,7 +55,7 @@ void UIRenderer::prepare(UIRenderCache &cache) {
     cache.quad_cache.reset();
 }
 
-void UIRenderer::render() {
+void UIQuadRenderer::render() {
     shader.bind();
     vao.bind();
     tex.bind();
@@ -76,7 +76,7 @@ void UIRenderer::render() {
     tex.unbind();
 }
 
-void UIRenderer::destroy() {
+void UIQuadRenderer::destroy() {
     shader.destroy();
     vao.destroy();
     ibo.destroy();
