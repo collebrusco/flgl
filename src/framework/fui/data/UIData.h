@@ -86,16 +86,22 @@ struct UIpivot {
 };
 
 
+typedef uint8_t layer_t;
+#define UILAYOUT_LAYER_TRUE_MAX (0xFF)
+/* artificially limit to keep loop short, no other reason rn. */
+#define UILAYOUT_LAYER_MAX (0x10)
 struct UIlayout {
     UIpin pinning;
     UIpivot pivot;
     glm::vec2 offset;
     glm::vec2 size;
+    layer_t layer;
     
     UIlayout(UIpin::pin_e pin = UIpin::CENTERCENTER, 
              UIpin::pin_e self_pin = UIpin::CENTERCENTER, 
              glm::vec2 ofs = glm::vec2(0.f), 
-             glm::vec2 sz = glm::vec2(0.5f));
+             glm::vec2 sz = glm::vec2(0.5f),
+             layer_t layer = 0);
     glm::vec2 offset_from(UIlayout const& parent) const;
 };
 
@@ -137,7 +143,7 @@ public:
     NO_COPY_OR_MOVE(UIRenderDescriptorCache);
     UIRenderDescriptorCache() = default;
 
-    void add(UIelement* owner, Descriptor const& desc) {
+    void add(UIelement* owner, Descriptor const& desc) { /* TODO version the pointers */
         assert(cursor <= cache.size());
         if (cursor == cache.size()) {
             dirty = true;

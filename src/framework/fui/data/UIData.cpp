@@ -157,11 +157,12 @@ void UIpivot::set_pin(UIpin pin) {
 
 // ---- UIlayout ----
 
-UIlayout::UIlayout(UIpin::pin_e pin, UIpin::pin_e self_pin, glm::vec2 ofs, glm::vec2 sz) {
+UIlayout::UIlayout(UIpin::pin_e pin, UIpin::pin_e self_pin, glm::vec2 ofs, glm::vec2 sz, layer_t l) {
     pinning.set_pin(pin);
     pivot.set_pin(UIpin(self_pin));
     offset = ofs;
     size = sz;
+    layer = l;
 }
 
 /** position of the center of this layout relative to parent

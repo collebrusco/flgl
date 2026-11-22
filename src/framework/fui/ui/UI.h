@@ -17,7 +17,7 @@ public:
     RootUIelement();
 };
 
-class FUI {
+class FUI : public UIcontext {
 public:
     RootUIelement root;
     UIRenderCache cache;

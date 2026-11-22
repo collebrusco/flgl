@@ -45,7 +45,9 @@ void FUI::tick(Window const& win, const float dt) {
     UImouse uimouse(win.mouse, glm::vec2(win.frame));
 
     UIelement::layout_tree(&root);
-    UIelement::hittest_tree(&root, uimouse);
+
+    UIelement::hittest_tree(&root, this, uimouse);
+
     UIelement::behave_tree(&root, dt, uimouse);
 
     cache.supply_window_frame(win.frame);

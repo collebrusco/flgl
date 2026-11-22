@@ -78,26 +78,40 @@ UIelement::UIelement() : parent(0), current_ofs(0.f), nkids(0) {
 bool UIelement::enabled() const {
     return flags.enable;
 }
-
 void UIelement::set_enabled(bool val) {
     flags.enable = val;
 }
-
 bool UIelement::subtree_enabled() const {
     return flags.subtree_enable;
 }
-
 void UIelement::set_subtree_enabled(bool val) {
     flags.subtree_enable = val;
 }
-
 bool UIelement::render_enabled() const {
     return flags.render_enable;
 }
-
 void UIelement::set_render_enable(bool val) {
     flags.render_enable = val;
 }
+bool UIelement::hittest_enabled() const {
+    return flags.hittest_enable;
+}
+void UIelement::set_hittest_enable(bool val) {
+    flags.hittest_enable = val;
+}
+bool UIelement::interact_enabled() const {
+    return flags.interactable;
+}
+void UIelement::set_interact_enable(bool val) {
+    flags.interactable = val;
+}
+bool UIelement::focus_enabled() const {
+    return flags.focusable;
+}
+void UIelement::set_focus_enable(bool val) {
+    flags.focusable = val;
+}
+
 
 bool UIelement::is_hovered() const {
     return flags.hovered;
@@ -116,10 +130,12 @@ size_t UIelement::num_children() const {
     return (size_t)nkids;
 }
 
+/** adds a child to list, sets its parent, and defaults its layer to parent layer + 1. */
 bool UIelement::add_child(UIelement *child) {
     if (nkids == UINODE_CHILD_MAX) return false;
     children[nkids++] = child;
     child->parent = this;
+    child->layout.layer = this->layout.layer + 1;
     return true;
 }
 
@@ -165,12 +181,14 @@ UImouse UIelement::localize_mouse(UImouse const &parent) {
     return UImouse(parent, this->total_ofs());
 }
 
-bool UIelement::hittest_self(UImouse const& mouse, bool obstructed) {
-    bool hit = !obstructed && hit_test(mouse);
+void UIelement::hittest_self(UImouse const &mouse, UIcontext* ctx)
+{
+    if (!hittest_enabled()) return;
+    bool hit = !(ctx->hot) && hit_test(mouse);
     flags.hover_enter = !flags.hovered && hit;
     flags.hover_exit = flags.hovered && !hit;
     flags.hovered = hit;
-    return hit;
+    if (hit) ctx->hot = this;
 }
 
 /** behave_self calls on_update */
@@ -198,23 +216,30 @@ void UIelement::on_layout() {
 }
 
 #define ITERATE_KIDS(root, c) (size_t c = (root)->num_children()-1; c < (root)->num_children(); c--)
+#define ITERATE_LAYERS_RENDER(l) (layer_t l = 0; l <= UILAYOUT_LAYER_MAX; l++) /* TODO try to avoid going to ff every time? */
+#define ITERATE_LAYERS_HITTEST(l) (int16_t l = UILAYOUT_LAYER_MAX; l >= 0; l--)
+
+void UIelement::hittest_tree_recurse(UIelement *root, UIcontext *ctx, UImouse const &mouse, layer_t l) {
+    if (root->subtree_enabled()) {
+        for ITERATE_KIDS(root, c) {
+            UIelement::hittest_tree_recurse(root->get_child(c), ctx, mouse, l);
+        }
+    }
+    if (root->enabled() && root->hittest_enabled() && root->layout.layer == l) {
+        root->hittest_self(root->localize_mouse(mouse), ctx);
+    }
+}
 
 /** layout -> hittest -> behave -> render
  * kids are walked front-to-back and obstruct both their later siblings and
  * their own parent. we never stop early: an obstructed element still has to
  * run hittest_self to clear a hover it was holding from a previous frame. */
-bool UIelement::hittest_tree(UIelement* root, UImouse const& mouse, bool obstructed) {
-    assert(root);
-    bool found = obstructed;
-    if (root->subtree_enabled()) {
-        for ITERATE_KIDS(root, c) {
-            found = UIelement::hittest_tree(root->get_child(c), mouse, found);
-        }
+void UIelement::hittest_tree(UIelement* root, UIcontext* ctx, UImouse const& mouse) {
+    assert(root && ctx);
+    ctx->hot = nullptr;
+    for ITERATE_LAYERS_HITTEST(l) {
+        hittest_tree_recurse(root, ctx, mouse, l);
     }
-    if (root->enabled()) {
-        found = root->hittest_self(root->localize_mouse(mouse), found) || found;
-    }
-    return found;
 }
 
 /** layout -> hittest -> behave -> render */
@@ -231,6 +256,8 @@ void UIelement::behave_tree(UIelement *root, float dt, UImouse const &mouse) {
 }
 
 /** layout -> hittest -> behave -> render */
+/** layout does not care about going in layering order, ironically.
+ * the contract for layout is still based purely on parent-child relationships, not spatial order */
 void UIelement::layout_tree(UIelement* root) {
     assert(root);
     if (root->enabled()) {
@@ -246,16 +273,22 @@ void UIelement::layout_tree(UIelement* root) {
     }
 }
 
-/** layout -> hittest -> behave -> render */
-void UIelement::submit_renders_tree(UIelement *root, UIRenderCache &cache) {
-    assert(root);
-    if (root->render_enabled()) {
+void UIelement::submit_renders_tree_recurse(UIelement *root, UIRenderCache& cache, layer_t l) {
+    if (root->render_enabled() && root->layout.layer == l) {
         root->submit_render(cache);
     }
     if (root->subtree_enabled()) {
         for ITERATE_KIDS(root, c) {
-            UIelement::submit_renders_tree(root->get_child(c), cache);
+            UIelement::submit_renders_tree_recurse(root->get_child(c), cache, l);
         }
+    }
+}
+
+/** layout -> hittest -> behave -> render */
+void UIelement::submit_renders_tree(UIelement *root, UIRenderCache &cache) {
+    assert(root);
+    for ITERATE_LAYERS_RENDER(l) {
+        submit_renders_tree_recurse(root, cache, (layer_t)l);
     }
 }
 

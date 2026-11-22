@@ -17,6 +17,19 @@ struct UImouse {
     UImouse(UImouse const& other, glm::vec2 ofs);
 };
 
+class UIelement;
+
+/** basis for a ui-wide context
+ * hot- current hovered element in space
+ * active- pointer owner
+ * focused- keyboard owner
+ */
+class UIcontext {
+public:
+    UIcontext() = default;
+    UIelement *hot, *active, *focused;
+};
+
 #define UINODE_CHILD_MAX 16
 
 /** root class of the ui element nodes in the ui tree
@@ -44,15 +57,20 @@ class UIelement {
         bool enable         : 1;
         bool render_enable  : 1;
         bool subtree_enable : 1;
+        bool hittest_enable : 1;
+        bool interactable   : 1;
+        bool focusable      : 1;
+        bool                : 7;
         bool hovered        : 1;
         bool hover_enter    : 1;
         bool hover_exit     : 1;
-        bool                : 2;
     } flags;
 
     virtual void submit_render_int(UIRenderCache& cache);
 
-    bool hittest_self(UImouse const& lmouse, bool obstructed);
+    static void hittest_tree_recurse(UIelement* root, UIcontext* ctx, UImouse const& mouse, layer_t l);
+    static void submit_renders_tree_recurse(UIelement* root, UIRenderCache& cache, layer_t l);
+    void hittest_self(UImouse const& lmouse, UIcontext* ctx);
     void behave_self(float dt, UImouse const& lmouse);
     virtual void on_update(float dt, UImouse const& lsmouse);
     /** called at the top of layout_self, before this element's box is computed.
@@ -68,7 +86,7 @@ public:
     UIelement();
     virtual ~UIelement() = default;
     
-    static bool hittest_tree(UIelement* root, UImouse const& mouse, bool obstructed = false);
+    static void hittest_tree(UIelement* root, UIcontext* ctx, UImouse const& mouse);
     static void behave_tree(UIelement* root, float dt, UImouse const& mouse);
     static void layout_tree(UIelement* root);
     static void submit_renders_tree(UIelement* root, UIRenderCache& cache);
@@ -92,6 +110,12 @@ public:
     void set_subtree_enabled(bool val = true);
     bool render_enabled() const;
     void set_render_enable(bool val);
+    bool hittest_enabled() const;
+    void set_hittest_enable(bool val);
+    bool interact_enabled() const;
+    void set_interact_enable(bool val);
+    bool focus_enabled() const;
+    void set_focus_enable(bool val);
     
     bool is_hovered()           const;
     bool is_hover_entered()     const;
@@ -100,7 +124,6 @@ public:
 
     
 };
-
 
 
 #endif /* UICORE_H */
