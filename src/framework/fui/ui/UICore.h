@@ -17,6 +17,11 @@ struct UImouse {
     UImouse(UImouse const& other, glm::vec2 ofs);
 };
 
+typedef uint16_t layer_t;
+#define UILAYOUT_LAYER_TRUE_MAX (0xFFFF)
+/* artificially limit to keep loop short, no other reason rn. */
+#define UILAYOUT_LAYER_MAX (0x100)
+
 class UIelement;
 
 /** basis for a ui-wide context
@@ -26,8 +31,9 @@ class UIelement;
  */
 class UIcontext {
 public:
-    UIcontext() = default;
+    UIcontext();
     UIelement *hot, *active, *focused;
+    layer_t max_layer;
 };
 
 #define UINODE_CHILD_MAX 16
@@ -53,6 +59,8 @@ class UIelement {
     UIelement* children[UINODE_CHILD_MAX];
     uint8_t nkids;
 
+    layer_t layer;
+
     struct {
         bool enable         : 1;
         bool render_enable  : 1;
@@ -60,7 +68,8 @@ class UIelement {
         bool hittest_enable : 1;
         bool interactable   : 1;
         bool focusable      : 1;
-        bool                : 7;
+        bool                : 2;
+        bool                : 5;
         bool hovered        : 1;
         bool hover_enter    : 1;
         bool hover_exit     : 1;
@@ -92,7 +101,7 @@ public:
     static void submit_renders_tree(UIelement* root, UIRenderCache& cache);
 
     size_t num_children() const;
-    bool add_child(UIelement* child);
+    bool add_child(UIelement* child, bool inherit_layer = true);
     void remove_child(UIelement* child);
     UIelement* get_child(size_t n);
 
@@ -103,6 +112,10 @@ public:
     glm::vec2 ofs_from_parent() const;
     glm::vec2 total_ofs() const;
     UImouse localize_mouse(UImouse const& parent);
+
+    void set_layer(layer_t l);
+    layer_t get_layer() const;
+    void reset_layer();
 
     bool enabled() const;
     void set_enabled(bool val = true);

@@ -26,6 +26,11 @@ UImouse::UImouse(UImouse const &other, glm::vec2 ofs)
     pos -= ofs;
 }
 
+// --- UIcontext ----
+UIcontext::UIcontext() {
+    hot = focused = active = 0;
+}
+
 // ---- UIelement ----
 
 void UIelement::submit_render(UIRenderCache& cache) {
@@ -125,17 +130,16 @@ bool UIelement::is_hover_exited() const {
     return flags.hover_exit;
 }
 
-
 size_t UIelement::num_children() const {
     return (size_t)nkids;
 }
 
 /** adds a child to list, sets its parent, and defaults its layer to parent layer + 1. */
-bool UIelement::add_child(UIelement *child) {
+bool UIelement::add_child(UIelement *child, bool inherit_layer) {
     if (nkids == UINODE_CHILD_MAX) return false;
     children[nkids++] = child;
     child->parent = this;
-    child->layout.layer = this->layout.layer + 1;
+    if (inherit_layer) child->reset_layer();
     return true;
 }
 
@@ -181,9 +185,26 @@ UImouse UIelement::localize_mouse(UImouse const &parent) {
     return UImouse(parent, this->total_ofs());
 }
 
-void UIelement::hittest_self(UImouse const &mouse, UIcontext* ctx)
-{
-    if (!hittest_enabled()) return;
+void UIelement::set_layer(layer_t l) {
+    if (l > UILAYOUT_LAYER_MAX) {
+        LOG_WRN("element %p hitting layer cap %d", this, l);
+        layer = UILAYOUT_LAYER_MAX;
+    } else {
+        layer = l;
+    }
+}
+layer_t UIelement::get_layer() const {
+    return layer;
+}
+void UIelement::reset_layer() {
+    if (parent) {
+        set_layer(parent->get_layer() + 1);
+    } else {
+        set_layer(0);
+    }
+}
+
+void UIelement::hittest_self(UImouse const &mouse, UIcontext* ctx) {
     bool hit = !(ctx->hot) && hit_test(mouse);
     flags.hover_enter = !flags.hovered && hit;
     flags.hover_exit = flags.hovered && !hit;
@@ -215,17 +236,20 @@ void UIelement::on_layout() {
     /** noop */
 }
 
-#define ITERATE_KIDS(root, c) (size_t c = (root)->num_children()-1; c < (root)->num_children(); c--)
+/* within the same layer, tree & submit order still decides layering. 
+the most recently added child is on top */
+#define ITERATE_KIDS_HITTEST(root, c) (size_t c = (root)->num_children()-1; c < (root)->num_children(); c--)
+#define ITERATE_KIDS_RENDER(root, c) (size_t c = 0; c < (root)->num_children(); c++)
 #define ITERATE_LAYERS_RENDER(l) (layer_t l = 0; l <= UILAYOUT_LAYER_MAX; l++) /* TODO try to avoid going to ff every time? */
 #define ITERATE_LAYERS_HITTEST(l) (int16_t l = UILAYOUT_LAYER_MAX; l >= 0; l--)
 
 void UIelement::hittest_tree_recurse(UIelement *root, UIcontext *ctx, UImouse const &mouse, layer_t l) {
     if (root->subtree_enabled()) {
-        for ITERATE_KIDS(root, c) {
+        for ITERATE_KIDS_HITTEST(root, c) {
             UIelement::hittest_tree_recurse(root->get_child(c), ctx, mouse, l);
         }
     }
-    if (root->enabled() && root->hittest_enabled() && root->layout.layer == l) {
+    if (root->enabled() && root->hittest_enabled() && root->get_layer() == l) {
         root->hittest_self(root->localize_mouse(mouse), ctx);
     }
 }
@@ -246,7 +270,7 @@ void UIelement::hittest_tree(UIelement* root, UIcontext* ctx, UImouse const& mou
 void UIelement::behave_tree(UIelement *root, float dt, UImouse const &mouse) {
     assert(root);
     if (root->subtree_enabled()) {
-        for ITERATE_KIDS(root, c) {
+        for ITERATE_KIDS_HITTEST(root, c) {
             UIelement::behave_tree(root->get_child(c), dt, mouse);
         }
     }
@@ -266,7 +290,7 @@ void UIelement::layout_tree(UIelement* root) {
         root->subtree_bbox = UIbbox::null();
     }
     if (root->subtree_enabled()) {
-        for ITERATE_KIDS(root, c) {
+        for ITERATE_KIDS_HITTEST(root, c) {
             UIelement::layout_tree(root->get_child(c));
             root->subtree_bbox.merge(root->get_child(c)->subtree_bbox);
         }
@@ -274,11 +298,11 @@ void UIelement::layout_tree(UIelement* root) {
 }
 
 void UIelement::submit_renders_tree_recurse(UIelement *root, UIRenderCache& cache, layer_t l) {
-    if (root->render_enabled() && root->layout.layer == l) {
+    if (root->render_enabled() && root->get_layer() == l) {
         root->submit_render(cache);
     }
     if (root->subtree_enabled()) {
-        for ITERATE_KIDS(root, c) {
+        for ITERATE_KIDS_RENDER(root, c) {
             UIelement::submit_renders_tree_recurse(root->get_child(c), cache, l);
         }
     }
