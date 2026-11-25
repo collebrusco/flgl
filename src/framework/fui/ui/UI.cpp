@@ -46,12 +46,14 @@ void FUI::init() {
 void FUI::tick(Window const& win, const float dt) {
     UImouse uimouse(win.mouse, glm::vec2(win.frame));
 
+    this->max_layer = UIelement::measure_tree(&root);
+
     UIelement::layout_tree(&root);
 
     UIelement::hittest_tree(&root, this, uimouse);
 
-    UIelement::behave_tree(&root, *this, dt, uimouse);
+    UIelement::behave_tree(&root, this, dt, uimouse);
 
     cache.supply_window_frame(win.frame);
-    UIelement::submit_renders_tree(&root, *this, cache);
+    UIelement::submit_renders_tree(&root, this, cache);
 }

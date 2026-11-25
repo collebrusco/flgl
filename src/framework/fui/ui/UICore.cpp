@@ -53,13 +53,13 @@ UIcontext::UIcontext() {
 
 // ---- UIelement ----
 
-void UIelement::submit_render(UIRenderCache& cache, UIcontext const& ctx) {
+void UIelement::submit_render(UIRenderCache& cache, UIcontext const* ctx) {
     if (flags.enable) {
         submit_render_int(cache, ctx);
     }
 }
 
-void UIelement::submit_render_int(UIRenderCache& cache, UIcontext const& ctx) {
+void UIelement::submit_render_int(UIRenderCache& cache, UIcontext const* ctx) {
     {    
         UIQuadRenderDescriptor desc;
 
@@ -69,7 +69,7 @@ void UIelement::submit_render_int(UIRenderCache& cache, UIcontext const& ctx) {
 
         glm::vec4 color = {0.3f, 0.3f, 0.3f, 0.9f};
 
-        if (ctx.active_left.clicked() == this) {
+        if (ctx->active_left.clicked() == this) {
             color = {0.f,1.f,0.f,0.9f};
         } else if (is_hover_entered()) {
             color = {0.2f, 0.4f, 1.0f, 0.9f};
@@ -86,13 +86,13 @@ void UIelement::submit_render_int(UIRenderCache& cache, UIcontext const& ctx) {
 
     {
         UITextRenderDescriptor desc;
-        if (ctx.active_left.clicked() == this) {
+        if (ctx->active_left.clicked() == this) {
             desc.text = "clicked";
-        } else if (ctx.active_left.pressed() == this) {
+        } else if (ctx->active_left.pressed() == this) {
             desc.text = "pressed";
-        } else if (ctx.active_left.held() == this) {
+        } else if (ctx->active_left.held() == this) {
             desc.text = "held";
-        } else if (ctx.active_left.released() == this) {
+        } else if (ctx->active_left.released() == this) {
             desc.text = "released";
         } else {
             desc.text = "default";
@@ -247,7 +247,7 @@ void UIelement::hittest_self(UImouse const &mouse, UIcontext* ctx) {
 }
 
 /** behave_self calls on_update */
-void UIelement::behave_self(UIcontext const& ctx, float dt, UImouse const& mouse) {
+void UIelement::behave_self(UIcontext const* ctx, float dt, UImouse const& mouse) {
     /** anything else? dont need this func if not */
     this->on_update(ctx, dt, mouse);
 }
@@ -262,7 +262,7 @@ void UIelement::layout_self() {
     subtree_bbox = bbox;
 }
 
-void UIelement::on_update(UIcontext const& ctx, float dt, UImouse const& mouse) {
+void UIelement::on_update(UIcontext const* ctx, float dt, UImouse const& mouse) {
     /** noop */
 }
 
@@ -297,8 +297,8 @@ static void bind_active_button(UIelement* hot, UIActiveElement* active, Button b
 the most recently added child is on top */
 #define ITERATE_KIDS_HITTEST(root, c) (size_t c = (root)->num_children()-1; c < (root)->num_children(); c--)
 #define ITERATE_KIDS_RENDER(root, c) (size_t c = 0; c < (root)->num_children(); c++)
-#define ITERATE_LAYERS_RENDER(l) (layer_t l = 0; l <= UILAYOUT_LAYER_MAX; l++) /* TODO try to avoid going to ff every time? */
-#define ITERATE_LAYERS_HITTEST(l) (int16_t l = UILAYOUT_LAYER_MAX; l >= 0; l--)
+#define ITERATE_LAYERS_RENDER(l, ctx) (layer_t l = 0; l <= (ctx)->max_layer; l++) /* TODO try to avoid going to ff every time? */
+#define ITERATE_LAYERS_HITTEST(l, ctx) (int16_t l = (ctx)->max_layer; l >= 0; l--)
 
 void UIelement::hittest_tree_recurse(UIelement *root, UIcontext *ctx, UImouse const &mouse, layer_t l) {
     if (root->subtree_enabled()) {
@@ -315,7 +315,7 @@ void UIelement::hittest_tree_recurse(UIelement *root, UIcontext *ctx, UImouse co
 void UIelement::hittest_tree(UIelement* root, UIcontext* ctx, UImouse const& mouse) {
     assert(root && ctx);
     ctx->hot = nullptr;
-    for ITERATE_LAYERS_HITTEST(l) {
+    for ITERATE_LAYERS_HITTEST(l, ctx) {
         hittest_tree_recurse(root, ctx, mouse, l);
     }
     bind_active_button(ctx->hot, &ctx->active_left, mouse.left);
@@ -323,8 +323,20 @@ void UIelement::hittest_tree(UIelement* root, UIcontext* ctx, UImouse const& mou
     // bind_active_button(ctx->hot, &ctx->active_right, mouse.right);
 }
 
+layer_t UIelement::measure_tree(UIelement* root) {
+    if (!root) return 0;
+    layer_t mlayer = root->layer;
+    for ITERATE_KIDS_HITTEST(root, c) {
+        layer_t kidlayer = measure_tree(root->get_child(c));
+        if (kidlayer > mlayer) {
+            mlayer = kidlayer;
+        }
+    }
+    return mlayer;
+}
+
 /** layout -> hittest -> behave -> render */
-void UIelement::behave_tree(UIelement *root, UIcontext const& ctx, float dt, UImouse const &mouse) {
+void UIelement::behave_tree(UIelement *root, UIcontext const* ctx, float dt, UImouse const &mouse) {
     assert(root);
     if (root->subtree_enabled()) {
         for ITERATE_KIDS_HITTEST(root, c) {
@@ -354,7 +366,7 @@ void UIelement::layout_tree(UIelement* root) {
     }
 }
 
-void UIelement::submit_renders_tree_recurse(UIelement *root, UIcontext const& ctx, UIRenderCache& cache, layer_t l) {
+void UIelement::submit_renders_tree_recurse(UIelement *root, UIcontext const* ctx, UIRenderCache& cache, layer_t l) {
     if (root->render_enabled() && root->get_layer() == l) {
         root->submit_render(cache, ctx);
     }
@@ -366,9 +378,9 @@ void UIelement::submit_renders_tree_recurse(UIelement *root, UIcontext const& ct
 }
 
 /** layout -> hittest -> behave -> render */
-void UIelement::submit_renders_tree(UIelement *root, UIcontext const& ctx, UIRenderCache &cache) {
+void UIelement::submit_renders_tree(UIelement *root, UIcontext const* ctx, UIRenderCache &cache) {
     assert(root);
-    for ITERATE_LAYERS_RENDER(l) {
+    for ITERATE_LAYERS_RENDER(l, ctx) {
         submit_renders_tree_recurse(root, ctx, cache, (layer_t)l);
     }
 }
