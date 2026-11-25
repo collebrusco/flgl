@@ -11,6 +11,8 @@ void RootUIelement::center() {
 }
 
 RootUIelement::RootUIelement() : UIelement() {
+    set_interact_enable(false);
+    set_hittest_enable(false);
     center();
 }
 
@@ -48,8 +50,8 @@ void FUI::tick(Window const& win, const float dt) {
 
     UIelement::hittest_tree(&root, this, uimouse);
 
-    UIelement::behave_tree(&root, dt, uimouse);
+    UIelement::behave_tree(&root, *this, dt, uimouse);
 
     cache.supply_window_frame(win.frame);
-    UIelement::submit_renders_tree(&root, cache);
+    UIelement::submit_renders_tree(&root, *this, cache);
 }

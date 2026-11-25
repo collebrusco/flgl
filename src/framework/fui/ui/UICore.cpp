@@ -26,20 +26,40 @@ UImouse::UImouse(UImouse const &other, glm::vec2 ofs)
     pos -= ofs;
 }
 
+// --- UIActiveElement ----
+UIActiveElement::UIActiveElement() : element(0), state() {
+}
+
+UIelement* UIActiveElement::clicked() const {
+    /* we used last to encode if we are the hot element. 
+    fyi: if nothingness is clicked we lose the signal */
+    return (state.last && state.released) ? element : nullptr; 
+}
+UIelement* UIActiveElement::pressed() const {
+    return state.pressed ? element : nullptr;
+}
+UIelement* UIActiveElement::released() const {
+    return state.released ? element : nullptr;
+}
+UIelement* UIActiveElement::held() const {
+    return state.down ? element : nullptr;
+}
+
+
 // --- UIcontext ----
 UIcontext::UIcontext() {
-    hot = focused = active = 0;
+    hot = focused = 0;
 }
 
 // ---- UIelement ----
 
-void UIelement::submit_render(UIRenderCache& cache) {
+void UIelement::submit_render(UIRenderCache& cache, UIcontext const& ctx) {
     if (flags.enable) {
-        submit_render_int(cache);
+        submit_render_int(cache, ctx);
     }
 }
 
-void UIelement::submit_render_int(UIRenderCache& cache) {
+void UIelement::submit_render_int(UIRenderCache& cache, UIcontext const& ctx) {
     {    
         UIQuadRenderDescriptor desc;
 
@@ -49,7 +69,9 @@ void UIelement::submit_render_int(UIRenderCache& cache) {
 
         glm::vec4 color = {0.3f, 0.3f, 0.3f, 0.9f};
 
-        if (is_hover_entered()) {
+        if (ctx.active_left.clicked() == this) {
+            color = {0.f,1.f,0.f,0.9f};
+        } else if (is_hover_entered()) {
             color = {0.2f, 0.4f, 1.0f, 0.9f};
         } else if (is_hover_exited()) {
             color = {1.0f, 0.2f, 0.2f, 0.9f};
@@ -64,7 +86,17 @@ void UIelement::submit_render_int(UIRenderCache& cache) {
 
     {
         UITextRenderDescriptor desc;
-        desc.text = "default";
+        if (ctx.active_left.clicked() == this) {
+            desc.text = "clicked";
+        } else if (ctx.active_left.pressed() == this) {
+            desc.text = "pressed";
+        } else if (ctx.active_left.held() == this) {
+            desc.text = "held";
+        } else if (ctx.active_left.released() == this) {
+            desc.text = "released";
+        } else {
+            desc.text = "default";
+        }
         desc.blpos = bbox.min();
         desc.scale = glm::clamp(3 * (uint32_t)(bbox.size().x / 160.f), 1u, 3u);
         cache.text_cache.add(this, desc);
@@ -72,10 +104,12 @@ void UIelement::submit_render_int(UIRenderCache& cache) {
 }
 
 
-UIelement::UIelement() : parent(0), current_ofs(0.f), nkids(0) {
+UIelement::UIelement() : parent(0), current_ofs(0.f), nkids(0), layer(0) {
     flags.enable = true;
     flags.render_enable = true;
     flags.subtree_enable = true;
+    flags.hittest_enable = true;
+    flags.interactable = true;
     flags.hover_enter = flags.hover_exit = flags.hovered = false;
     memset(children, 0, sizeof(UIelement*) * UINODE_CHILD_MAX);
 }
@@ -213,9 +247,9 @@ void UIelement::hittest_self(UImouse const &mouse, UIcontext* ctx) {
 }
 
 /** behave_self calls on_update */
-void UIelement::behave_self(float dt, UImouse const& mouse) {
+void UIelement::behave_self(UIcontext const& ctx, float dt, UImouse const& mouse) {
     /** anything else? dont need this func if not */
-    this->on_update(dt, mouse);
+    this->on_update(ctx, dt, mouse);
 }
 
 void UIelement::layout_self() {
@@ -228,12 +262,35 @@ void UIelement::layout_self() {
     subtree_bbox = bbox;
 }
 
-void UIelement::on_update(float dt, UImouse const& mouse) {
+void UIelement::on_update(UIcontext const& ctx, float dt, UImouse const& mouse) {
     /** noop */
 }
 
 void UIelement::on_layout() {
     /** noop */
+}
+
+static void bind_active_button(UIelement* hot, UIActiveElement* active, Button b) {
+    /* clear a release from previous tick */
+    if (active->state.released) {
+        active->element = nullptr;
+    }
+    /* if pressed select active element accordingly */
+    if (b.pressed) {
+        assert(!active->element);
+        active->element = (hot && hot->interact_enabled()) ? hot : nullptr;
+    }
+    /* this is jank but we're using this bit to say if we were the hot element */
+    b.last = hot == active->element;
+    /* set new button state */
+    active->state = b;
+    /* safety check */
+    if (!(b.down || (!active->element) || b.released)) {
+        // LOG_ERR("butt down %d, pressed %d, released %d, active element %p", b.down, b.pressed, b.released, active->element);
+    }
+    // LOG_INF("butt down %d, pressed %d, released %d, active element %p", b.down, b.pressed, b.released, active->element);
+
+    // assert(b.down || (!active->element) || b.released);
 }
 
 /* within the same layer, tree & submit order still decides layering. 
@@ -254,28 +311,28 @@ void UIelement::hittest_tree_recurse(UIelement *root, UIcontext *ctx, UImouse co
     }
 }
 
-/** layout -> hittest -> behave -> render
- * kids are walked front-to-back and obstruct both their later siblings and
- * their own parent. we never stop early: an obstructed element still has to
- * run hittest_self to clear a hover it was holding from a previous frame. */
+/** layout -> hittest -> behave -> render */
 void UIelement::hittest_tree(UIelement* root, UIcontext* ctx, UImouse const& mouse) {
     assert(root && ctx);
     ctx->hot = nullptr;
     for ITERATE_LAYERS_HITTEST(l) {
         hittest_tree_recurse(root, ctx, mouse, l);
     }
+    bind_active_button(ctx->hot, &ctx->active_left, mouse.left);
+    // bind_active_button(ctx->hot, &ctx->active_mid, mouse.middle);
+    // bind_active_button(ctx->hot, &ctx->active_right, mouse.right);
 }
 
 /** layout -> hittest -> behave -> render */
-void UIelement::behave_tree(UIelement *root, float dt, UImouse const &mouse) {
+void UIelement::behave_tree(UIelement *root, UIcontext const& ctx, float dt, UImouse const &mouse) {
     assert(root);
     if (root->subtree_enabled()) {
         for ITERATE_KIDS_HITTEST(root, c) {
-            UIelement::behave_tree(root->get_child(c), dt, mouse);
+            UIelement::behave_tree(root->get_child(c), ctx, dt, mouse);
         }
     }
     if (root->enabled()) {
-        root->behave_self(dt, root->localize_mouse(mouse));
+        root->behave_self(ctx, dt, root->localize_mouse(mouse));
     }
 }
 
@@ -297,27 +354,21 @@ void UIelement::layout_tree(UIelement* root) {
     }
 }
 
-void UIelement::submit_renders_tree_recurse(UIelement *root, UIRenderCache& cache, layer_t l) {
+void UIelement::submit_renders_tree_recurse(UIelement *root, UIcontext const& ctx, UIRenderCache& cache, layer_t l) {
     if (root->render_enabled() && root->get_layer() == l) {
-        root->submit_render(cache);
+        root->submit_render(cache, ctx);
     }
     if (root->subtree_enabled()) {
         for ITERATE_KIDS_RENDER(root, c) {
-            UIelement::submit_renders_tree_recurse(root->get_child(c), cache, l);
+            UIelement::submit_renders_tree_recurse(root->get_child(c), ctx, cache, l);
         }
     }
 }
 
 /** layout -> hittest -> behave -> render */
-void UIelement::submit_renders_tree(UIelement *root, UIRenderCache &cache) {
+void UIelement::submit_renders_tree(UIelement *root, UIcontext const& ctx, UIRenderCache &cache) {
     assert(root);
     for ITERATE_LAYERS_RENDER(l) {
-        submit_renders_tree_recurse(root, cache, (layer_t)l);
+        submit_renders_tree_recurse(root, ctx, cache, (layer_t)l);
     }
 }
-
-
-
-
-
-

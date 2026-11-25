@@ -161,12 +161,12 @@ void Window::swap_buffers() {
 
 void Window::update() {
     if (!active) return;
-    _keyboard.update_data();
-    _mouse.update_data();
     int win_w,win_h; glfwGetWindowSize(handle,&win_w,&win_h);
     fr2win = (float)_frame.x / (float)win_w;
     _pframe = _frame;
     poll_events();
+    _keyboard.update_data();
+    _mouse.update_data();
     swap_buffers();
 }
 void Window::destroy() {

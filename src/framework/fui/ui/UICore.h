@@ -24,17 +24,28 @@ typedef uint16_t layer_t;
 
 class UIelement;
 
+struct UIActiveElement {
+    UIActiveElement();
+    UIelement* element;
+    Button state;
+    UIelement* clicked() const;
+    UIelement* pressed() const;
+    UIelement* released() const;
+    UIelement* held() const;
+};
+
 /** basis for a ui-wide context
  * hot- current hovered element in space
- * active- pointer owner
+ * active- pointer owner (left, right, middle)
  * focused- keyboard owner
  */
 class UIcontext {
 public:
     UIcontext();
-    UIelement *hot, *active, *focused;
-    layer_t max_layer;
+    UIelement *hot, *focused;
+    UIActiveElement active_left, active_mid, active_right;
 };
+
 
 #define UINODE_CHILD_MAX 16
 
@@ -68,20 +79,18 @@ class UIelement {
         bool hittest_enable : 1;
         bool interactable   : 1;
         bool focusable      : 1;
-        bool                : 2;
-        bool                : 5;
         bool hovered        : 1;
         bool hover_enter    : 1;
         bool hover_exit     : 1;
     } flags;
 
-    virtual void submit_render_int(UIRenderCache& cache);
+    virtual void submit_render_int(UIRenderCache& cache, UIcontext const& ctx);
 
     static void hittest_tree_recurse(UIelement* root, UIcontext* ctx, UImouse const& mouse, layer_t l);
-    static void submit_renders_tree_recurse(UIelement* root, UIRenderCache& cache, layer_t l);
+    static void submit_renders_tree_recurse(UIelement* root, UIcontext const& ctx, UIRenderCache& cache, layer_t l);
     void hittest_self(UImouse const& lmouse, UIcontext* ctx);
-    void behave_self(float dt, UImouse const& lmouse);
-    virtual void on_update(float dt, UImouse const& lsmouse);
+    void behave_self(UIcontext const& ctx, float dt, UImouse const& lmouse);
+    virtual void on_update(UIcontext const& ctx, float dt, UImouse const& lsmouse);
     /** called at the top of layout_self, before this element's box is computed.
      * override to drive layout from external state (window size, content, ...) */
     virtual void on_layout();
@@ -96,9 +105,9 @@ public:
     virtual ~UIelement() = default;
     
     static void hittest_tree(UIelement* root, UIcontext* ctx, UImouse const& mouse);
-    static void behave_tree(UIelement* root, float dt, UImouse const& mouse);
+    static void behave_tree(UIelement* root, UIcontext const& ctx, float dt, UImouse const& mouse);
     static void layout_tree(UIelement* root);
-    static void submit_renders_tree(UIelement* root, UIRenderCache& cache);
+    static void submit_renders_tree(UIelement* root, UIcontext const& ctx, UIRenderCache& cache);
 
     size_t num_children() const;
     bool add_child(UIelement* child, bool inherit_layer = true);
@@ -107,7 +116,7 @@ public:
 
     bool hit_test(UImouse const& local_mouse);
 
-    void submit_render(UIRenderCache& cache);
+    void submit_render(UIRenderCache& cache, UIcontext const& ctx);
 
     glm::vec2 ofs_from_parent() const;
     glm::vec2 total_ofs() const;
@@ -134,7 +143,10 @@ public:
     bool is_hover_entered()     const;
     bool is_hover_exited()      const;
 
-
+    bool clicked() const;
+    bool pressed() const;
+    bool released() const;
+    bool held() const;
     
 };
 
