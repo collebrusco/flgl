@@ -107,6 +107,7 @@ public:
     virtual ~UIelement() = default;
 
     UIbbox get_bbox() const;
+    glm::vec2 resolve_size(glm::vec2 space) const;
     glm::vec2 get_desired_size() const;
 
     static layer_t find_max_layer_tree(UIelement* root);

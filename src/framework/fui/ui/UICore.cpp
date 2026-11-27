@@ -52,12 +52,20 @@ UIcontext::UIcontext() {
 }
 
 // ---- UIelement ----
+#define ITERATE_AXES(a) (int a = 0; a < 2; a++)
 
 UIbbox UIelement::get_bbox() const {
     return bbox;
 }
 glm::vec2 UIelement::get_desired_size() const {
     return desired_size;
+}
+glm::vec2 UIelement::resolve_size(glm::vec2 space) const {
+    glm::vec2 resolved;
+    for ITERATE_AXES(a) {
+        resolved[a] = (layout.scale[a] == FILL) ? space[a] : desired_size[a];
+    }
+    return resolved;
 }
 
 void UIelement::submit_render(UIRenderCache& cache, UIcontext const* ctx) {
@@ -355,8 +363,6 @@ void UIelement::behave_tree(UIelement *root, UIcontext const* ctx, float dt, UIm
     }
 }
 
-#define ITERATE_AXES(a) (int a = 0; a < 2; a++)
-
 glm::vec2 UIelement::on_measure(glm::vec2 avail) {
     for ITERATE_KIDS(this, c) {
         measure_tree(get_child(c), avail);
@@ -395,14 +401,9 @@ void UIelement::on_arrange() {
     const glm::vec2 psize = bbox.size();
     for ITERATE_KIDS(this, c) {
         UIelement*const kid = get_child(c);
-        glm::vec2 true_size = kid->get_desired_size();
-        for ITERATE_AXES(a) {
-            if (kid->layout.scale[a] == FILL)
-                true_size[a] = psize[a];
-        }
+        const glm::vec2 true_size = kid->resolve_size(psize);
         const glm::vec2 true_ofs = parent_ofs + kid->layout.offset_within_with_size(psize, true_size);
-        UIbbox kidbox = UIbbox::from_midsize(true_ofs, true_size);
-        arrange_tree(kid, kidbox);
+        arrange_tree(kid, UIbbox::from_midsize(true_ofs, true_size));
     }
 }
 

@@ -21,7 +21,6 @@ public:
     RootUIelement root;
     UIRenderCache cache;
 
-
     void init();
     void tick(Window const& window, const float dt);
 private:
