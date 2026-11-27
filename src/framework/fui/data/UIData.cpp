@@ -157,20 +157,30 @@ void UIpivot::set_pin(UIpin pin) {
 
 // ---- UIlayout ----
 
-UIlayout::UIlayout(UIpin::pin_e pin, UIpin::pin_e self_pin, glm::vec2 ofs, glm::vec2 sz) {
+UIlayout::UIlayout(UIpin::pin_e pin, UIpin::pin_e self_pin, glm::vec2 ofs, glm::vec2 sz, UIscale hscale, UIscale vscale) {
     pinning.set_pin(pin);
     pivot.set_pin(UIpin(self_pin));
     offset = ofs;
     size = sz;
+    scale[0] = hscale;
+    scale[1] = vscale;
+}
+
+glm::vec2 UIlayout::offset_within_with_size(glm::vec2 space, glm::vec2 size) const {
+    glm::vec2 ofs = space * this->pinning.to_unit_ofs();
+    ofs -= (size * this->pivot.value);
+    ofs += offset;
+    return ofs;
+}
+
+glm::vec2 UIlayout::offset_within(glm::vec2 space) const {
+    return offset_within_with_size(space, this->size);
 }
 
 /** position of the center of this layout relative to parent
  * center here meaning center of bbox */
 glm::vec2 UIlayout::offset_from(UIlayout const &parent) const {
-    glm::vec2 ofs = parent.size * this->pinning.to_unit_ofs();
-    ofs -= (this->size * this->pivot.value);
-    ofs += offset;
-    return ofs;
+    return offset_within(parent.size);
 }
 
 // ---- Render Cache ----

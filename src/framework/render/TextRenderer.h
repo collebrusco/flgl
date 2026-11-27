@@ -37,6 +37,8 @@ public:
 	}
 
 	glm::ivec2 box_size() const;
+
+	static glm::ivec2 hypothetical_box_size(const char* text);
 	
 	void set_color(glm::vec3 const& color);
 	void render(int x, int y, int scale) const;

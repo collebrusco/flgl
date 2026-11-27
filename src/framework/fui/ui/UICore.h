@@ -66,13 +66,14 @@ class UIelement {
     /** calculated per tree update */
     UIbbox bbox;
     UIbbox subtree_bbox;
-    glm::vec2 current_ofs;
-    
+    glm::vec2 desired_size;
+
     UIelement* children[UINODE_CHILD_MAX];
     uint8_t nkids;
 
     layer_t layer;
 
+    /** enabled disables & collapses self and children, subtree_enabled just children */
     struct {
         bool enable         : 1;
         bool render_enable  : 1;
@@ -85,6 +86,8 @@ class UIelement {
         bool hover_exit     : 1;
     } flags;
 
+    bool doesnt_layout() const;
+
     virtual void submit_render_int(UIRenderCache& cache, UIcontext const* ctx);
 
     static void hittest_tree_recurse(UIelement* root, UIcontext* ctx, UImouse const& mouse, layer_t l);
@@ -92,10 +95,8 @@ class UIelement {
     void hittest_self(UImouse const& lmouse, UIcontext* ctx);
     void behave_self(UIcontext const* ctx, float dt, UImouse const& lmouse);
     virtual void on_update(UIcontext const* ctx, float dt, UImouse const& lsmouse);
-    /** called at the top of layout_self, before this element's box is computed.
-     * override to drive layout from external state (window size, content, ...) */
-    virtual void on_layout();
-    void layout_self();
+    virtual glm::vec2 on_measure(glm::vec2 avail);
+    virtual void on_arrange();
     
 public:
 
@@ -105,11 +106,16 @@ public:
     UIelement();
     virtual ~UIelement() = default;
 
-    static layer_t measure_tree(UIelement* root);
+    UIbbox get_bbox() const;
+    glm::vec2 get_desired_size() const;
+
+    static layer_t find_max_layer_tree(UIelement* root);
     
+    // static void layout_tree(UIelement* root);
+    static glm::vec2 measure_tree(UIelement* root, glm::vec2 avail);
+    static void arrange_tree(UIelement* root, UIbbox area);
     static void hittest_tree(UIelement* root, UIcontext* ctx, UImouse const& mouse);
     static void behave_tree(UIelement* root, UIcontext const* ctx, float dt, UImouse const& mouse);
-    static void layout_tree(UIelement* root);
     static void submit_renders_tree(UIelement* root, UIcontext const* ctx, UIRenderCache& cache);
 
     size_t num_children() const;
@@ -122,7 +128,7 @@ public:
     void submit_render(UIRenderCache& cache, UIcontext const* ctx);
 
     glm::vec2 ofs_from_parent() const;
-    glm::vec2 total_ofs() const;
+    glm::vec2 center() const;
     UImouse localize_mouse(UImouse const& parent);
 
     void set_layer(layer_t l);
@@ -141,12 +147,14 @@ public:
     void set_interact_enable(bool val);
     bool focus_enabled() const;
     void set_focus_enable(bool val);
+
+    void set_hidden_mode(bool val);
+    bool hidden_mode() const;
     
     bool is_hovered()           const;
     bool is_hover_entered()     const;
     bool is_hover_exited()      const;
     
 };
-
 
 #endif /* UICORE_H */

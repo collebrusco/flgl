@@ -53,6 +53,13 @@ UIcontext::UIcontext() {
 
 // ---- UIelement ----
 
+UIbbox UIelement::get_bbox() const {
+    return bbox;
+}
+glm::vec2 UIelement::get_desired_size() const {
+    return desired_size;
+}
+
 void UIelement::submit_render(UIRenderCache& cache, UIcontext const* ctx) {
     if (flags.enable) {
         submit_render_int(cache, ctx);
@@ -104,7 +111,7 @@ void UIelement::submit_render_int(UIRenderCache& cache, UIcontext const* ctx) {
 }
 
 
-UIelement::UIelement() : parent(0), current_ofs(0.f), nkids(0), layer(0) {
+UIelement::UIelement() : parent(0), bbox(), subtree_bbox(), desired_size(0), nkids(0), layer(0) {
     flags.enable = true;
     flags.render_enable = true;
     flags.subtree_enable = true;
@@ -149,6 +156,16 @@ bool UIelement::focus_enabled() const {
 }
 void UIelement::set_focus_enable(bool val) {
     flags.focusable = val;
+}
+
+/** hidden mode is not one flag, but a shorthand for the combination of being enabled  but having render, interact, and hittest disabled */
+void UIelement::set_hidden_mode(bool val) {
+    if (val) flags.enable = true;
+    flags.hittest_enable = flags.interactable = flags.render_enable = !val;
+}
+
+bool UIelement::hidden_mode() const {
+    return !(flags.hittest_enable || flags.interactable || flags.render_enable || !flags.enable);
 }
 
 
@@ -198,7 +215,7 @@ UIelement *UIelement::get_child(size_t n) {
 }
 
 bool UIelement::hit_test(UImouse const &local_mouse) {
-    glm::vec2 hsize = this->layout.size * 0.5f;
+    glm::vec2 hsize = this->bbox.size() * 0.5f;
     glm::vec2 mpos = glm::abs(local_mouse.pos);
     return (mpos.x < hsize.x) && (mpos.y < hsize.y);
 }
@@ -211,12 +228,12 @@ glm::vec2 UIelement::ofs_from_parent() const {
     }
 }
 
-glm::vec2 UIelement::total_ofs() const {
-    return this->current_ofs;
+glm::vec2 UIelement::center() const {
+    return this->bbox.middle();
 }
 
 UImouse UIelement::localize_mouse(UImouse const &parent) {
-    return UImouse(parent, this->total_ofs());
+    return UImouse(parent, this->center());
 }
 
 void UIelement::set_layer(layer_t l) {
@@ -252,21 +269,7 @@ void UIelement::behave_self(UIcontext const* ctx, float dt, UImouse const& mouse
     this->on_update(ctx, dt, mouse);
 }
 
-void UIelement::layout_self() {
-    on_layout();
-    current_ofs = ofs_from_parent();
-    if (parent) {
-        current_ofs += parent->total_ofs();
-    }
-    bbox = UIbbox::from_midsize(current_ofs, layout.size);
-    subtree_bbox = bbox;
-}
-
 void UIelement::on_update(UIcontext const* ctx, float dt, UImouse const& mouse) {
-    /** noop */
-}
-
-void UIelement::on_layout() {
     /** noop */
 }
 
@@ -297,11 +300,12 @@ static void bind_active_button(UIelement* hot, UIActiveElement* active, Button b
 the most recently added child is on top */
 #define ITERATE_KIDS_HITTEST(root, c) (size_t c = (root)->num_children()-1; c < (root)->num_children(); c--)
 #define ITERATE_KIDS_RENDER(root, c) (size_t c = 0; c < (root)->num_children(); c++)
+#define ITERATE_KIDS(root, c) ITERATE_KIDS_HITTEST(root, c)
 #define ITERATE_LAYERS_RENDER(l, ctx) (layer_t l = 0; l <= (ctx)->max_layer; l++) /* TODO try to avoid going to ff every time? */
 #define ITERATE_LAYERS_HITTEST(l, ctx) (int16_t l = (ctx)->max_layer; l >= 0; l--)
 
 void UIelement::hittest_tree_recurse(UIelement *root, UIcontext *ctx, UImouse const &mouse, layer_t l) {
-    if (root->subtree_enabled()) {
+    if (root->enabled() && root->subtree_enabled()) {
         for ITERATE_KIDS_HITTEST(root, c) {
             UIelement::hittest_tree_recurse(root->get_child(c), ctx, mouse, l);
         }
@@ -319,17 +323,20 @@ void UIelement::hittest_tree(UIelement* root, UIcontext* ctx, UImouse const& mou
         hittest_tree_recurse(root, ctx, mouse, l);
     }
     bind_active_button(ctx->hot, &ctx->active_left, mouse.left);
-    // bind_active_button(ctx->hot, &ctx->active_mid, mouse.middle);
-    // bind_active_button(ctx->hot, &ctx->active_right, mouse.right);
+    bind_active_button(ctx->hot, &ctx->active_mid, mouse.middle);
+    bind_active_button(ctx->hot, &ctx->active_right, mouse.right);
 }
 
-layer_t UIelement::measure_tree(UIelement* root) {
+layer_t UIelement::find_max_layer_tree(UIelement* root) {
     if (!root) return 0;
-    layer_t mlayer = root->layer;
-    for ITERATE_KIDS_HITTEST(root, c) {
-        layer_t kidlayer = measure_tree(root->get_child(c));
-        if (kidlayer > mlayer) {
-            mlayer = kidlayer;
+    /* layers arent counted if not enabled or if not rendering or hittesting */
+    layer_t mlayer = (root->enabled() && (root->hittest_enabled() || root->render_enabled())) ? root->layer : 0;
+    if (root->enabled() && root->subtree_enabled()) {
+        for ITERATE_KIDS(root, c) {
+            layer_t kidlayer = find_max_layer_tree(root->get_child(c));
+            if (kidlayer > mlayer) {
+                mlayer = kidlayer;
+            }
         }
     }
     return mlayer;
@@ -338,8 +345,8 @@ layer_t UIelement::measure_tree(UIelement* root) {
 /** layout -> hittest -> behave -> render */
 void UIelement::behave_tree(UIelement *root, UIcontext const* ctx, float dt, UImouse const &mouse) {
     assert(root);
-    if (root->subtree_enabled()) {
-        for ITERATE_KIDS_HITTEST(root, c) {
+    if (root->enabled() && root->subtree_enabled()) {
+        for ITERATE_KIDS(root, c) {
             UIelement::behave_tree(root->get_child(c), ctx, dt, mouse);
         }
     }
@@ -348,29 +355,75 @@ void UIelement::behave_tree(UIelement *root, UIcontext const* ctx, float dt, UIm
     }
 }
 
-/** layout -> hittest -> behave -> render */
-/** layout does not care about going in layering order, ironically.
- * the contract for layout is still based purely on parent-child relationships, not spatial order */
-void UIelement::layout_tree(UIelement* root) {
-    assert(root);
-    if (root->enabled()) {
-        root->layout_self();
-    } else {
-        root->subtree_bbox = UIbbox::null();
+#define ITERATE_AXES(a) (int a = 0; a < 2; a++)
+
+glm::vec2 UIelement::on_measure(glm::vec2 avail) {
+    for ITERATE_KIDS(this, c) {
+        measure_tree(get_child(c), avail);
     }
-    if (root->subtree_enabled()) {
-        for ITERATE_KIDS_HITTEST(root, c) {
-            UIelement::layout_tree(root->get_child(c));
-            root->subtree_bbox.merge(root->get_child(c)->subtree_bbox);
+    return vec2(0.f);
+}
+
+bool UIelement::doesnt_layout() const {
+    return !enabled() || (parent && !parent->subtree_enabled());
+}
+
+glm::vec2 UIelement::measure_tree(UIelement* root, glm::vec2 avail) {
+    if (root->doesnt_layout()) {
+        return root->desired_size = glm::vec2(0.f);
+    }
+    for ITERATE_AXES(a) {
+        if (root->layout.scale[a] == FIXED) avail[a] = root->layout.size[a];
+    }
+    glm::vec2 desired, content = root->on_measure(avail);
+    for ITERATE_AXES(a) {
+        switch (root->layout.scale[a]) {
+        case FIT:
+        case FILL:
+            desired[a] = content[a];
+            break;
+        case FIXED:
+            desired[a] = root->layout.size[a];
+            break;
         }
+    }
+    return root->desired_size = desired;
+}
+
+void UIelement::on_arrange() {
+    const glm::vec2 parent_ofs = center();
+    const glm::vec2 psize = bbox.size();
+    for ITERATE_KIDS(this, c) {
+        UIelement*const kid = get_child(c);
+        glm::vec2 true_size = kid->get_desired_size();
+        for ITERATE_AXES(a) {
+            if (kid->layout.scale[a] == FILL)
+                true_size[a] = psize[a];
+        }
+        const glm::vec2 true_ofs = parent_ofs + kid->layout.offset_within_with_size(psize, true_size);
+        UIbbox kidbox = UIbbox::from_midsize(true_ofs, true_size);
+        arrange_tree(kid, kidbox);
+    }
+}
+
+void UIelement::arrange_tree(UIelement* root, UIbbox area) {
+    if (root->doesnt_layout()) {
+        root->bbox = root->subtree_bbox = UIbbox::null();
+        return;
+    }
+    root->bbox = area;
+    root->on_arrange();
+    root->subtree_bbox = root->bbox;
+    for ITERATE_KIDS(root, c) {
+        root->subtree_bbox.merge(root->get_child(c)->subtree_bbox);
     }
 }
 
 void UIelement::submit_renders_tree_recurse(UIelement *root, UIcontext const* ctx, UIRenderCache& cache, layer_t l) {
-    if (root->render_enabled() && root->get_layer() == l) {
+    if (root->enabled() && root->render_enabled() && root->get_layer() == l) {
         root->submit_render(cache, ctx);
     }
-    if (root->subtree_enabled()) {
+    if (root->enabled() && root->subtree_enabled()) {
         for ITERATE_KIDS_RENDER(root, c) {
             UIelement::submit_renders_tree_recurse(root->get_child(c), ctx, cache, l);
         }

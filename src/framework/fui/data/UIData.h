@@ -85,17 +85,26 @@ struct UIpivot {
     UIpivot(UIpin pin);
 };
 
+enum UIscale : uint8_t {
+    FIXED, FILL, FIT
+};
+
 struct UIlayout {
     UIpin pinning;
     UIpivot pivot;
     glm::vec2 offset;
     glm::vec2 size;
+    UIscale scale[2];
     
     UIlayout(UIpin::pin_e pin = UIpin::CENTERCENTER, 
              UIpin::pin_e self_pin = UIpin::CENTERCENTER, 
              glm::vec2 ofs = glm::vec2(0.f), 
-             glm::vec2 sz = glm::vec2(0.5f));
+             glm::vec2 sz = glm::vec2(0.5f),
+             UIscale hscale = FIXED,
+             UIscale vscale = FIXED);
     glm::vec2 offset_from(UIlayout const& parent) const;
+    glm::vec2 offset_within(glm::vec2 space) const;
+    glm::vec2 offset_within_with_size(glm::vec2 space, glm::vec2 size) const;
 };
 
 

@@ -12,7 +12,6 @@
 
 class RootUIelement : public UIelement {
     void center();
-    virtual void on_layout() override;
 public:
     RootUIelement();
 };

@@ -89,6 +89,31 @@ void TextRenderer::_set_text(const char* text) {
 	string_mesh.update(verts, elems);
 }
 
+glm::ivec2 TextRenderer::hypothetical_box_size(const char* text) {
+
+	glm::ivec2 box = {0,1};
+	glm::ivec2 cursor = {0,0};
+
+	while (*text) {
+		char ch = *text; text++;
+		if (ch != '\n' && (ch < 32 || ch > 127)) ch = '*';
+		switch (ch) {
+		case '\n':
+			cursor.x = 0; cursor.y -= 9;
+			box.y++;
+			break;
+		case ' ':
+			cursor.x += 7;
+			break;
+		default:
+			cursor.x += 7;
+		}
+		box.x = max(box.x, cursor.x / 7);
+	}
+
+	return box;
+}
+
 void TextRenderer::render(int x, int y, int scale) const {
 	text_shader.bind();
 	font.bind();

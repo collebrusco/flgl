@@ -1,22 +1,21 @@
 #include "UI.h"
 
+/* TODO obsolete */
 void RootUIelement::center() {
     layout = UIlayout(
         UIpin::CENTERCENTER,
         UIpin::CENTERCENTER,
         glm::vec2(0.f),
         /* TODO hardcoded window here */
-        glm::vec2(window.frame)
+        glm::vec2(window.frame),
+        FILL,
+        FILL
     );
 }
 
 RootUIelement::RootUIelement() : UIelement() {
     set_interact_enable(false);
     set_hittest_enable(false);
-    center();
-}
-
-void RootUIelement::on_layout() {
     center();
 }
 
@@ -46,9 +45,10 @@ void FUI::init() {
 void FUI::tick(Window const& win, const float dt) {
     UImouse uimouse(win.mouse, glm::vec2(win.frame));
 
-    this->max_layer = UIelement::measure_tree(&root);
+    this->max_layer = UIelement::find_max_layer_tree(&root);
 
-    UIelement::layout_tree(&root);
+    UIelement::measure_tree(&root, win.frame);
+    UIelement::arrange_tree(&root, UIbbox::from_midsize(glm::vec2(0.f), win.frame));
 
     UIelement::hittest_tree(&root, this, uimouse);
 
